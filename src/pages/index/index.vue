@@ -4,8 +4,8 @@
 			<div v-if="login" class="animated" :key="1">
 				<div class="container">
 					<div class="title">欢迎使用</div>
-					<div class="subtitle">使用手机号登录</div>
 					<div class="login-form">
+						<div class="subtitle">使用手机号登录</div>
 						<div class="input-frame">
 							<div class="prefix">+86</div>
 							<input type="text" placeholder="手机号" v-model="phone" class="input">
@@ -16,19 +16,22 @@
 								{{pickSelect}}
 							</view>
 						</picker>
-						<div class="input-title">
-							<span>同意 </span>
-							<checkbox value="1" checked="true" /> 《垦利石化小程序服务条款》
+						<div class="checkbox">
+							<checkbox value="1" checked="true" size="mini" /> 记住公司名称
 						</div>
-						<button type="primary" size="default" @click="nextStep">提交</button>
+						<div class="input-title">
+							<checkbox value="1" checked="true" /> 同意《垦利石化小程序服务条款》
+						</div>
+						<button type="primary" size="default" @click="nextStep" style="height: 50px;background-color: #2E79FF;height: 40px;line-height: 40px">下一步</button>
 
 					</div>
 				</div>
 			</div>
 			<div v-if="!login" class="animated" :key="2">
-				<div class="container" >
-					<div class="title1">请输入验证码</div>
-					<div class="subtitle1">验证码已发送至+86 {{phone}}</div>
+				<div class="container">
+					<div class="title1">短信已发送至{{phone}}</div>
+
+					<div class="subtitle1">请输入验证码</div>
 					<div class="security-code-wrap">
 						<label for="code">
 							<ul class="security-code-container">
@@ -37,13 +40,13 @@
 								</li>
 							</ul>
 						</label>
-						<input ref="input" focus="true" class="input-code" @keyup="handleInput($event)" v-model="value" id="code" name="code" type="tel" :maxlength="number"
-						 autocorrect="off" autocomplete="off" autocapitalize="off">
+						<input ref="input" focus="true" class="input-code" @keyup="handleInput($event)" v-model="value" id="code" name="code" type="tel"
+						 :maxlength="number" autocorrect="off" autocomplete="off" autocapitalize="off">
 					</div>
 					<div class="time color" v-show="show" @click="reset">重新获取验证码</div>
-					<div class="time" v-show="!show">{{count}}秒后可重新获取</div>
+					<div class="time" v-show="!show">重新发送短信({{count}}秒)</div>
 					<!-- <a href="javascript:;" class="weui_btn weui_btn_primary" @click="sureStep">确定</a> -->
-					<button type="primary" size="default" @click="sureStep" class="sure">提交</button>
+					<button type="primary" size="default" @click="sureStep" class="sure">登录</button>
 
 				</div>
 			</div>
@@ -137,7 +140,7 @@
 				}
 			},
 			// 唤起键盘 
-			showKeyboard(){
+			showKeyboard() {
 				console.log("唤起")
 				document.activeElement.focus(); // ios唤起键盘
 				this.$refs.input.focus();
@@ -162,8 +165,8 @@
 		},
 
 		created() {
-			
-		 }
+
+		}
 	}
 </script>
 
@@ -180,71 +183,78 @@
 		box-sizing: border-box;
 		text-align: left;
 		padding-left: 30px;
-		color: #E2BF85;
+		color: #000;
 		height: 75px;
 		line-height: 75px;
 		font-size: 36px;
+		margin-bottom: 20px;
 	}
+	 .title1{
+		 font-size: 24px;
+	 }
 
 	.subtitle,
 	.subtitle1 {
 		width: 100%;
 		box-sizing: border-box;
 		text-align: left;
-		padding-left: 30px;
 		color: rgb(94, 92, 92);
 		font-size: 14px;
-		margin-bottom: 30px
+		margin-bottom: 10px
 	}
-
+	.subtitle1{
+		padding-left: 30px;
+	}
 	.login-form {
-		width: 75%;
+		width: 84%;
 		margin: 0 auto
 	}
 
 	.input-frame {
-		border: 1px solid #8E8E8E;
-		margin-bottom: 30px;
+		border: 1px solid #4a4a4a;
+		margin-bottom: 50px;
+	}
+
+	.checkbox {
+		font-size: 14px;
+		color: #2E79FF;
+		margin: 15px 0px 30px 0px;
 	}
 
 	.prefix {
-		display: inline-table;
-		color: #000;
+		display: inline-block;
+		color: #4a4a4a;
 		height: 32px;
 		line-height: 32px;
 		width: 20%;
-		border-right: 1px solid #8E8E8E;
+		border-right: 1px solid #4a4a4a;
 		text-align: center;
 		box-sizing: border-box
 	}
 
 	.input {
-		display: inline-table;
+		display: inline-block;
 		height: 32px;
 		line-height: 32px;
 		width: 76%;
 		background-color: #fff;
 		padding-left: 16px;
 		box-sizing: border-box;
-		color: #000;
+		color: #4a4a4a;
 	}
 
 	.input-title {
 		text-align: center;
 		font-size: 14px;
-		color: #aaa;
+		color: #4a4a4a;
 		margin-top: 130px;
 		margin-bottom: 30px;
 
 	}
 
-	._checkbox {
-		width: 16px;
-		height: 16px;
-	}
 
 	.picker {
-		display: inline-table;
+		display: inline-block;
 		height: 32px;
 		line-height: 32px;
 		width: 100%;
@@ -252,12 +262,12 @@
 		padding-left: 16px;
 		box-sizing: border-box;
 		color: #aaa;
-		border: 1px solid #8E8E8E;
+		border: 1px solid #4a4a4a;
 	}
 
 	.security-code-wrap {
 		overflow: hidden;
-		width: 75%;
+		width: 88%;
 		margin: 0 auto;
 	}
 
@@ -277,8 +287,8 @@
 		line-height: 40px;
 		font-size: 16px;
 		background-color: #fff;
-		margin: 2px;
-		border: 1px solid #8E8E8E;
+		margin: 6px;
+		border: 1px solid #4a4a4a;
 		color: #fff;
 
 	}
@@ -303,22 +313,23 @@
 	}
 
 	.time {
+		width:84%;
 		font-size: 16px;
 		color: #E8E8E8;
-		margin-top:30px;
-		text-align: center;
+		margin-top: 30px;
+		text-align: left;
 	}
+
 	.color {
-		color: #E2BF85;
+		color: #2E79FF;
 	}
 
 	.sure {
-		width: 75%;
-		margin-left: 12.5%;
-		margin-top:100px;
-		height: 50px;
-		line-height: 50px;
-		background-color: #E2BF85;
+		width: 84%;
+		margin-top: 100px;
+		height: 40px;
+		line-height: 40px;
+		background-color: #2E79FF;
 		color: #fff;
 		border: none;
 	}
