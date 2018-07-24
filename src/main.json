@@ -1,0 +1,30 @@
+{
+  "pages": [
+	"pages/index/main",
+	"pages/center/main",
+	"pages/order/main",
+	"pages/workbench/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "垦利石化",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/workbench/main",
+      "text": "工作台"
+    }, {
+      "pagePath": "pages/order/main",
+      "text": "订单"
+    }, {
+		"pagePath": "pages/center/main",
+		"text": "我的"
+	  }]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  }
+}
