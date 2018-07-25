@@ -3,7 +3,8 @@
 	"pages/index/main",
 	"pages/center/main",
 	"pages/order/main",
-	"pages/workbench/main"
+	"pages/workbench/main",
+	"pages/selfHelp/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
