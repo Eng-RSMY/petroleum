@@ -165,7 +165,18 @@
 		},
 
 		created() {
+			// 获取公司列表
+			// var params = {
+			// 	page: "0",
+			// 	size: "10",
 
+			// }
+			// this.$http.get("/users", params).then(function (response) {
+			// 	console.log(response);
+			// })
+			// 	.catch(function (error) {
+			// 		console.log(error);
+			// 	});
 		}
 	}
 </script>
@@ -189,9 +200,10 @@
 		font-size: 36px;
 		margin-bottom: 20px;
 	}
-	 .title1{
-		 font-size: 24px;
-	 }
+
+	.title1 {
+		font-size: 24px;
+	}
 
 	.subtitle,
 	.subtitle1 {
@@ -202,9 +214,11 @@
 		font-size: 14px;
 		margin-bottom: 10px
 	}
-	.subtitle1{
+
+	.subtitle1 {
 		padding-left: 30px;
 	}
+
 	.login-form {
 		width: 84%;
 		margin: 0 auto
@@ -313,7 +327,7 @@
 	}
 
 	.time {
-		width:84%;
+		width: 84%;
 		font-size: 16px;
 		color: #E8E8E8;
 		margin-top: 30px;
