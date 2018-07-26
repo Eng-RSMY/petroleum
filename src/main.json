@@ -4,7 +4,9 @@
 	"pages/center/main",
 	"pages/order/main",
 	"pages/workbench/main",
-	"pages/selfHelp/main"
+	"pages/selfHelp/main",
+	"pages/order/orderInfo/main",
+	"pages/makeCard/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,7 +1,7 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": false,
 		"postcss": true,
 		"minified": true,
@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 3,
 			"list": [
 				{
 					"id": -1,
@@ -40,7 +40,20 @@
 				{
 					"id": -1,
 					"name": "订单",
-					"pathName": "pages/order/main"
+					"pathName": "pages/order/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "自助下单",
+					"pathName": "pages/selfHelp/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "订单详情",
+					"pathName": "pages/order/orderInfo/main",
+					"query": "orderid=1"
 				}
 			]
 		}
