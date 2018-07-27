@@ -44,16 +44,22 @@
 					"query": ""
 				},
 				{
-					"id": -1,
-					"name": "自助下单",
-					"pathName": "pages/selfHelp/main",
+					"id": 2,
+					"name": "选择车辆",
+					"pathName": "pages/selectCar/main",
 					"query": ""
 				},
 				{
 					"id": -1,
-					"name": "订单详情",
-					"pathName": "pages/order/orderInfo/main",
-					"query": "orderid=1"
+					"name": "选择司机",
+					"pathName": "pages/selectDriver/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "选择押车员",
+					"pathName": "pages/selectEscort/main",
+					"query": ""
 				}
 			]
 		}

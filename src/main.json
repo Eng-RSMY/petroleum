@@ -3,13 +3,13 @@
 	"pages/index/main",
 	"pages/center/main",
 	"pages/order/main",
-	"pages/workbench/main",
-	"pages/selfHelp/main",
-	"pages/order/orderInfo/main",
-	"pages/makeCard/main",
-	"pages/trackeOrder/main",
-	"pages/bill/main",
-  "pages/checkPrice/main"
+  "pages/workbench/main",
+  "pages/selectCar/main",
+  "pages/selectDriver/main",
+  "pages/selectEscort/main",
+  "pages/addCar/main",
+  "pages/addDriver/main",
+  "pages/addEscort/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
