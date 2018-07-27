@@ -18,14 +18,23 @@
     "navigationBarTextStyle": "#fff"
   },
   "tabBar": {
+	"backgroundColor":"#fff",
+	"selectedColor":"#2E79FF",
+	"color":"#898989",
     "list": [{
-      "pagePath": "pages/workbench/main",
+	  "pagePath": "pages/workbench/main",
+	  "iconPath":"/static/images/work2.png",
+	  "selectedIconPath":"/static/images/work.png",
       "text": "工作台"
     }, {
-      "pagePath": "pages/order/main",
+	  "pagePath": "pages/order/main",
+	  "iconPath":"/static/images/order.png",
+	  "selectedIconPath":"/static/images/order2.png",
       "text": "订单"
     }, {
 		"pagePath": "pages/center/main",
+		"iconPath":"/static/images/my.png",
+		"selectedIconPath":"/static/images/my2.png",
 		"text": "我的"
 	  }]
   },

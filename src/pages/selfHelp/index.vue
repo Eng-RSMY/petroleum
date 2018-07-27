@@ -1,6 +1,159 @@
 <template>
 	<div class="container">
-		
+		<div class="top">
+			<p>公司名称：山东xxxxx化学品运输公司</p>
+			<div class="weui-flex top_maddle">
+				<div class="weui-flex__item">
+					<div class="placeholder">52134</div>
+					<div class="placeholder1">账户余额</div>
+				</div>
+				<div class="weui-flex__item">
+					<div class="placeholder">46789</div>
+					<div class="placeholder1">已下单</div>
+
+				</div>
+				<div class="weui-flex__item">
+					<div class="placeholder">4561</div>
+					<div class="placeholder1">可用金额</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- 订购货物信息 -->
+		<div class="product">
+			<p>
+				<span>------</span>
+				<span style="margin: 0px 30px;">订购货物信息</span>
+				<span>------</span>
+			</p>
+			<div class="weui-cell" style="border-top: none">
+				<div class="weui-cell__bd">
+					<p>预提货品类</p>
+				</div>
+				<div class="weui-cell__ft">
+					<picker @change="bindPickerChange" :value="index" :range="array">
+						<view class="picker">
+							{{pickSelect}}
+						</view>
+					</picker>
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<p>物料名称</p>
+				</div>
+				<div class="weui-cell__ft">
+					<picker @change="bindPickerChange" :value="index" :range="array">
+						<view class="picker">
+							{{pickSelect}}
+						</view>
+					</picker>
+				</div>
+			</div>
+			<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
+				<div class="weui-cell__bd">
+					<p>物料名称</p>
+				</div>
+				<div class="weui-cell__ft">
+					<span class="dw">(吨)</span>
+					<input class="input" type="number" pattern="[0-9]*" placeholder="请输入">
+				</div>
+			</div>
+		</div>
+		<div class="choose">
+			<p>
+				<span>选择司机</span>
+			</p>
+			<button class="weui-btn weui-btn_default" v-if="showDriver" @click="chooseDriver">选择司机</button>
+			<div class="driver" v-else>
+				<p class="close" @click="reset">x</p>
+				<p class="driver_name driverInfo">
+					<span>司机真实姓名：</span>
+					<span>name</span>
+				</p>
+				<p class="driver_phone driverInfo">
+					<span>绑定手机号：</span>
+					<span>17615833291</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>司机真实姓名：</span>
+					<span>name</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>身份证号：</span>
+					<span>xxxxxxxxxxxxxxxx</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>驾证号码：</span>
+					<span>XXXXXXXXXXX</span>
+				</p>
+			</div>
+		</div>
+		<div class="choose">
+			<p>
+				<span>选择车辆</span>
+			</p>
+			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar">选择车辆</button>
+			<div class="driver" v-else>
+				<p class="close" @click="reset1">x</p>
+				<p class="driver_name driverInfo">
+					<span>车辆名：</span>
+					<span>name</span>
+				</p>
+				<p class="driver_phone driverInfo">
+					<span>车牌号：</span>
+					<span>鲁A911XP</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>行驶证号：</span>
+					<span>xxxxxxxxxxxxxxxx</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>危险品运输证号：</span>
+					<span>XXXXXXXXXXX</span>
+				</p>
+			</div>
+		</div>
+		<div class="choose" style="margin-bottom: 60px">
+			<p>
+				<span>选择已有押车员下单(可不选)</span>
+			</p>
+			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle">选择压车员</button>
+			<div class="driver" v-else>
+				<p class="close" @click="reset2">x</p>
+				<p class="driver_name driverInfo">
+					<span>姓名：</span>
+					<span>name</span>
+				</p>
+				<p class="driver_phone driverInfo">
+					<span>绑定手机号：</span>
+					<span>17615833291</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>身份证号：</span>
+					<span>xxxxxxxxxxxxxxxx</span>
+				</p>
+			</div>
+		</div>
+		<div class="footer">
+			<span>￥45000.00</span>
+			<button class="weui-btn weui-btn_primary" @click="creatOrder">提交订单</button>
+		</div>
+		<div class="js_dialog" id="iosDialog1" v-if="showDialog">
+			<div class="weui-mask"></div>
+			<div class="weui-dialog">
+				<div class="weui-dialog__hd"><strong class="weui-dialog__title">警告</strong></div>
+				<div class="weui-dialog__bd">
+					<p>您当前可用余额不足，是否仍然下单？</p>
+					<p>可用余额：120000元</p>
+					<p>订单金额：130000元</p>
+				</div>
+				<div class="weui-dialog__ft">
+					<button class="weui-dialog__btn weui-dialog__btn_default" @click="concel">取消</button>
+					<button class="weui-dialog__btn weui-dialog__btn_primary" @click="sure">继续下单</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -8,6 +161,13 @@
 	export default {
 		data() {
 			return {
+				pickSelect: "请选择",
+				index: 0,
+				showDriver: true,
+				showCar: true,
+				showPeople: true,
+				showDialog: false,
+				array: ['美国', '中国', '巴西', '日本'],
 			}
 		},
 
@@ -15,6 +175,51 @@
 		},
 
 		methods: {
+			bindPickerChange: function (e) {
+				console.log('picker发送选择改变，携带值为', e)
+				this.pickSelect = this.array[e.mp.detail.value]
+			},
+			reset: function () {
+				this.showDriver = true;
+			},
+			reset1: function () {
+				this.showCar = true;
+			},
+			reset2: function () {
+				this.showPeople = true;
+			},
+			chooseDriver: function () {
+				// 跳转到司机页面
+				this.showDriver = false;
+			},
+			chooseCar: function () {
+				// 跳转到车辆页面
+				this.showCar = false;
+
+			},
+			choosePeoPle: function () {
+				// 跳转到押运员页面
+				this.showPeople = false;
+
+			},
+			creatOrder: function () {
+				// 判断当前账户余额是否能够支付，不能支付弹出警告，点击继续支付可以跳转到订单详情页，如果余额够支付 不提示直接跳转到订单详情
+				// 余额不足弹窗
+				this.showDialog=true;
+			},
+			concel:function(){
+				this.showDialog=false;
+			},
+			sure:function(){
+				this.showDialog=false;
+				wx.navigateTo({
+					url:"../../pages/order/orderInfo/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+				
+			}
 
 		},
 
@@ -24,7 +229,192 @@
 
 <style scoped>
 	.container {
+		width: 100%;
 		padding: 0px;
 		background-color: #efeff4;
+		overflow-x: hidden;
+	}
+
+	.input {
+		float: right;
+		width: 50%;
+		padding: 0px;
+		text-align: right;
+		height: 100%;
+	}
+
+	input-placeholder {
+		text-align: right
+	}
+
+	.dw {
+		float: right;
+
+	}
+
+	.weui-cell__bd {
+		margin-left: 10px;
+	}
+
+	.weui-cell {
+		background-color: #fff;
+	}
+
+	.top {
+		background-color: #fff;
+		height: 150px;
+		color: #4a4a4a;
+		width: 100%;
+	}
+
+	.top p {
+		text-align: center;
+		font-size: 16px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	.weui-flex__item {
+		text-align: center;
+		font-size: 22px;
+		color: #2E79FF;
+	}
+
+	.placeholder1 {
+		font-size: 14px;
+		margin-top: 10px;
+	}
+
+	.product {
+		margin-top: 10px;
+		background-color: #fff;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.product>p {
+		text-align: center;
+		margin: 15px 0px;
+		color: #4a4a4a;
+	}
+
+	.product p span {
+		color: #ddd;
+
+	}
+
+	.choose {
+		background-color: #fff;
+		margin-top: 10px;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.choose p {
+		text-align: center;
+		padding: 10px 0px;
+	}
+
+	.weui-btn {
+		margin: 50px 0px;
+		width: 84%;
+		color: #2E79FF;
+		margin-left: 8%
+	}
+
+	.driver {
+		margin: 20px 3%;
+		width: 94%;
+		border: 1px solid #ddd;
+
+	}
+
+	.close {
+		width: 94%;
+		padding-right: 3%;
+		text-align: right !important;
+		font-size: 18px;
+	}
+
+	.driverInfo {
+
+		text-align: left !important;
+		margin-left: 70px;
+		color: #4a4a4a;
+		font-size: 14px;
+		box-sizing: border-box
+	}
+
+	.driverInfo:last-child {
+		margin-bottom: 20px;
+	}
+
+	.footer {
+		width: 100%;
+		position: fixed;
+		bottom: 0px;
+		left: 0px;
+		height: 50px;
+		border-top: 1px solid #ddd;
+		background-color: #fff;
+	}
+
+	.footer span {
+		float: left;
+		width: 60%;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		color: red;
+		font-size: 16px;
+	}
+
+	.footer button {
+		color: #fff;
+		float: left;
+		width: 40%;
+		height: 50px;
+		line-height: 50px;
+		background-color: #2E79FF;
+		margin: 0px;
+		border: none !important;
+		border-radius: 0px !important;
+		box-shadow: 0px 0px 0px #fff;
+	}
+
+	.weui-dialog__hd {
+		padding: 10px 0px 20px 0px;
+	}
+
+	.weui-dialog {
+		width: 90%;
+		max-width: 650rpx;
+		top: 40%;
+		left: 50%;
+	}
+	.weui-dialog__bd p{
+		width:100%;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		margin-bottom: 10px;
+	}
+	.weui-dialog__bd p:nth-child(2){
+		width:70%;
+		margin-left:15%; 
+		color: #fff;
+		background-color: #1fa4e4;
+		height:40px;
+		line-height: 40px;
+		border-radius: 5px;
+	}
+	.weui-dialog__bd p:nth-child(3){
+		width:70%;
+		background-color: #33d38c;
+		margin-left:15%; 
+		color: #fff;
+		height:40px;
+		line-height: 40px;
+		border-radius: 5px;
 	}
 </style>
