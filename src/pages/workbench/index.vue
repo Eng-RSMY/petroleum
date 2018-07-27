@@ -66,7 +66,7 @@
 				</div>
 				<div class="placeholder1">新建用户</div>
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toCheckPrice()">
 				<div class="placeholder">
 					<img src="/static/images/jgcx.png" alt="" class="img">
 				</div>
@@ -176,6 +176,14 @@
 					}
 				})
 			},
+      toCheckPrice:function () {
+        wx.navigateTo({
+          url: "../../pages/checkPrice/main",
+          fail: function (res) {
+            console.log(res)
+          }
+        })
+      },
 			toBill:function(){
 				wx.navigateTo({
 					url: "../../pages/bill/main",
