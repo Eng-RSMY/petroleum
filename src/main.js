@@ -2,6 +2,9 @@ import Vue from 'vue'
 import App from './App'
 import "../static/weui.css"
 import animate from "animate.css"
+//在项目入口文件
+import VueInputCode from 'vue-input-code'
+Vue.component('VueInputCode', VueInputCode)
 var Fly=require("flyio/dist/npm/wx") 
 var fly=new Fly
 fly.config.timeout=10000;
