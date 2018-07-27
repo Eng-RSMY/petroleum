@@ -3,7 +3,13 @@
 	"pages/index/main",
 	"pages/center/main",
 	"pages/order/main",
-	"pages/workbench/main"
+  "pages/workbench/main",
+  "pages/selectCar/main",
+  "pages/selectDriver/main",
+  "pages/selectEscort/main",
+  "pages/addCar/main",
+  "pages/addDriver/main",
+  "pages/addEscort/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

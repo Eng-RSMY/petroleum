@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 4,
 			"list": [
 				{
 					"id": -1,
@@ -40,7 +40,26 @@
 				{
 					"id": -1,
 					"name": "订单",
-					"pathName": "pages/order/main"
+					"pathName": "pages/order/main",
+					"query": ""
+				},
+				{
+					"id": 2,
+					"name": "选择车辆",
+					"pathName": "pages/selectCar/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "选择司机",
+					"pathName": "pages/selectDriver/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "选择押车员",
+					"pathName": "pages/selectEscort/main",
+					"query": ""
 				}
 			]
 		}
