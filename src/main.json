@@ -23,8 +23,8 @@
 	"color":"#898989",
     "list": [{
 	  "pagePath": "pages/workbench/main",
-	  "iconPath":"/static/images/work2.png",
-	  "selectedIconPath":"/static/images/work.png",
+	  "iconPath":"/static/images/work.png",
+	  "selectedIconPath":"/static/images/work2.png",
       "text": "工作台"
     }, {
 	  "pagePath": "pages/order/main",

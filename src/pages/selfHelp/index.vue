@@ -1,19 +1,19 @@
 <template>
 	<div class="container">
 		<div class="top">
-			<p>公司名称：山东xxxxx化学品运输公司</p>
+			<p>公司名称：{{companyInfo.name}}</p>
 			<div class="weui-flex top_maddle">
 				<div class="weui-flex__item">
-					<div class="placeholder">52134</div>
+					<div class="placeholder">{{companyInfo.balance}}</div>
 					<div class="placeholder1">账户余额</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">46789</div>
+					<div class="placeholder">{{companyInfo.orderedMoney}}</div>
 					<div class="placeholder1">已下单</div>
 
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">4561</div>
+					<div class="placeholder">{{companyInfo.availableBalance}}</div>
 					<div class="placeholder1">可用金额</div>
 
 				</div>
@@ -31,7 +31,7 @@
 					<p>预提货品类</p>
 				</div>
 				<div class="weui-cell__ft">
-					<picker @change="bindPickerChange" :value="index" :range="array">
+					<picker @change="bindPickerChange" :value="index" :range="categories">
 						<view class="picker">
 							{{pickSelect}}
 						</view>
@@ -43,9 +43,9 @@
 					<p>物料名称</p>
 				</div>
 				<div class="weui-cell__ft">
-					<picker @change="bindPickerChange" :value="index" :range="array">
+					<picker @change="bindPickerChange1" :value="index" :range="oils">
 						<view class="picker">
-							{{pickSelect}}
+							{{pickSelect1}}
 						</view>
 					</picker>
 				</div>
@@ -56,7 +56,7 @@
 				</div>
 				<div class="weui-cell__ft">
 					<span class="dw">(吨)</span>
-					<input class="input" type="number" pattern="[0-9]*" placeholder="请输入">
+					<input class="input" type="number" @change="input" pattern="[0-9]*" v-model.lazy="num"  placeholder="请输入">
 				</div>
 			</div>
 		</div>
@@ -136,7 +136,7 @@
 			</div>
 		</div>
 		<div class="footer">
-			<span>￥45000.00</span>
+			<span>{{sumPrice}}</span>
 			<button class="weui-btn weui-btn_primary" @click="creatOrder">提交订单</button>
 		</div>
 		<div class="js_dialog" id="iosDialog1" v-if="showDialog">
@@ -145,8 +145,8 @@
 				<div class="weui-dialog__hd"><strong class="weui-dialog__title">警告</strong></div>
 				<div class="weui-dialog__bd">
 					<p>您当前可用余额不足，是否仍然下单？</p>
-					<p>可用余额：120000元</p>
-					<p>订单金额：130000元</p>
+					<p>可用余额：{{companyInfo.balance}}元</p>
+					<p>订单金额：{{sumPrice}}元</p>
 				</div>
 				<div class="weui-dialog__ft">
 					<button class="weui-dialog__btn weui-dialog__btn_default" @click="concel">取消</button>
@@ -161,23 +161,79 @@
 	export default {
 		data() {
 			return {
+				companyInfo: "",
 				pickSelect: "请选择",
+				pickSelect1: "请选择",
 				index: 0,
 				showDriver: true,
 				showCar: true,
 				showPeople: true,
 				showDialog: false,
-				array: ['美国', '中国', '巴西', '日本'],
+				categories: [],
+				num:"",
+				oils: [],
+				// 库存
+				stock:"",
+				// 油品单价
+				oilPrice:"",
+				// 总价
+				sumPrice:"",
+				
 			}
 		},
-
 		components: {
 		},
 
 		methods: {
 			bindPickerChange: function (e) {
 				console.log('picker发送选择改变，携带值为', e)
-				this.pickSelect = this.array[e.mp.detail.value]
+				this.pickSelect = this.categories[e.mp.detail.value];
+				var categoryName = this.categories[e.mp.detail.value];
+				this.$http.get("/self_order/oils", { "categoryName": categoryName })
+					.then(res => {
+						console.log(res)
+						if(res.status == "200"){
+							if (res) {
+							for (var i = 0; i < res.data.length; i++) {
+								this.oils.push(res.data[i].name)
+							}
+							}
+						}
+
+					})
+					.catch(res => {
+						console.log(res)
+					})
+			},
+			bindPickerChange1: function (e) {
+				if (this.pickSelect == "请选择") {
+					wx.showToast({
+						title: "请先选择预提货品类",
+						icon: 'none',
+						duration: 2000
+					})
+				}else{
+					console.log('picker发送选择改变，携带值为', e)
+					this.pickSelect1 = this.oils[e.mp.detail.value];
+					var oilName= this.oils[e.mp.detail.value];
+					this.$http.get("/self_order/oil_product", { "categoryName": this.categoryName,"oilName":oilName })
+					.then(res => {
+						console.log(res)
+						if(res.status == "200"){
+							this.oilPrice=res.data.price;
+							this.stock=res.data.stock;
+						}
+					})
+					.catch(res => {
+						console.log(res)
+					})
+				}
+				
+			},
+			input:function(val){
+				console.log(val)
+				var num=val.mp.detail.value;
+				this.sumPrice="¥"+parseFloat(this.oilPrice*num)
 			},
 			reset: function () {
 				this.showDriver = true;
@@ -205,25 +261,57 @@
 			creatOrder: function () {
 				// 判断当前账户余额是否能够支付，不能支付弹出警告，点击继续支付可以跳转到订单详情页，如果余额够支付 不提示直接跳转到订单详情
 				// 余额不足弹窗
-				this.showDialog=true;
+				this.showDialog = true;
 			},
-			concel:function(){
-				this.showDialog=false;
+			concel: function () {
+				this.showDialog = false;
 			},
-			sure:function(){
-				this.showDialog=false;
+			sure: function () {
+				this.showDialog = false;
 				wx.navigateTo({
-					url:"../../pages/order/orderInfo/main",
+					url: "../../pages/order/orderInfo/main",
 					fail: function (res) {
 						console.log(res)
 					}
 				})
-				
+
 			}
 
 		},
 
-		created() { }
+		created() {
+			// 获取企业信息
+			this.$http.get("/self_order/company_account")
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.companyInfo = res.data;
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
+					}
+				})
+			// 获取预提货品类
+			this.$http.get("/self_order/categories")
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						for (var i = 0; i < res.data.length; i++) {
+							this.categories.push(res.data[i].name)
+						}
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
+					}
+				})
+			// 获取物料列表
+		}
 	}
 </script>
 
@@ -392,28 +480,31 @@
 		top: 40%;
 		left: 50%;
 	}
-	.weui-dialog__bd p{
-		width:100%;
+
+	.weui-dialog__bd p {
+		width: 100%;
 		height: 30px;
 		line-height: 30px;
 		text-align: center;
 		margin-bottom: 10px;
 	}
-	.weui-dialog__bd p:nth-child(2){
-		width:70%;
-		margin-left:15%; 
+
+	.weui-dialog__bd p:nth-child(2) {
+		width: 70%;
+		margin-left: 15%;
 		color: #fff;
 		background-color: #1fa4e4;
-		height:40px;
+		height: 40px;
 		line-height: 40px;
 		border-radius: 5px;
 	}
-	.weui-dialog__bd p:nth-child(3){
-		width:70%;
+
+	.weui-dialog__bd p:nth-child(3) {
+		width: 70%;
 		background-color: #33d38c;
-		margin-left:15%; 
+		margin-left: 15%;
 		color: #fff;
-		height:40px;
+		height: 40px;
 		line-height: 40px;
 		border-radius: 5px;
 	}
