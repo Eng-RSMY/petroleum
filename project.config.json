@@ -44,9 +44,15 @@
 					"query": ""
 				},
 				{
+					"id": 2,
+					"name": "选择车辆",
+					"pathName": "pages/selectCar/main",
+					"query": ""
+				},
+				{
 					"id": -1,
-					"name": "自助下单",
-					"pathName": "pages/selfHelp/main",
+					"name": "选择司机",
+					"pathName": "pages/selectDriver/main",
 					"query": ""
 				},
 				{
