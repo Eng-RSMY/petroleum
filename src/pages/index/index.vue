@@ -137,7 +137,6 @@
 		padding-top: 60px;
 		background-color: #fff;
 	}
-
 	.title,
 	.title1 {
 		width: 100%;
