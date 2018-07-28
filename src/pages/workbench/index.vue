@@ -82,7 +82,7 @@
 				</div>
 				<div class="placeholder1">入场制卡</div>
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toMoneyInQuiry">
 				<div class="placeholder">
 					<img src="/static/images/hkcx.png" alt="" class="img">
 				</div>
@@ -179,6 +179,14 @@
       toCheckPrice:function () {
         wx.navigateTo({
           url: "../../pages/checkPrice/main",
+          fail: function (res) {
+            console.log(res)
+          }
+        })
+      },
+      toMoneyInQuiry:function () {
+        wx.navigateTo({
+          url: "../../pages/moneyInquiry/main",
           fail: function (res) {
             console.log(res)
           }
