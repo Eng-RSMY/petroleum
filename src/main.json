@@ -15,7 +15,8 @@
 	"pages/selectEscort/main",
 	"pages/addCar/main",
 	"pages/addDriver/main",
-	"pages/addEscort/main"
+	"pages/addEscort/main",
+	"pages/checkPrice/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

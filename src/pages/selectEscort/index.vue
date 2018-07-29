@@ -299,7 +299,7 @@
 
 	.single-msg-box {
 		width: 125%;
-		height: 140px;
+		height: 160px;
 		margin: 6.5px 0 0 0;
 		position: relative;
 		background: #fff;
@@ -315,29 +315,29 @@
 
 	.single-box {
 		width: 100%;
-		height: 140px;
+		height: 160px;
 		position: relative;
 		float: left;
 	}
 
 	.s-m-b-inner {
 		width: 375px;
-		height: 140px;
+		height: 160px;
 		position: relative;
 		float: left;
 	}
 
 	.single-msg-box-left {
 		width: 98px;
-		height: 108px;
-		margin: 12px 0 0 17px;
+		height: 100%;
+		margin: 12px 0 12px 17px;
 		float: left;
 	}
 
 	.single-msg-box-center {
 		width: 160px;
-		height: 108px;
-		margin: 12px 0 0 0;
+		height: 100%;
+		margin: 12px 0 12px 0;
 		float: left;
 	}
 

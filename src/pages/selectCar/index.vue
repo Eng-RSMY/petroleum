@@ -21,7 +21,7 @@
 							<p>车辆名：</p>
 							<p>车牌号：</p>
 							<p>行驶证号：</p>
-							<!-- <p>危险品运输号：</p> -->
+							<p>危险品运输号：</p>
 						</div>
 						<div class="single-msg-box-center">
 							<p>{{ item.remark ==null ? "暂无信息" : item.remark }}</p>
