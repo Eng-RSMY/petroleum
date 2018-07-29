@@ -299,7 +299,7 @@
 						.then(res => {
 							console.log(res)
 							if (res.status == "200") {
-								var orderInfo = JSON.stringify(res.data)
+								var orderInfo =res.data.id
 								console.log(orderInfo)
 								wx.navigateTo({
 									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo,
