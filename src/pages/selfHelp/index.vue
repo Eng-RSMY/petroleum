@@ -56,7 +56,7 @@
 				</div>
 				<div class="weui-cell__ft">
 					<span class="dw">(吨)</span>
-					<input class="input" type="number" @change="input" pattern="[0-9]*" v-model.lazy="num"  placeholder="请输入">
+					<input class="input" type="number" @change="input" pattern="[0-9]*" v-model.lazy="num" placeholder="请输入">
 				</div>
 			</div>
 		</div>
@@ -69,23 +69,19 @@
 				<p class="close" @click="reset">x</p>
 				<p class="driver_name driverInfo">
 					<span>司机真实姓名：</span>
-					<span>name</span>
+					<span>{{driverInfo.realName}}</span>
 				</p>
 				<p class="driver_phone driverInfo">
 					<span>绑定手机号：</span>
-					<span>17615833291</span>
-				</p>
-				<p class="driver_name driverInfo">
-					<span>司机真实姓名：</span>
-					<span>name</span>
+					<span>{{driverInfo.phone}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>身份证号：</span>
-					<span>xxxxxxxxxxxxxxxx</span>
+					<span>{{driverInfo.idNumber}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>驾证号码：</span>
-					<span>XXXXXXXXXXX</span>
+					<span>{{driverInfo.driverNumber}}</span>
 				</p>
 			</div>
 		</div>
@@ -98,19 +94,19 @@
 				<p class="close" @click="reset1">x</p>
 				<p class="driver_name driverInfo">
 					<span>车辆名：</span>
-					<span>name</span>
+					<span>{{carInfo.remark}}</span>
 				</p>
 				<p class="driver_phone driverInfo">
 					<span>车牌号：</span>
-					<span>鲁A911XP</span>
+					<span>{{carInfo.carNumber}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>行驶证号：</span>
-					<span>xxxxxxxxxxxxxxxx</span>
+					<span>{{carInfo.drivingNumber}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>危险品运输证号：</span>
-					<span>XXXXXXXXXXX</span>
+					<span>{{carInfo.transportNumber}}</span>
 				</p>
 			</div>
 		</div>
@@ -122,21 +118,26 @@
 			<div class="driver" v-else>
 				<p class="close" @click="reset2">x</p>
 				<p class="driver_name driverInfo">
-					<span>姓名：</span>
-					<span>name</span>
+					<span>用户名：</span>
+					<span>{{escortInfo.username}}</span>
+				</p>
+				<p class="driver_name driverInfo">
+					<span>真实姓名：</span>
+					<span>{{escortInfo.realName}}</span>
 				</p>
 				<p class="driver_phone driverInfo">
 					<span>绑定手机号：</span>
-					<span>17615833291</span>
+					<span>{{escortInfo.phone}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>身份证号：</span>
-					<span>xxxxxxxxxxxxxxxx</span>
+					<span>{{escortInfo.idNumber}}</span>
 				</p>
+
 			</div>
 		</div>
 		<div class="footer">
-			<span>{{sumPrice}}</span>
+			<span style="font-size: 20px">{{sumPrice}}</span>
 			<button class="weui-btn weui-btn_primary" @click="creatOrder">提交订单</button>
 		</div>
 		<div class="js_dialog" id="iosDialog1" v-if="showDialog">
@@ -170,15 +171,18 @@
 				showPeople: true,
 				showDialog: false,
 				categories: [],
-				num:"",
+				num: "",
 				oils: [],
 				// 库存
-				stock:"",
+				stock: "",
 				// 油品单价
-				oilPrice:"",
+				oilPrice: "",
 				// 总价
-				sumPrice:"",
-				
+				sumPrice: "¥0",
+				driverInfo: "",
+				carInfo: "",
+				escortInfo: ""
+
 			}
 		},
 		components: {
@@ -192,11 +196,11 @@
 				this.$http.get("/self_order/oils", { "categoryName": categoryName })
 					.then(res => {
 						console.log(res)
-						if(res.status == "200"){
+						if (res.status == "200") {
 							if (res) {
-							for (var i = 0; i < res.data.length; i++) {
-								this.oils.push(res.data[i].name)
-							}
+								for (var i = 0; i < res.data.length; i++) {
+									this.oils.push(res.data[i].name)
+								}
 							}
 						}
 
@@ -212,28 +216,28 @@
 						icon: 'none',
 						duration: 2000
 					})
-				}else{
+				} else {
 					console.log('picker发送选择改变，携带值为', e)
 					this.pickSelect1 = this.oils[e.mp.detail.value];
-					var oilName= this.oils[e.mp.detail.value];
-					this.$http.get("/self_order/oil_product", { "categoryName": this.categoryName,"oilName":oilName })
-					.then(res => {
-						console.log(res)
-						if(res.status == "200"){
-							this.oilPrice=res.data.price;
-							this.stock=res.data.stock;
-						}
-					})
-					.catch(res => {
-						console.log(res)
-					})
+					var oilName = this.oils[e.mp.detail.value];
+					this.$http.get("/self_order/oil_product", { "categoryName": this.categoryName, "oilName": oilName })
+						.then(res => {
+							console.log(res)
+							if (res.status == "200") {
+								this.oilPrice = res.data.price;
+								this.stock = res.data.stock;
+							}
+						})
+						.catch(res => {
+							console.log(res)
+						})
 				}
-				
+
 			},
-			input:function(val){
+			input: function (val) {
 				console.log(val)
-				var num=val.mp.detail.value;
-				this.sumPrice="¥"+parseFloat(this.oilPrice*num)
+				var num = val.mp.detail.value;
+				this.sumPrice = "¥" + (this.oilPrice * num).toFixed(2)
 			},
 			reset: function () {
 				this.showDriver = true;
@@ -246,34 +250,117 @@
 			},
 			chooseDriver: function () {
 				// 跳转到司机页面
-				this.showDriver = false;
+				// this.showDriver = false;
+				wx.navigateTo({
+					url: "../../pages/selectDriver/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
 			},
 			chooseCar: function () {
 				// 跳转到车辆页面
-				this.showCar = false;
+				// this.showCar = false;
+				wx.navigateTo({
+					url: "../../pages/selectCar/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
 
 			},
 			choosePeoPle: function () {
 				// 跳转到押运员页面
-				this.showPeople = false;
+				// this.showPeople = false;
+				wx.navigateTo({
+					url: "../../pages/selectEscort/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
 
 			},
 			creatOrder: function () {
 				// 判断当前账户余额是否能够支付，不能支付弹出警告，点击继续支付可以跳转到订单详情页，如果余额够支付 不提示直接跳转到订单详情
-				// 余额不足弹窗
-				this.showDialog = true;
+				if (this.sumPrice > this.companyInfo.balance) {
+					// 余额不足弹窗
+					this.showDialog = true;
+				} else {
+					// 下单
+					var params = {
+						categoryName: this.pickSelect,
+						oilName: this.pickSelect1,
+						orderWeight: this.num,
+						driverId: this.driverInfo.key,
+						escortId: this.escortInfo.length > 0 ? this.escortInfo.key : "",
+						carId: this.carInfo.key
+					}
+					this.$http.post("/self_order", params)
+						.then(res => {
+							console.log(res)
+							if (res.status == "200") {
+								var orderInfo = JSON.stringify(res.data)
+								console.log(orderInfo)
+								wx.navigateTo({
+									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo,
+									fail: function (res) {
+										console.log(res)
+									}
+								})
+							} else {
+								wx.showToast({
+									title: res.statusText,
+									icon: 'none',
+									duration: 2000
+								})
+							}
+						})
+						.catch(res => {
+							console.log(res)
+							// .response.data.message
+							wx.showToast({
+								title: res.response.data.message,
+								icon: 'none',
+								duration: 2000
+							})
+						})
+				}
+
 			},
 			concel: function () {
 				this.showDialog = false;
 			},
 			sure: function () {
-				this.showDialog = false;
-				wx.navigateTo({
-					url: "../../pages/order/orderInfo/main",
-					fail: function (res) {
+
+				var params = {
+					categoryName: this.pickSelect,
+					oilName: this.pickSelect1,
+					orderWeight: this.num,
+					driverId: this.driverInfo.key,
+					escortId: this.escortInfo.length > 0 ? this.escortInfo.key : "",
+					carId: this.carInfo.key
+				}
+				this.$http.post("/self_order", params)
+					.then(res => {
 						console.log(res)
-					}
-				})
+						this.showDialog = false;
+						if (res.status == "200") {
+							var orderInfo = JSON.stringify(res.data)
+							console.log(orderInfo)
+							// wx.navigateTo({
+							// 	url: "../../pages/order/orderInfo/main?orderInfo="+JSON.stringify(res.data),
+							// 	fail: function (res) {
+							// 		console.log(res)
+							// 	}
+							// })
+						} else {
+							wx.showToast({
+								title: res.statusText,
+								icon: 'none',
+								duration: 2000
+							})
+						}
+					})
 
 			}
 
@@ -311,6 +398,23 @@
 					}
 				})
 			// 获取物料列表
+		},
+		mounted(query) {
+			// 接收页面参数
+			console.log(this.$root.$mp.query)
+			var router = this.$root.$mp.query;
+			if (router.from == "selectDriver") {
+				this.driverInfo = router
+				this.showDriver = false
+			}
+			if (router.from == "selectCar") {
+				this.carInfo = router;
+				this.showCar = false;
+			}
+			if (router.from == "selectescorts") {
+				this.escortInfo = router;
+				this.showPeople = false;
+			}
 		}
 	}
 </script>

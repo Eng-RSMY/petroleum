@@ -8,7 +8,7 @@
 						<div class="subtitle">使用手机号登录</div>
 						<div class="input-frame">
 							<div class="prefix">+86</div>
-							<input type="text" placeholder="手机号" v-model="phone" class="input">
+							<input type="text" placeholder="手机号" v-model="phone" class="input1">
 						</div>
 						<!-- <picker bindchange="bindPickerChange" placeholder="请选择公司" value="{{index}}" range="{{array}}"> -->
 						<picker @change="bindPickerChange" :value="index" :range="array">
@@ -32,8 +32,31 @@
 					<div class="title1">短信已发送至{{phone}}</div>
 
 					<div class="subtitle1">请输入验证码</div>
-					<security-code class="security-code" v-model="code" :length="6"></security-code>
-					<security-code v-model="code"></security-code>
+					<view class="code">
+						<view class="input-content-wrap">
+							<view catchtap="set_Focus" class="input-code-wrap">
+								<view :class="length==1||length==0?'input':'input_none'">
+									<text>{{code[0]}}</text>
+								</view>
+								<view :class="length==2?'input':'input_none'">
+									<text>{{code[1]}}</text>
+								</view>
+								<view :class="length==3?'input':'input_none'">
+									<text>{{code[2]}}</text>
+								</view>
+								<view :class="length==4?'input':'input_none'">
+									<text>{{code[3]}}</text>
+								</view>
+								<view :class="length==5?'input':'input_none'">
+									<text>{{code[4]}}</text>
+								</view>
+								<view :class="length==6?'input':'input_none'">
+									<text>{{code[5]}}</text>
+								</view>
+							</view>
+						</view>
+						<input @input="get_code" class="input-content" type="number" :focus="code_isFocus" maxlength="6" />
+					</view>
 					<div class="time color" v-show="show" @click="reset">重新获取验证码</div>
 					<div class="time" v-show="!show">重新发送短信({{count}}秒)</div>
 					<!-- <a href="javascript:;" class="weui_btn weui_btn_primary" @click="sureStep">确定</a> -->
@@ -46,14 +69,9 @@
 </template>
 
 <script>
-	// import SecurityCode from '../../components/security-code'
 	export default {
-		// components: {
-			// SecurityCode
-		// },
 		data() {
 			return {
-				code:"",
 				pickSelect: "公司名称请选择",
 				index: 0,
 				array: ['美国', '中国', '巴西', '日本'],
@@ -66,6 +84,12 @@
 				timer: null,
 				mask: false,
 				popup: "请输入手机号",
+				phoneNumber: "",
+				code: null,
+				code_isFocus: true,//控制input 聚焦
+				code: [],
+				focus_status: [],
+				length: 0,//已经输入的长度
 			};
 		},
 
@@ -93,6 +117,7 @@
 				}
 			},
 			sureStep: function () {
+				console.log(this.code)
 				wx.switchTab({
 					url: "../../pages/workbench/main",
 					fail: function (res) {
@@ -121,12 +146,52 @@
 					}, 1000);
 				}
 			},
-			
+			get_code:function(e) {
+				console.log(e)
+				var that = this;
+				that.code = e.mp.detail.value
+				if (that.code.length == 0) {
+					that.focus_status = "100000"
+
+				}
+				if (that.code.length == 1) {
+					that.length = e.mp.detail.value.length,
+						that.focus_status = "010000"
+
+				}
+				if (that.code.length == 2) {
+					that.length = e.mp.detail.value.length,
+						that.focus_status = "001000"
+				}
+				if (that.code.length == 3) {
+					that.length = e.mp.detail.value.length,
+						that.focus_status = "000100"
+				}
+				if (that.code.length == 4) {
+					that.length = e.mp.detail.value.length,
+						that.focus_status = "00010"
+				}
+				if (that.code.length == 5) {
+					that.length = e.mp.detail.value.length,
+						that.focus_status = "00001"
+
+				}
+				if (that.code.length == 6) {
+					that.length = e.mp.detail.value.length,
+						console.log(that.code)
+					this.code_isFocus=false;
+				}
+			},
+			set_Focus() { //聚焦input
+				var that = this
+				that.code_isFocus = true
+
+			},
 
 		},
 
 		created() {
-			
+
 		}
 	}
 </script>
@@ -137,6 +202,7 @@
 		padding-top: 60px;
 		background-color: #fff;
 	}
+
 	.title,
 	.title1 {
 		width: 100%;
@@ -195,7 +261,7 @@
 		box-sizing: border-box
 	}
 
-	.input {
+	.input1 {
 		display: inline-block;
 		height: 32px;
 		line-height: 32px;
@@ -227,6 +293,7 @@
 		color: #aaa;
 		border: 1px solid #4a4a4a;
 	}
+
 	.input-code {
 		position: absolute;
 		left: 0px;
@@ -262,5 +329,104 @@
 		background-color: #2E79FF;
 		color: #fff;
 		border: none;
+	}
+
+	page .code .input-content-wrap .input-code-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: center1;
+		height: 150rpx;
+	}
+
+	page .code .input-content-wrap .input-code-wrap .code_dot {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		color: #000;
+		background-color: #fff;
+		box-sizing: border-box;
+		width: 124rpx;
+		height: 150rpx;
+		border: #dfdfdf solid 1rpx;
+		border-left: none 0;
+		font-size: 60rpx;
+	}
+
+	page .code .input-content-wrap .input-code-wrap .code_dot:nth-child(1) {
+		border-left: 2rpx solid #ddd;
+	}
+
+	page .code .input-content-wrap .input-code-wrap .code_dot i {
+		/* background: #000; */
+		border-radius: 50%;
+		width: 20rpx;
+		height: 20rpx;
+		display: flex;
+		align-items: center;
+	}
+
+	page .code .input-content {
+		position: absolute;
+		opacity: 0;
+		left: -100%;
+		top: 600rpx;
+		background: #f56;
+		z-index: -999;
+		text-align: center;
+	}
+
+	page .code .input-content.active {
+		z-index: -99;
+	}
+
+	.input {
+		height:70px;
+		width: 50px;
+		flex: 1;
+		background-color: #fff;
+		color: #262626;
+		font-size: 64rpx;
+		margin: 0 10rpx 0 10rpx;
+		border: 1rpx #4287ff solid;
+		position: relative;
+		box-sizing: border-box
+	}
+
+	.input_none {
+		height:70px;
+		width: 50px;
+		flex: 1;
+		background-color: #fff;
+		color: #262626;
+		font-size: 64rpx;
+		margin: 0 10rpx 0 10rpx;
+		border: 1rpx #dfdfdf solid;
+		position: relative;
+		box-sizing: border-box
+	}
+
+	.input text {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-content: center;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
+	.input_none text {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-content: center;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 	}
 </style>
