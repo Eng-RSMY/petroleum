@@ -9,12 +9,11 @@
 	"pages/makeCard/main",
 	"pages/ticket/main",
 	"pages/trackeOrder/main",
-  "pages/checkPrice/main",
   "pages/userManagement/main",
   "pages/modifyUser/main",
   "pages/permission/main",
   "pages/NewEnterpriseUser/main",
-  "pages/moneyInquiry/main"
+  "pages/moneyInquiry/main",
 	"pages/workbench/main",
 	"pages/selectCar/main",
 	"pages/selectDriver/main",
