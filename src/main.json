@@ -9,7 +9,12 @@
 	"pages/makeCard/main",
 	"pages/trackeOrder/main",
 	"pages/bill/main",
-  "pages/checkPrice/main"
+  "pages/checkPrice/main",
+  "pages/userManagement/main",
+  "pages/modifyUser/main",
+  "pages/permission/main",
+  "pages/NewEnterpriseUser/main",
+  "pages/moneyInquiry/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
