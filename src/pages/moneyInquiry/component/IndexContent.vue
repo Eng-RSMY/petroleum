@@ -34,6 +34,8 @@
           <span>流水号:</span>
           <span>2018-0909</span>
         </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,8 +57,8 @@
     padding: 20px;
     margin-top: 10px;
   }
-  .contentList p span:nth-child(1){
+  .contentList p span:nth-child(1) {
     width: 100px;
-
+  }
 </style>
 
