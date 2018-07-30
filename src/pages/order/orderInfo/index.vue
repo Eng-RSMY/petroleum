@@ -3,51 +3,59 @@
 		<div class="orderInfo">
 			<p>
 				<span>订单号：</span>
-				<span>{{orderInfo[0].orderCode}}</span>
+				<span>{{orderInfo.number}}</span>
 			</p>
 			<p>
 				<span>订购货物:</span>
-				<span>{{orderInfo[0].orderProduct}}</span>
+				<span>{{orderInfo.categoryName}} {{orderInfo.oilName}}</span>
 			</p>
 			<p>
 				<span>订购量：</span>
-				<span>{{orderInfo[0].orderProductNum}}</span>
+				<span>{{orderInfo.orderWeight}}</span>
+			</p>
+			<p>
+				<span>下单价格：</span>
+				<span>{{orderInfo.orderPrice}}</span>
 			</p>
 			<p>
 				<span>货车司机：</span>
-				<span>{{orderInfo[0].orderDriverName}}</span>
+				<span>{{orderInfo.driverName}}</span>
 			</p>
 			<p>
 				<span>车牌号：</span>
-				<span>{{orderInfo[0].orderCarCode}}</span>
+				<span>{{orderInfo.carNumber}}</span>
 			</p>
 			<p>
 				<span>司机手机号:</span>
-				<span>{{orderInfo[0].orderDriverPhone}}</span>
+				<span>{{orderInfo.driverPhone}}</span>
 			</p>
 			<p>
 				<span>司机身份证号：</span>
-				<span>{{orderInfo[0].orderDriverIdCard}}</span>
+				<span>{{orderInfo.driverIdNumber}}</span>
 			</p>
 			<p>
 				<span>押运员：</span>
-				<span>{{orderInfo[0].orderPeople}}</span>
+				<span>{{orderInfo.escortName == null ? "未选择押运员" : orderInfo.escortName }}</span>
 			</p>
 			<p>
 				<span>押运员手机号：</span>
-				<span>{{orderInfo[0].orderPeoplePhone}}</span>
+				<span>{{orderInfo.escortPhone == null ? "未选择押运员" : orderInfo.escortPhone }}</span>
 			</p>
 			<p>
 				<span>下单时间：</span>
-				<span>{{orderInfo[0].orderCreatetime}}</span>
+				<span>{{orderInfo.orderedTime}}</span>
 			</p>
 			<p>
 				<span>操作人：</span>
-				<span>{{orderInfo[0].caozuoName}}</span>
+				<span>{{orderInfo.operatorName}}</span>
 			</p>
 			<p>
-				<span>操作账号：：</span>
-				<span>{{orderInfo[0].caozuoPhone}}</span>
+				<span>操作帐号</span>
+				<span>{{orderInfo.operatorUsername}}</span>
+			</p>
+			<p>
+				<span>操作人手机号：</span>
+				<span>{{orderInfo.operatorPhone}}</span>
 			</p>
 		</div>
 		<div class="weui-cell" style="border-top: none">
@@ -55,7 +63,7 @@
 				<p>订购状态</p>
 			</div>
 			<div class="weui-cell__ft">
-				<p style="color: #2E79FF;">{{orderInfo[0].orderState}}</p>
+				<p style="color: #2E79FF;">{{orderInfo.statusName}}</p>
 			</div>
 		</div>
 		<div class="weui-cell" style="border-top: none">
@@ -63,38 +71,25 @@
 				<p>订购金额</p>
 			</div>
 			<div class="weui-cell__ft">
-				<p style="color: #FF001F;font-size: 17px">¥ {{orderInfo[0].orderPrice}}</p>
+				<p style="color: #FF001F;font-size: 17px">¥ {{orderInfo.orderTotalPrice}}</p>
 			</div>
 		</div>
 		<div class="two-bar-codes">
 			<p>二维码</p>
-			<div class="img">
+			<canvas class="img" style="width: 200px; height: 200px;" canvas-id="myQrcode"></canvas>
+			<!-- <div class="img">
 					<img src="https://qr.api.cli.im/qr?data=www.baidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=f33aa9d4852b6c3e3439d4e50f311c26" alt="">
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
 
 <script>
+	import drawQrcode from 'weapp-qrcode'
 	export default {
 		data() {
 			return {
-				orderInfo: [{
-					orderCode: "1000201805158866371",
-					orderProduct: "92号汽油",
-					orderProductNum: "12吨",
-					orderDriverName: "张三",
-					orderCarCode: "鲁A911XP",
-					orderDriverPhone: "XXXXXXXXXXX",
-					orderDriverIdCard: "XXXXXXXXXXXXXXXXXX",
-					orderPeople: "王发财",
-					orderPeoplePhone: "XXXXXXXXXXX",
-					orderCreatetime: "2018-05-15  09：34: 00",
-					caozuoName: "name（用户名)",
-					caozuoPhone: "15066668888",
-					orderState: "已入场",
-					orderPrice: "48000.00"
-				}]
+				orderInfo: "",
 			}
 		},
 
@@ -103,9 +98,41 @@
 
 		methods: {
 
+
 		},
 
-		created() { }
+		created() { },
+		mounted() {
+			var orderId = this.$root.$mp.query.orderInfo;
+			this.$http.get(`/orders/${orderId}`)
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.orderInfo = res.data
+						// this.qrcode(res.data.encryptOrderNumber)
+						drawQrcode({
+							width: 200,
+							height: 200,
+							canvasId: 'myQrcode',
+							text: res.data.encryptOrderNumber
+						})
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
+					}
+				})
+				.catch(res => {
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
+				})
+			// 获取物料列表
+		},
 	}
 </script>
 
@@ -119,7 +146,7 @@
 
 	.weui-cell__bd {
 		padding-left: 5%;
-		color:#000;
+		color: #000;
 	}
 
 	.weui-cell {
@@ -151,27 +178,31 @@
 		width: 30%;
 		padding-left: 40px;
 	}
-	.two-bar-codes{
-		width:100%;
+
+	.two-bar-codes {
+		width: 100%;
 		margin-top: 10px;
 		background-color: #fff;
 	}
-	.two-bar-codes p{
+
+	.two-bar-codes p {
 		width: 100%;
 		text-align: left !important;
 		padding-left: 5%;
 		font-size: 14px;
 		color: #000;
-		height:50px;
+		height: 50px;
 		line-height: 50px;
 	}
-	.two-bar-codes .img{
-		width:200px;
-		height:200px;
+
+	.two-bar-codes .img {
+		width: 200px;
+		height: 200px;
 		margin: 20px auto
 	}
-	.two-bar-codes .img img{
-		width:100%;
+
+	.two-bar-codes .img img {
+		width: 100%;
 		height: 100%;
 	}
 </style>
