@@ -3,18 +3,26 @@
 	"pages/index/main",
 	"pages/center/main",
 	"pages/order/main",
-	"pages/workbench/main",
 	"pages/selfHelp/main",
 	"pages/order/orderInfo/main",
-	"pages/makeCard/main",
-	"pages/trackeOrder/main",
 	"pages/bill/main",
+	"pages/makeCard/main",
+	"pages/ticket/main",
+	"pages/trackeOrder/main",
   "pages/checkPrice/main",
   "pages/userManagement/main",
   "pages/modifyUser/main",
   "pages/permission/main",
   "pages/NewEnterpriseUser/main",
   "pages/moneyInquiry/main"
+	"pages/workbench/main",
+	"pages/selectCar/main",
+	"pages/selectDriver/main",
+	"pages/selectEscort/main",
+	"pages/addCar/main",
+	"pages/addDriver/main",
+	"pages/addEscort/main",
+	"pages/checkPrice/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,8 +36,8 @@
 	"color":"#898989",
     "list": [{
 	  "pagePath": "pages/workbench/main",
-	  "iconPath":"/static/images/work2.png",
-	  "selectedIconPath":"/static/images/work.png",
+	  "iconPath":"/static/images/work.png",
+	  "selectedIconPath":"/static/images/work2.png",
       "text": "工作台"
     }, {
 	  "pagePath": "pages/order/main",

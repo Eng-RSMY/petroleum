@@ -5,7 +5,7 @@
 				<p>公司名称</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" placeholder="请输入公司名称">
+				<input class="input" type="text" v-model.lazy="companyInfo.fullName"  placeholder="请输入公司名称">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -13,7 +13,7 @@
 				<p>纳税人识别号</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" placeholder="请输入纳税人识别号">
+				<input class="input" type="text" v-model.lazy="companyInfo.taxpayerNumber" placeholder="请输入纳税人识别号">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -21,7 +21,7 @@
 				<p>电话号码</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" placeholder="请输入电话号码">
+				<input class="input" type="text" v-model.lazy="companyInfo.contactNumber" placeholder="请输入电话号码">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -29,7 +29,7 @@
 				<p>开户行</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" placeholder="请输入开户行">
+				<input class="input" type="text"  v-model.lazy="companyInfo.bankName" placeholder="请输入开户行">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -37,7 +37,7 @@
 				<p>银行帐号</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" placeholder="请输入银行账号">
+				<input class="input" type="text" v-model.lazy="companyInfo.bankAccount" placeholder="请输入银行账号">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -45,7 +45,7 @@
 				<p>公司地址</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" placeholder="请输入公司地址">
+				<input class="input" type="text" v-model.lazy="companyInfo.companyAddress" placeholder="请输入公司地址">
 			</div>
 		</div>
 		<button class="weui-btn weui-btn_primary button" @click="save">保存并更新</button>
@@ -56,7 +56,7 @@
 	export default {
 		data() {
 			return {
-
+				companyInfo:""
 			}
 		},
 
@@ -65,16 +65,38 @@
 
 		methods: {
 			save: function (orderCode) {
-				wx.navigateTo({
-					url: "../../pages/order/orderInfo/main?orderCode=" + orderCode,
-					fail: function (res) {
-						console.log(res)
+				this.$http.post("/invoice",this.companyInfo)
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.companyInfo = res.data;
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
 					}
 				})
 			}
 		},
 
-		created() { }
+		created() { 
+			// 获取企业开票信息
+			this.$http.get("/invoice")
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.companyInfo = res.data;
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
+					}
+				})
+		}
 	}
 </script>
 

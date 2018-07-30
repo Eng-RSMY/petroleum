@@ -3,28 +3,26 @@
 		<!-- This is a workbence -->
 		<!-- 顶部公司信息 -->
 		<div class="top">
-			<p>山东xxxxx化学品运输公司</p>
+			<p>{{companyInfo.name}}</p>
 			<div class="weui-flex top_maddle">
 				<div class="weui-flex__item">
-					<div class="placeholder">52134</div>
-					<div class="placeholder1">账户余额</div>
+					<div class="placeholder">{{companyInfo.balance}}</div>
+					<div class="placeholder2">账户余额</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">46789</div>
-					<div class="placeholder1">已下单</div>
-
+					<div class="placeholder">{{companyInfo.orderedMoney}}</div>
+					<div class="placeholder2">已下单</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">4561</div>
-					<div class="placeholder1">可用金额</div>
-
+					<div class="placeholder">{{companyInfo.availableBalance}}</div>
+					<div class="placeholder2">可用金额</div>
 				</div>
 			</div>
 		</div>
 		<!-- 常用功能 -->
 		<div class="weui-cell">
 			<div class="weui-cell__bd">
-				<p style="font-size: 14px;font-weight: bold">常用功能</p>
+				<p style="font-size: 16px;font-weight: bold">常用功能</p>
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
@@ -50,7 +48,7 @@
 		<!-- 全部功能 -->
 		<div class="weui-cell" style="margin-top: 10px;">
 			<div class="weui-cell__bd">
-				<p style="font-size: 14px;font-weight: bold">全部功能</p>
+				<p style="font-size: 16px;font-weight: bold">全部功能</p>
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
@@ -77,11 +75,11 @@
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
 			<div class="weui-flex__item" @click="toMakeCard">
 				<div class="placeholder">
-					<img src="/static/images/rczk.png"  alt="" class="img">
+					<img src="/static/images/rczk.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">入场制卡</div>
 			</div>
-			<div class="weui-flex__item" @click="toMoneyInquiry">
+			<div class="weui-flex__item" @click="toMoneyInQuiry">
 				<div class="placeholder">
 					<img src="/static/images/hkcx.png" alt="" class="img">
 				</div>
@@ -89,8 +87,7 @@
 			</div>
 			<div class="weui-flex__item">
 				<div class="placeholder">
-					<img src="/static/images/zhcz.png"
-					 alt="" class="img">
+					<img src="/static/images/zhcz.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">账户充值</div>
 			</div>
@@ -104,7 +101,7 @@
 			</div>
 			<div class="weui-flex__item" @click="toTicket()">
 				<div class="placeholder">
-					<img src="/static/images/kpxx.png"  alt="" class="img">
+					<img src="/static/images/kpxx.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">开票信息</div>
 			</div>
@@ -125,7 +122,7 @@
 			</div>
 			<div class="weui-flex__item">
 				<div class="placeholder">
-					<img src="/static/images/car.png"  alt="" class="img">
+					<img src="/static/images/car.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">车辆管理</div>
 			</div>
@@ -143,7 +140,7 @@
 	export default {
 		data() {
 			return {
-
+				companyInfo: "",
 			}
 		},
 
@@ -207,6 +204,14 @@
           }
         })
       },
+      toMoneyInQuiry:function () {
+        wx.navigateTo({
+          url: "../../pages/moneyInquiry/main",
+          fail: function (res) {
+            console.log(res)
+          }
+        })
+      },
 			toBill:function(){
 				wx.navigateTo({
 					url: "../../pages/bill/main",
@@ -215,7 +220,7 @@
 					}
 				})
 			},
-			toTicket:function(){
+			toTicket: function () {
 				wx.navigateTo({
 					url: "../../pages/ticket/main",
 					fail: function (res) {
@@ -225,7 +230,22 @@
 			}
 		},
 
-		created() { }
+		created() {
+			this.$http.get("/workbench/company_account")
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.companyInfo = res.data;
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
+					}
+
+				})
+		}
 	}
 </script>
 
@@ -265,6 +285,9 @@
 	}
 
 	.placeholder1 {
+		font-size: 14px;
+	}
+	.placeholder2{
 		font-size: 14px;
 		margin-top: 10px;
 	}

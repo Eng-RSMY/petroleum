@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 8,
 			"list": [
 				{
 					"id": -1,
@@ -44,9 +44,15 @@
 					"query": ""
 				},
 				{
+					"id": 2,
+					"name": "选择车辆",
+					"pathName": "pages/selectCar/main",
+					"query": ""
+				},
+				{
 					"id": -1,
-					"name": "自助下单",
-					"pathName": "pages/selfHelp/main",
+					"name": "选择司机",
+					"pathName": "pages/selectDriver/main",
 					"query": ""
 				},
 				{
@@ -54,7 +60,33 @@
 					"name": "订单详情",
 					"pathName": "pages/order/orderInfo/main",
 					"query": "orderid=1"
-				}
+				},
+				{
+					"id": -1,
+					"name": "开票信息",
+					"pathName": "pages/ticket/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "自助下单",
+					"pathName": "pages/selfHelp/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+
+					"name": "个人中心",
+					"pathName": "pages/center/main",
+					"query": ""
+        },
+         {
+          "id": -1,
+					"name": "订单详情",
+					"pathName": "pages/order/orderInfo/main",
+					"query": "orderInfo=30"
+        }
+				
 			]
 		}
 	}
