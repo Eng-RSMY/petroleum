@@ -262,7 +262,7 @@
 				// 跳转到车辆页面
 				// this.showCar = false;
 				wx.navigateTo({
-					url: "../../pages/selectCar/main",
+					url: "../../pages/selectCar/main?from=selfHelp",
 					fail: function (res) {
 						console.log(res)
 					}
@@ -299,7 +299,7 @@
 						.then(res => {
 							console.log(res)
 							if (res.status == "200") {
-								var orderInfo =res.data.id
+								var orderInfo = res.data.id
 								console.log(orderInfo)
 								wx.navigateTo({
 									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo,
@@ -360,6 +360,15 @@
 								duration: 2000
 							})
 						}
+					})
+					.catch(res => {
+						console.log(res)
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
 					})
 
 			}
