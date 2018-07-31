@@ -106,7 +106,7 @@
 				</div>
 				<div class="placeholder1">开票信息</div>
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toKF()">
 				<div class="placeholder">
 					<img src="/static/images/kf.png" alt="" class="img">
 				</div>
@@ -127,7 +127,7 @@
 				</div>
 				<div class="placeholder1">车辆管理</div>
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toNews()">
 				<div class="placeholder">
 					<img src="/static/images/xtgg.png" alt="" class="img">
 				</div>
@@ -200,6 +200,22 @@
 			toTicket: function () {
 				wx.navigateTo({
 					url: "../../pages/ticket/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toNews: function () {
+				wx.navigateTo({
+					url: "../../pages/news/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toKF: function () {
+				wx.navigateTo({
+					url: "../../pages/customerService/main",
 					fail: function (res) {
 						console.log(res)
 					}
