@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 9,
 			"list": [
 				{
 					"id": -1,
@@ -85,8 +85,19 @@
 					"name": "订单详情",
 					"pathName": "pages/order/orderInfo/main",
 					"query": "orderInfo=30"
-        }
-				
+				},
+				{
+					"id": 8,
+					"name": "选择车辆",
+					"pathName": "pages/selectCar/main",
+					"query": "from=workbench"
+				},
+				{
+					"id": -1,
+					"name": "添加车辆",
+					"pathName": "pages/addCar/main",
+					"query": "from=workbench&key=1"
+				}
 			]
 		}
 	}

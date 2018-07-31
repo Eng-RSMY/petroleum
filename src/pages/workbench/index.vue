@@ -120,7 +120,7 @@
 				<div class="placeholder1">预警管理</div>
 
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toCar">
 				<div class="placeholder">
 					<img src="/static/images/car.png" alt="" class="img">
 				</div>
@@ -196,23 +196,23 @@
 					}
 				})
 			},
-      toCheckPrice:function () {
-        wx.navigateTo({
-          url: "../../pages/checkPrice/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
-      toMoneyInQuiry:function () {
-        wx.navigateTo({
-          url: "../../pages/moneyInquiry/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
-			toBill:function(){
+			toCheckPrice: function () {
+				wx.navigateTo({
+					url: "../../pages/checkPrice/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toMoneyInQuiry: function () {
+				wx.navigateTo({
+					url: "../../pages/moneyInquiry/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toBill: function () {
 				wx.navigateTo({
 					url: "../../pages/bill/main",
 					fail: function (res) {
@@ -223,6 +223,14 @@
 			toTicket: function () {
 				wx.navigateTo({
 					url: "../../pages/ticket/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toCar:function(){
+				wx.navigateTo({
+					url:"../../pages/selectCar/main?from=workbench",
 					fail: function (res) {
 						console.log(res)
 					}
@@ -287,7 +295,8 @@
 	.placeholder1 {
 		font-size: 14px;
 	}
-	.placeholder2{
+
+	.placeholder2 {
 		font-size: 14px;
 		margin-top: 10px;
 	}
