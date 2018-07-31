@@ -75,6 +75,13 @@
 				},
 				{
 					"id": -1,
+
+					"name": "个人中心",
+					"pathName": "pages/center/main",
+					"query": ""
+        },
+         {
+          "id": -1,
 					"name": "订单详情",
 					"pathName": "pages/order/orderInfo/main",
 					"query": "orderInfo=30"
