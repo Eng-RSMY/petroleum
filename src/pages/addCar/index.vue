@@ -135,7 +135,33 @@
 							// this.carNo = res.data.carNumber
 							// this.driveNum = res.data.drivingNumber
 							// this.dangerNum = res.data.transportNumber
-							if(this.router)
+								wx.redirectTo({
+									url: '../../pages/selectCar/main?from='+this.router
+								})
+						}
+					})
+					.catch(res => {
+						console.log(res)
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
+				}else{
+					params.id=this.key
+					this.$http.post(`/cars`,params)
+					.then(res => {
+						console.log(res)
+						if (res.status == "200") {
+							// this.carName = res.data.remark
+							// this.carNo = res.data.carNumber
+							// this.driveNum = res.data.drivingNumber
+							// this.dangerNum = res.data.transportNumber
+								wx.redirectTo({
+									url: '../../pages/selectCar/main?from='+this.router
+								})
 						}
 					})
 					.catch(res => {
