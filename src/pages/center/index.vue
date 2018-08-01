@@ -152,6 +152,7 @@
 		background: #fff;
 	}
 	.a-left {
+		width: 50%;
 		position: relative;
 		margin: 0 0 0 8%;
 	}
