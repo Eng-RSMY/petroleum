@@ -12,9 +12,9 @@
 				</div>
 				<div class="header-words">
 					<div class="h-w-inner">
-						<p class="h-w-name">某某某</p>
-						<p>山东石化石油运输公司</p>
-						<p>企业管理员</p>
+						<p class="h-w-name">{{ personList.realName }}</p>
+						<p>{{ personList.companyName }}</p>
+						<p>{{ personList.roleName }}</p>
 					</div>
 				</div>
 			</div>
@@ -24,7 +24,7 @@
 					<span>账号角色</span>
 				</div>
 				<div class="a-right">
-					<span>企业管理员</span>
+					<span>{{ personList.roleName }}</span>
 					<img src="/static/images/more.png" />
 				</div>
 			</div>
@@ -34,11 +34,11 @@
 					<span>绑定手机号</span>
 				</div>
 				<div class="a-right">
-					<span>150****0000</span>
+					<span>{{ personList.phone }}</span>
 					<img src="/static/images/more.png" />
 				</div>
 			</div>
-			<div class="footer">
+			<div class="footer" @click="logout">
 				退出登录
 			</div>
 		</div>
@@ -49,6 +49,7 @@
 	export default {
 		data() {
 			return {
+				personList: {}
 			}
 		},
 
@@ -56,13 +57,32 @@
 		},
 
 		methods: {
-
+			logout () {
+				this.personList = {}
+				wx.navigateTo({
+					url: "../../pages/index/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			}
 		},
 
 		created() {
 			this.$http.get("/mine")
 				.then(res => {
-					console.log(res)
+					if(res.status == "200") {
+						this.personList = res.data
+						let p = this.personList.phone
+						p = p.split("")
+						for(let i=3; i < 7; i++) {
+							p[i] = "*"
+						}
+						p = p.join("")
+						this.personList.phone = p
+					}else {
+						console.log("获取个人信息失败")
+					}
 				})
 		}
 	}
@@ -130,9 +150,6 @@
 		display: flex;
 		justify-content: space-between;
 		background: #fff;
-	}
-	.account img {
-
 	}
 	.a-left {
 		position: relative;

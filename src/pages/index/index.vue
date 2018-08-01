@@ -7,7 +7,7 @@
 					<div class="login-form">
 						<div class="subtitle">使用手机号登录</div>
 						<div class="input-frame">
-							<div class="prefix">+86</div>
+							<span class="prefix">+86</span>
 							<input type="text" placeholder="手机号" v-model="phone" class="input1">
 						</div>
 						<!-- <picker bindchange="bindPickerChange" placeholder="请选择公司" value="{{index}}" range="{{array}}"> -->
@@ -16,13 +16,24 @@
 								{{pickSelect}}
 							</view>
 						</picker>
-						<div class="checkbox">
-							<checkbox value="1" checked="true" size="mini" /> 记住公司名称
+						<div class="checkbox" v-if="select" @click="isselect">
+							<img class="img" src="/static/images/selected.png" alt="" align="middle">
+							<span class="span">记住公司名称</span>
 						</div>
-						<div class="input-title">
-							<checkbox value="1" checked="true" /> 同意《垦利石化小程序服务条款》
+						<div class="checkbox" v-else  @click="isselect">
+							<img class="img" src="/static/images/select.png" alt="" align="middle">
+							<span class="span">记住公司名称</span>
 						</div>
-						<button type="primary" size="default" @click="nextStep" style="height: 50px;background-color: #2E79FF;height: 40px;line-height: 40px">下一步</button>
+						<div class="input-title" v-if="select1"  @click="isselect1">
+							<img class="img" src="/static/images/selected.png" alt="" align="middle">
+							<span class="span"> 同意《垦利石化小程序服务条款》</span>
+						</div>
+						<div class="input-title" v-else  @click="isselect1">
+							<img class="img" src="/static/images/select.png" alt="" align="middle" >
+							<span class="span"> 同意《垦利石化小程序服务条款》</span>
+						</div>
+						<!-- <button type="primary" size="default" style="height: 50px;background-color: #f1f1f1;height: 40px;line-height: 40px" v-if="isEnty">下一步</button> -->
+						<button type="primary" size="default" @click="nextStep" style="height: 50px;background-color: #2E79FF;height: 40px;line-height: 40px" >下一步</button>
 
 					</div>
 				</div>
@@ -59,7 +70,6 @@
 					</view>
 					<div class="time color" v-show="show" @click="reset">重新获取验证码</div>
 					<div class="time" v-show="!show">重新发送短信({{count}}秒)</div>
-					<!-- <a href="javascript:;" class="weui_btn weui_btn_primary" @click="sureStep">确定</a> -->
 					<button type="primary" size="default" @click="sureStep" class="sure">登录</button>
 
 				</div>
@@ -72,6 +82,9 @@
 	export default {
 		data() {
 			return {
+				select: true,
+				select1: true,
+				isEnty:true,
 				pickSelect: "公司名称请选择",
 				index: 0,
 				array: ['美国', '中国', '巴西', '日本'],
@@ -95,8 +108,25 @@
 
 		components: {
 		},
-
+		watch:{
+			isEnty:function(val){
+				cpnsole.log(val)
+				if(this.phone != "" && this.pickSelect !="公司请选择" && this.select==true && this.select1==true){
+					this.isEnty=false
+				}
+			}
+		},
 		methods: {
+			isselect:function(){
+				this.select == true ? this.select=false : this.select=true;
+			},
+			isselect1:function(){
+				this.select1 == true ? this.select1=false : this.select1=true;
+			},
+			bindPickerChange:function(e){
+				console.log(e)
+				this.pickSelect = this.array[e.mp.detail.value];
+			},
 			nextStep: function () {
 				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
 				if (this.phone == "") {
@@ -146,7 +176,7 @@
 					}, 1000);
 				}
 			},
-			get_code:function(e) {
+			get_code: function (e) {
 				console.log(e)
 				var that = this;
 				that.code = e.mp.detail.value
@@ -179,7 +209,7 @@
 				if (that.code.length == 6) {
 					that.length = e.mp.detail.value.length,
 						console.log(that.code)
-					this.code_isFocus=false;
+					this.code_isFocus = false;
 				}
 			},
 			set_Focus() { //聚焦input
@@ -191,7 +221,19 @@
 		},
 
 		created() {
-
+			// var params={
+			// 	grant_type:"password",
+			// 	username:"admin",
+			// 	password:"password"
+				
+			// }
+			// this.$http.post("/oauth/token",params)
+			// .then(res => {
+			// 	console.log(res)
+			// })
+			// .catch(res => {
+			// 	console.log(res)
+			// })
 		}
 	}
 </script>
@@ -225,8 +267,8 @@
 		width: 100%;
 		box-sizing: border-box;
 		text-align: left;
-		color: rgb(94, 92, 92);
-		font-size: 14px;
+		color:#565656;
+		font-size: 16px;
 		margin-bottom: 10px
 	}
 
@@ -241,7 +283,7 @@
 
 	.input-frame {
 		border: 1px solid #4a4a4a;
-		margin-bottom: 50px;
+		margin-bottom: 25px;
 	}
 
 	.checkbox {
@@ -253,23 +295,25 @@
 	.prefix {
 		display: inline-block;
 		color: #4a4a4a;
-		height: 32px;
-		line-height: 32px;
+		height: 45px;
+		line-height: 45px;
 		width: 20%;
 		border-right: 1px solid #4a4a4a;
 		text-align: center;
-		box-sizing: border-box
+		box-sizing: border-box;
+		vertical-align: middle
 	}
 
 	.input1 {
 		display: inline-block;
-		height: 32px;
-		line-height: 32px;
+		height: 45px;
+		line-height: 45px;
 		width: 76%;
 		background-color: #fff;
 		padding-left: 16px;
 		box-sizing: border-box;
-		color: #4a4a4a;
+		color: #565656;
+		vertical-align: middle
 	}
 
 	.input-title {
@@ -284,13 +328,13 @@
 
 	.picker {
 		display: inline-block;
-		height: 32px;
-		line-height: 32px;
+		height: 45px;
+		line-height: 45px;
 		width: 100%;
 		background-color: #fff;
 		padding-left: 16px;
 		box-sizing: border-box;
-		color: #aaa;
+		color: #565656;
 		border: 1px solid #4a4a4a;
 	}
 
@@ -311,9 +355,8 @@
 
 	.time {
 		width: 84%;
-		font-size: 16px;
-		color: #E8E8E8;
-		margin-top: 30px;
+		font-size: 14px;
+		color: #898989;
 		text-align: left;
 	}
 
@@ -381,12 +424,12 @@
 	}
 
 	.input {
-		height:70px;
-		width: 50px;
+		height: 40px;
+		width: 40px;
 		flex: 1;
 		background-color: #fff;
 		color: #262626;
-		font-size: 64rpx;
+		font-size: 48rpx;
 		margin: 0 10rpx 0 10rpx;
 		border: 1rpx #4287ff solid;
 		position: relative;
@@ -394,12 +437,12 @@
 	}
 
 	.input_none {
-		height:70px;
-		width: 50px;
+		height: 40px;
+		width: 40px;
 		flex: 1;
 		background-color: #fff;
 		color: #262626;
-		font-size: 64rpx;
+		font-size: 48rpx;
 		margin: 0 10rpx 0 10rpx;
 		border: 1rpx #dfdfdf solid;
 		position: relative;
@@ -428,5 +471,19 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+	}
+
+	.img {
+		width: 16px;
+		height: 16px;
+		display: inline-block;
+		margin-right: 5px;
+		vertical-align:middle
+	}
+
+	.span {
+		display: inline-block;
+		height: 100%;
+		line-height:16px;
 	}
 </style>

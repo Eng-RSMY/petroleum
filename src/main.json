@@ -9,11 +9,11 @@
 	"pages/makeCard/main",
 	"pages/ticket/main",
 	"pages/trackeOrder/main",
-  "pages/userManagement/main",
-  "pages/modifyUser/main",
-  "pages/permission/main",
-  "pages/NewEnterpriseUser/main",
-  "pages/moneyInquiry/main",
+	"pages/userManagement/main",
+	"pages/modifyUser/main",
+	"pages/permission/main",
+	"pages/NewEnterpriseUser/main",
+	"pages/moneyInquiry/main",
 	"pages/workbench/main",
 	"pages/selectCar/main",
 	"pages/selectDriver/main",
@@ -21,7 +21,10 @@
 	"pages/addCar/main",
 	"pages/addDriver/main",
 	"pages/addEscort/main",
-	"pages/checkPrice/main"
+	"pages/checkPrice/main",
+	"pages/news/main",
+	"pages/newsDetail/main",
+	"pages/customerService/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

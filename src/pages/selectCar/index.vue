@@ -39,7 +39,8 @@
 				</div>
 				<div class="s-m-b-right">
 					<div class="s-m-b-r-edit" @click="editItem" :data-key="item.id">编辑 </div>
-					<div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div>
+					<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
+					<div class="s-m-b-r-del" :data-key="item.id">删除</div>
 				</div>
 			</div>
 		</div>
@@ -66,7 +67,8 @@
 				carList: [],
 				page: 0,
 				carNumber: "",
-				foot: true
+				foot: true,
+				router: "",
 			}
 		},
 		methods: {
@@ -103,7 +105,7 @@
 					})
 			},
 			addItem() {
-				var url = "../addCar/main"
+				var url = "../addCar/main?from="+this.router;
 				wx.navigateTo({ url })
 			},
 			loadingMore: function () {
@@ -153,7 +155,9 @@
 				var transportNumber = list[index].transportNumber
 				var url = "../selfHelp/main?from=selectCar&key=" + key + "&remark=" + remark + "&carNumber=" + carNumber +
 					"&drivingNumber=" + drivingNumber + "&transportNumber=" + transportNumber
-				wx.navigateTo({ url })
+				if (this.router == "selfHelp") {
+					wx.navigateTo({ url })
+				}
 			},
 			touchS(e) {
 				if (e.touches.length === 1) {
@@ -202,19 +206,20 @@
 			},
 			editItem(e) {
 				var key = e.currentTarget.dataset.key
-				var list = this.carList
-				var index = null
-				for (let i = 0; i < list.length; i++) {
-					if (list[i].id == key) {
-						index = i
-					}
-				}
-				var carName = list[index].name
-				var carPlate = list[index].plate
-				var driveNum = list[index].driveNum
-				var dangerNum = list[index].dangerNum
-				var url = "../addCar/main?key=" + key + "&carName=" + carName + "&carPlate=" + carPlate +
-					"&driveNum=" + driveNum + "&dangerNum=" + dangerNum
+				// var list = this.carList
+				// var index = null
+				// for (let i = 0; i < list.length; i++) {
+				// 	if (list[i].id == key) {
+				// 		index = i
+				// 	}
+				// }
+				// var carName = list[index].name
+				// var carPlate = list[index].plate
+				// var driveNum = list[index].driveNum
+				// var dangerNum = list[index].dangerNum
+				// var url = "../addCar/main?key=" + key + "&carName=" + carName + "&carPlate=" + carPlate +
+					// "&driveNum=" + driveNum + "&dangerNum=" + dangerNum
+					var url = "../addCar/main?key=" + key + "&from=selfHelp"
 				wx.navigateTo({ url })
 			}
 		},
@@ -241,7 +246,26 @@
 						})
 					}
 				})
-		}
+		},
+		mounted() {
+			var router = this.$root.$mp.query.from;
+			this.router = router
+			if (router == "workbench") {
+				wx.setNavigationBarTitle({
+					title: '车辆管理',
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			} else {
+				wx.setNavigationBarTitle({
+					title: '选择车辆',
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			}
+		},
 	}
 </script>
 <style scoped>

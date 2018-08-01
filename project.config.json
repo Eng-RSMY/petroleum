@@ -96,6 +96,16 @@
 					"name": "新建用户",
 					"pathName": "pages/NewEnterpriseUser/main",
 					"query": ""
+					"id": 8,
+					"name": "选择车辆",
+					"pathName": "pages/selectCar/main",
+					"query": "from=workbench"
+				},
+				{
+					"id": -1,
+					"name": "添加车辆",
+					"pathName": "pages/addCar/main",
+					"query": "from=workbench&key=1"
 				}
 			]
 		}

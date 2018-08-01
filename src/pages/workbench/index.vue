@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item"  @click="toUserManagement">
+			<div class="weui-flex__item" @click="toUserManagement">
 				<div class="placeholder">
 					<img src="/static/images/yhgl.png" alt="" class="img">
 				</div>
@@ -105,7 +105,7 @@
 				</div>
 				<div class="placeholder1">开票信息</div>
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toKF()">
 				<div class="placeholder">
 					<img src="/static/images/kf.png" alt="" class="img">
 				</div>
@@ -120,13 +120,13 @@
 				<div class="placeholder1">预警管理</div>
 
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toCar">
 				<div class="placeholder">
 					<img src="/static/images/car.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">车辆管理</div>
 			</div>
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toNews()">
 				<div class="placeholder">
 					<img src="/static/images/xtgg.png" alt="" class="img">
 				</div>
@@ -156,14 +156,14 @@
 					}
 				})
 			},
-      toMoneyInquiry: function () {
-        wx.navigateTo({
-          url: "../../pages/moneyInquiry/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
+			toMoneyInquiry: function () {
+				wx.navigateTo({
+					url: "../../pages/moneyInquiry/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
 			toMakeCard: function () {
 				wx.navigateTo({
 					url: "../../pages/makeCard/main",
@@ -172,22 +172,22 @@
 					}
 				})
 			},
-      toNewEnterpriseUser: function () {
-        wx.navigateTo({
-          url: "../../pages/NewEnterpriseUser/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
-      toUserManagement:function () {
-        wx.navigateTo({
-          url: "../../pages/userManagement/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
+			toNewEnterpriseUser: function () {
+				wx.navigateTo({
+					url: "../../pages/NewEnterpriseUser/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toUserManagement: function () {
+				wx.navigateTo({
+					url: "../../pages/userManagement/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
 			toTrackeOrder: function () {
 				wx.navigateTo({
 					url: "../../pages/trackeOrder/main",
@@ -196,23 +196,23 @@
 					}
 				})
 			},
-      toCheckPrice:function () {
-        wx.navigateTo({
-          url: "../../pages/checkPrice/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
-      toMoneyInQuiry:function () {
-        wx.navigateTo({
-          url: "../../pages/moneyInquiry/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
-			toBill:function(){
+			toCheckPrice: function () {
+				wx.navigateTo({
+					url: "../../pages/checkPrice/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toMoneyInQuiry: function () {
+				wx.navigateTo({
+					url: "../../pages/moneyInquiry/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toBill: function () {
 				wx.navigateTo({
 					url: "../../pages/bill/main",
 					fail: function (res) {
@@ -223,6 +223,27 @@
 			toTicket: function () {
 				wx.navigateTo({
 					url: "../../pages/ticket/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toNews: function () {
+				wx.navigateTo({
+					url: "../../pages/news/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toKF: function () {
+				wx.navigateTo({
+					url: "../../pages/customerService/main",
+				})
+			},
+			toCar: function () {
+				wx.navigateTo({
+					url: "../../pages/selectCar/main?from=workbench",
 					fail: function (res) {
 						console.log(res)
 					}
@@ -287,7 +308,8 @@
 	.placeholder1 {
 		font-size: 14px;
 	}
-	.placeholder2{
+
+	.placeholder2 {
 		font-size: 14px;
 		margin-top: 10px;
 	}
