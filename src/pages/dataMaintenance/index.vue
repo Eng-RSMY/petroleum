@@ -1,7 +1,7 @@
 <template>
     <div>
       <index-content></index-content>
-      <index-bottom></index-bottom>
+      <!--<index-bottom></index-bottom>-->
     </div>
 </template>
 
