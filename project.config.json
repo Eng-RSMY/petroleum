@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 10,
 			"list": [
 				{
 					"id": -1,
@@ -75,18 +75,28 @@
 				},
 				{
 					"id": -1,
-
 					"name": "个人中心",
 					"pathName": "pages/center/main",
 					"query": ""
-        },
-         {
-          "id": -1,
+				},
+				{
+					"id": -1,
 					"name": "订单详情",
 					"pathName": "pages/order/orderInfo/main",
 					"query": "orderInfo=30"
-        }
-				
+				},
+				{
+					"id": -1,
+					"name": "用户管理",
+					"pathName": "pages/userManagement/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "新建用户",
+					"pathName": "pages/NewEnterpriseUser/main",
+					"query": ""
+				}
 			]
 		}
 	}

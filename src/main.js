@@ -5,15 +5,15 @@ import animate from "animate.css"
 //在项目入口文件
 import VueInputCode from 'vue-input-code'
 Vue.component('VueInputCode', VueInputCode)
-var Fly=require("flyio/dist/npm/wx") 
+var Fly=require("flyio/dist/npm/wx")
 var fly=new Fly
 fly.config.timeout=10000;
 //设置请求基地址
 fly.config.baseURL="http://123.206.17.18:8081";
 fly.interceptors.request.use((request)=>{
     //给所有请求添加自定义header
-	request.headers["Authorization"]="bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJvbGVfY3VzdG9tIl0sImV4cCI6MTU0MTY1Nzk4OCwiYXV0aG9yaXRpZXMiOlsiMTIzIiwiMTIzMTIiLCIxMjMyMiIsIuS8geS4mueuoeeQhuWRmCJdLCJqdGkiOiJhOGEzYTZlNi1hNjJjLTRmYjItODhjMy1hOGJmMDRlYjY3MmYiLCJjbGllbnRfaWQiOiJjdXN0b20iLCJ1c2VybmFtZSI6ImFkbWluIn0.Pk_eKdD5WYIqsL5umBeWLXzegChScLlXGGtXjwVghz9q8jKX7bPktmklvivdEW512-gBLJglEyaq6LbfQ9-YgXTVQKCrZ9DGTsmT61hK5P0AsMITslxNiOy7YmZgihMdgS1BxMqs_K4M6wt7Kxt7a8o-Gtt0wS2lCGkTD1tYbEwGtjf-oWIbqeM8ast7K_9n5hq-llMdqkkpW2UcozmKpVQ6QmG33KuTW-AFTCTCvZRIfzLIaHH4hHCHQbrn1OZLq7u74bnF1-qjpsJetCaNFfbEXRAaPItfXGoEd2ixtoWXCXxoTQ-0SlADto_e6L2lA0tu2Ifyn1DH5mH-_N9Hrw";
 	request.headers["Content-Type"]="application/json"
+  request.headers["Authorization"]="bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiLllYrllYrllYoiLCJzY29wZSI6WyJyb2xlX2N1c3RvbSJdLCJleHAiOjE1NDIwOTIwODIsImF1dGhvcml0aWVzIjpbIuWPuOacuiJdLCJqdGkiOiIzYTMwYTU2Yy02YzAwLTRlNTYtODM2Ni1iN2YxMzA4YzE5ZDIiLCJjbGllbnRfaWQiOiJjdXN0b20iLCJ1c2VybmFtZSI6IuWViuWViuWViiJ9.E_AvDubjQGmIc2SeB0KtHom5W8aMoKOMxaJrW8OrRDme98gccdQSPgoXNQR-sr6cXMBSpXkjIGxcul2sBRZ-PjmSHI2Z7r8tI-NISgrgET5Ai_w3RX99ufaBfcfJ6v-y3xuapJkc4p17Kk7DE2jG8kvffaPaK0n5R4aPQuxCd095-E26fqZQUx3C9VswQADvmrg_Y0dN1nqth2uy5qzHV24nBskspuXrSubDZgFjMznyE5DbooF6dxc6NZC6EjCRj_cZFb9ss3hvXQIiuwui0ukIFg5F9KdObm8dQfTuiy2Op60Kveu0C0CVpDYA2r11z98JZM-nJXaLUrc3Fwv3bw";
       //打印出请求体
       console.log(request.body)
       //终止请求
