@@ -101,7 +101,7 @@
 			}
 		},
 
-		created() {
+		mounted() {
 			var params = {
 				page: this.page,
 				size: 5,

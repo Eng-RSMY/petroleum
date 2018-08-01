@@ -30,7 +30,7 @@
         methods: {
 
         },
-        created () {
+        mounted () {
 
         }
     }

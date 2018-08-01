@@ -251,7 +251,7 @@
 			}
 		},
 
-		created() {
+		mounted() {
 			this.$http.get("/workbench/company_account")
 				.then(res => {
 					console.log(res)

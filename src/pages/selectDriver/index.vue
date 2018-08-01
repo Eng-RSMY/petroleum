@@ -218,7 +218,7 @@
 				wx.navigateTo({ url })
 			}
 		},
-		created() {
+		mounted() {
 			// 获取企业开票信息
 			var params = {
 				nameOrPhone: this.nameOrPhone,

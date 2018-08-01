@@ -81,7 +81,7 @@
 			}
 		},
 
-		created() { 
+		mounted() { 
 			// 获取企业开票信息
 			this.$http.get("/invoice")
 				.then(res => {

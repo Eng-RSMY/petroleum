@@ -68,7 +68,7 @@
 			}
 		},
 
-		created() {
+		mounted() {
 			this.$http.get("/mine")
 				.then(res => {
 					if(res.status == "200") {
