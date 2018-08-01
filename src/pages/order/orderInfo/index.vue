@@ -100,8 +100,6 @@
 
 
 		},
-
-		created() { },
 		mounted() {
 			var orderId = this.$root.$mp.query.orderInfo;
 			this.$http.get(`/orders/${orderId}`)

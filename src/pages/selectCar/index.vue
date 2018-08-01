@@ -225,9 +225,6 @@
 		},
 		components: {
 		},
-		created() {
-			
-		},
 		mounted() {
 			// 获取企业开票信息
 			var params = {

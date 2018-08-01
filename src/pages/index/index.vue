@@ -220,7 +220,7 @@
 
 		},
 
-		created() {
+		mounted() {
 			// var params={
 			// 	grant_type:"password",
 			// 	username:"admin",

@@ -50,7 +50,7 @@
         methods: {
 
         },
-        created () {
+        mounted () {
 
         }
     }

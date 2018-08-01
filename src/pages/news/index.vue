@@ -76,7 +76,7 @@
 				})
             }
         },
-        created () {
+        mounted () {
 
         }
     }
