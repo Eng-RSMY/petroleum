@@ -13,7 +13,7 @@
 			</div> -->
 		</div>
 		<!-- 单条信息 -->
-		<div v-for="(item,index) of escortList" @click="toSelfHelp" :data-key="item.id">
+		<div v-for="(item,index) of escortList" @click.stop="toSelfHelp" :data-key="item.id">
 			<div class="single-msg-box" :style="item.sstyle">
 				<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
 					<div class="s-m-b-inner">
@@ -40,9 +40,9 @@
 					</div>
 				</div>
 				<div class="s-m-b-right">
-					<div class="s-m-b-r-edit" @click="editItem" :data-key="item.id">编辑 </div>
+					<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
 					<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
-					<div class="s-m-b-r-del" :data-key="item.id">删除</div>
+					<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
 				</div>
 			</div>
 		</div>
@@ -353,7 +353,7 @@
 	}
 
 	.s-m-b-right {
-		width: 20%;
+		width: 10%;
 		height: 140px;
 		line-height: 140px;
 		position: absolute;
@@ -365,7 +365,7 @@
 	}
 
 	.s-m-b-r-edit {
-		width: 50%;
+		width: 100%;
 		height: 140px;
 		float: left;
 		background: #2E79FF;
