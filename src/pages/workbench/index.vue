@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item"  @click="toUserManagement">
+			<div class="weui-flex__item" @click="toUserManagement">
 				<div class="placeholder">
 					<img src="/static/images/yhgl.png" alt="" class="img">
 				</div>
@@ -156,14 +156,14 @@
 					}
 				})
 			},
-      toMoneyInquiry: function () {
-        wx.navigateTo({
-          url: "../../pages/moneyInquiry/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
+			toMoneyInquiry: function () {
+				wx.navigateTo({
+					url: "../../pages/moneyInquiry/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
 			toMakeCard: function () {
 				wx.navigateTo({
 					url: "../../pages/makeCard/main",
@@ -172,22 +172,22 @@
 					}
 				})
 			},
-      toNewEnterpriseUser: function () {
-        wx.navigateTo({
-          url: "../../pages/NewEnterpriseUser/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
-      toUserManagement:function () {
-        wx.navigateTo({
-          url: "../../pages/userManagement/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
+			toNewEnterpriseUser: function () {
+				wx.navigateTo({
+					url: "../../pages/NewEnterpriseUser/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
+			toUserManagement: function () {
+				wx.navigateTo({
+					url: "../../pages/userManagement/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
 			toTrackeOrder: function () {
 				wx.navigateTo({
 					url: "../../pages/trackeOrder/main",
@@ -239,11 +239,11 @@
 			toKF: function () {
 				wx.navigateTo({
 					url: "../../pages/customerService/main",
-        })
-       },
-			toCar:function(){
+				})
+			},
+			toCar: function () {
 				wx.navigateTo({
-					url:"../../pages/selectCar/main?from=workbench",
+					url: "../../pages/selectCar/main?from=workbench",
 					fail: function (res) {
 						console.log(res)
 					}
