@@ -4,15 +4,15 @@
       <div class="from">
         <div class="input-list">
           <span>用户名</span>
-          <span><input type="text" placeholder="请输入用户名"></span>
+          <span><input type="text" placeholder="请输入用户名" v-model="newUserName"></span>
         </div>
         <div class="input-list">
           <span>绑定手机号</span>
-          <span><input type="text" placeholder="请输入手机号"></span>
+          <span><input type="text" placeholder="请输入手机号" v-model="newUserPhone"></span>
         </div>
         <div class="input-list">
           <span>用户真实姓名</span>
-          <span><input type="text" placeholder="马云"></span>
+          <span><input type="text" placeholder="请输入用户真实姓名" v-model="newRealName"></span>
         </div>
         <div class="input-list-select input-list">
           <span>设置用户角色</span>
@@ -32,7 +32,7 @@
             <view>
               <view>
                 <view>
-                    <switch checked />
+                    <switch :checked="checked" @change="handleSwitch($event)"/>
                 </view>
               </view>
             </view>
@@ -43,11 +43,17 @@
           <view class="">
             <view class="">
               <view class="">
-                <textarea class="" placeholder="请输入文本"/>
+                <textarea class="" placeholder="请输入备注信息" v-model="newRemark"/>
               </view>
             </view>
           </view>
         </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div>
+        <button @click="history">取消编辑</button>
+        <button @click="update">保存并更新</button>
       </div>
     </div>
   </div>
@@ -58,15 +64,92 @@
     name: "IndexTitle",
     data () {
       return {
-        accounts: ["财务人员", "业务员", "运输司机", "押车员"],
+        accounts: [],
         accountIndex: 0,
+        newUserName: '',
+        newUserPhone:'',
+        newRealName:'',
+        newRemark:'',
+        checked:false
       }
     },
     methods: {
       bindAccountChange: function(e) {
         this.accountIndex = e.mp.detail.value
       },
-    }
+      history: function() {
+        wx.switchTab({
+          url: "../../pages/workbench/main",
+          fail: function (res) {
+          }
+        })
+      },
+      handleSwitch (e) {
+        this.checked = e.mp.detail.value;
+      },
+      prompt (title) {
+        wx.showToast({
+          title: title,
+          icon: 'none',
+          duration: 2000
+        })
+      },
+      update: function() {
+        switch (this.accounts[this.accountIndex]) {
+          case '业务员':
+            var roleid = 2;
+            break;
+          case '司机':
+            var roleid = 3;
+            break;
+          case '押运员':
+            var roleid = 4;
+            break;
+          case '财务':
+            var roleid = 5;
+            break;
+        }
+        this.$http.post(`/users`,{
+          username:this.newUserName,
+          phone:this.newUserPhone,
+          realName:this.newUserName,
+          remark:this.newRemark,
+          roleId:roleid,
+          enabled:this.checked
+        }).then(res => {
+          this.prompt('新建成功');
+          setTimeout(()=>{
+            wx.switchTab({
+              url: "../../pages/workbench/main",
+              fail: function (res) {
+              }
+            })
+          },1000)
+        }).catch((res)=>{
+          var str = res.response.data.message;
+          str = str.replace("[","");
+          str = str.replace("]","");
+          str = str.split(" ")
+          this.prompt(str[0])
+        })
+      }
+    },
+    beforeMount () {
+      // 获取角色
+      this.$http.get("/users/roles").then((res)=>{
+        if (res.status == "200") {
+          for (let item of res.data){
+            this.accounts.push(item.name);
+          } ;
+        } else {
+          wx.showToast({
+            title: res.statusText,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    },
   };
 </script>
 
@@ -103,5 +186,14 @@
     padding: 20px 0;
     height: 30px;
     text-indent: .1rem;
+  }
+  .bottom{
+    padding: 20px 20px;
+  }
+  .bottom button {
+    margin-top: 10px;
+  }
+  .bottom button:nth-child(1) {
+    color: red;
   }
 </style>

@@ -1,14 +1,15 @@
 <template>
   <div>
     <div class="content">
-      <div class="contentList" v-for="item in 10" @click="edit">
+      <div class="contentList" @click="edit(item.id)" v-if="showList" v-for="item in userList" :key="item.id">
         <div>
-          <p><span>用户名</span> <span>111</span> </p>
-          <p><span>角色</span> <span>111</span> </p>
-          <p><span>绑定手机号</span><span>111</span> </p>
+          <p><span>用户名</span> <span>{{item.username}}</span> </p>
+          <p><span>角色</span> <span>{{item.roleName}}</span> </p>
+          <p><span>绑定手机号</span><span>{{item.phone}}</span> </p>
         </div>
         <div>
-          <button>激活中</button>
+          <button v-if="item.enabled">激活中</button>
+          <button class="not" v-else>未激活</button>
         </div>
       </div>
     </div>
@@ -18,15 +19,26 @@
 <script>
   export default {
     name: "IndexTitle",
+    props:["userList"],
+    data () {
+    },
     methods: {
-      edit () {
+      edit (id) {
         wx.navigateTo({
-          url: "../../pages/modifyUser/main",
+          url: `../../pages/modifyUser/main?id=${id}`,
           fail: function (res) {
             console.log(res)
           }
         })
       }
+    },
+    computed: {
+      showList () {
+        console.log(this.userList)
+        return this.userList.length
+      }
+    },
+     created () {
     }
   };
 </script>
@@ -54,5 +66,10 @@
     border: 1px solid #33CCCC;
     background: none;
     font-size: 14px;
+    color:#33CCCC ;
+  }
+  .contentList button.not {
+    border: 1px solid #FF6633;
+    color: #FF6633;
   }
 </style>

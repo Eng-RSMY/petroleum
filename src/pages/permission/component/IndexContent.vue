@@ -1,9 +1,9 @@
 <template>
   <div class="title">
-    <div v-for="item in 10" class="title-content-wrap">
-      <div class="title-content">
-        <span>1</span>
-        <span>业务员</span>
+    <div class="title-content-wrap">
+      <div class="title-content" v-for="item in titleList" :key="item.id">
+        <span>{{item.id}}</span>
+        <span>{{item.name}}</span>
         <span>设置</span>
       </div>
     </div>
@@ -19,7 +19,21 @@
       }
     },
     methods: {
-    }
+    },
+    beforeMount () {
+      // 获取角色
+      this.$http.get("/users/roles").then((res)=>{
+        if (res.status == "200") {
+          this.titleList = res.data;
+        } else {
+          wx.showToast({
+            title: res.statusText,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    },
   };
 </script>
 
@@ -33,7 +47,7 @@
     background: #fff;
     color: black;
   }
-  .title-content-wrap:nth-child(2n) {
+  .title-content:nth-child(2n) {
     background: #e7e7e7;
   }
   .title-content{
