@@ -41,7 +41,8 @@
 				</div>
 				<div class="s-m-b-right">
 					<div class="s-m-b-r-edit" @click="editItem" :data-key="item.id">编辑 </div>
-					<div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div>
+					<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
+					<div class="s-m-b-r-del" :data-key="item.id">删除</div>
 				</div>
 			</div>
 		</div>
