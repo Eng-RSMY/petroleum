@@ -241,7 +241,7 @@
 <style scoped>
 	.container {
 		height: 100%;
-		padding-top: 60px;
+		padding-top: 20px;
 		background-color: #fff;
 	}
 

@@ -1,42 +1,46 @@
 <template>
 	<div class="container">
-		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.orderCode)">
+		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)">
 			<p>
 				<span>订单号：</span>
-				<span>{{item.orderCode}}</span>
+				<span>{{item.number == null ? "暂无数据" : item.number}}</span>
 			</p>
 			<p>
 				<span>订购货物:</span>
-				<span>{{item.productType}}</span>
+				<span>{{item.categoryName}} {{item.oilName}}</span>
 			</p>
 			<p>
 				<span>订购量：</span>
-				<span>{{item.quantity}}</span>
+				<span>{{item.orderWeight == null ? "暂无数据" : item.orderWeight}}</span>
 			</p>
 			<p>
 				<span>货车司机：</span>
-				<span>{{item.shiji}}</span>
+				<span>{{item.driverName == null ? "暂无数据" : item.driverName}}</span>
 			</p>
 			<p>
 				<span>车牌号：</span>
-				<span>{{item.carCode}}</span>
+				<span>{{item.carNumber == null ? "暂无数据" : item.carNumber}}</span>
 			</p>
 			<p>
 				<span>下单时间：</span>
-				<span>{{item.orderCreattime}}</span>
+				<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
 			</p>
 			<div class="weui-cell" style="border-top: none">
 				<div class="weui-cell__bd">
 					<p style="display: inline-block;width:40%">订购金额</p>
-					<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">¥ {{item.orderPrice}}</p>
+					<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">{{item.orderTotalPrice == null ? "暂无数据" : "¥"+item.orderTotalPrice}}</p>
 				</div>
 				<div class="weui-cell__ft">
-					<p style="color: #2E79FF;font-size: 17px">{{item.orderType}}</p>
+					<p style="color: #2E79FF;font-size: 17px">{{item.statusName}}</p>
 				</div>
 			</div>
 		</div>
-
-	</div>
+		<div class="footer" v-if="foot">
+			<p @click="loadingMore">加载更多</p>
+		</div>
+		<div class="footer" v-else>
+			<p>已经到底了</p>
+		</div>
 	</div>
 </template>
 
@@ -44,38 +48,9 @@
 	export default {
 		data() {
 			return {
-				orderList: [{
-					orderCode: "2314311484619",
-					productType: "92号汽油",
-					quantity: "12吨",
-					shiji: "啦啦啦",
-					orderPrice: "45000.00",
-					orderState: "2",
-					carCode: "鲁A415cc",
-					orderType:"已冻结",
-					orderCreattime: "2018-07-17  14:00:00"
-				}, {
-					orderCode: "2314311484619",
-					productType: "95号汽油",
-					quantity: "12吨",
-					orderPrice: "45000.00",
-					shiji: "啦啦啦",
-					carCode: "鲁A911XP",
-					orderState: "1",
-					orderType:"已冻结",
-					orderCreattime: "2018-07-17  14:00:00"
-				}, {
-					orderCode: "2314311484619",
-					productType: "97号汽油",
-					quantity: "12吨",
-					orderPrice: "45000.00",
-					shiji: "啦啦啦",
-					orderState: "1",
-					carCode: "鲁A415CC",
-					orderType:"未冻结",
-					orderCreattime: "2018-07-18  14:00:00"
-				}],
-				
+				orderList: "",
+				foot: true,
+				page: 0,
 			}
 		},
 
@@ -86,9 +61,39 @@
 			toggleTabs: function (index) {
 				this.nowIndex = index;
 			},
+			loadingMore: function () {
+				var page = this.page + 1;
+				this.page = page
+				var params = {
+					page: page,
+					size: 5,
+					sort: "orderedTime,desc"
+				}
+				this.$http.get("/track_order", params)
+					.then(res => {
+						console.log(res)
+						if (res.data.content.length > 0) {
+							for (var i = 0; i < res.data.content.length; i++) {
+								this.orderList.push(res.data.content[i]);
+							}
+							console.log(this.orderList)
+						} else {
+							this.foot = false
+						}
+					})
+					.catch(res => {
+						console.log(res)
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
+			},
 			toOrderInfo: function (orderCode) {
 				wx.navigateTo({
-					url: "../../pages/order/orderInfo/main?orderCode=" + orderCode,
+					url: "../../pages/order/orderInfo/main?orderInfo=" + orderCode,
 					fail: function (res) {
 						console.log(res)
 					}
@@ -96,7 +101,29 @@
 			}
 		},
 
-		created() { }
+		created() {
+			var params = {
+				page: this.page,
+				size: 5,
+				sort: "orderedTime,desc"
+			}
+			this.$http.get("/track_order", params)
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.orderList = res.data.content
+					}
+				})
+				.catch(res => {
+					console.log(res)
+					// .response.data.message
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
+				})
+		}
 	}
 </script>
 
@@ -179,5 +206,18 @@
 		display: inline-block;
 		width: 30%;
 		padding-left: 40px;
+	}
+
+	.footer {
+		width: 375px;
+		height: 50px;
+		color: #898989;
+		background: #efeff4;
+		font-size: 13px;
+		text-align: center;
+	}
+
+	.footer p {
+		padding: 11px 0 0 0;
 	}
 </style>
