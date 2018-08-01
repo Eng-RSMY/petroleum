@@ -24,7 +24,8 @@
 	"pages/checkPrice/main",
 	"pages/news/main",
 	"pages/newsDetail/main",
-	"pages/customerService/main"
+	"pages/customerService/main",
+  "pages/dataMaintenance/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

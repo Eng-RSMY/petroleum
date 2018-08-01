@@ -93,7 +93,7 @@
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toDataMaintenance">
 				<div class="placeholder">
 					<img src="/static/images/zlwh.png" alt="" class="img">
 				</div>
@@ -156,6 +156,14 @@
 					}
 				})
 			},
+      toDataMaintenance () {
+        wx.navigateTo({
+          url: "../../pages/dataMaintenance/main",
+          fail: function (res) {
+            console.log(res)
+          }
+        })
+      },
 			toMoneyInquiry: function () {
 				wx.navigateTo({
 					url: "../../pages/moneyInquiry/main",
