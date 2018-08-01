@@ -5,19 +5,19 @@
 				<div>
 					<span>车辆名称</span>
 				</div>
-				<div><input class="c-row-input" type="text" placeholder="请输入" dir="rtl" :value="carName" /></div>
+				<div><input class="c-row-input" type="text" placeholder="请输入" dir="rtl" v-model.lazy="carName" /></div>
 			</div>
 			<div class="c-row">
 				<span>车牌号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" @click="showInput" :focus="focus" :value="carNo" />
+				<div class="c-row-input" contenteditable="true"  style="width: 100px;height:30px;border:1px solid #ddd" @click.stop="showInput">{{carNo}}</div>
 			</div>
 			<div class="c-row">
 				<span>行驶证号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" :value="driveNum" />
+				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" v-model.lazy="driveNum" />
 			</div>
 			<div class="c-row c-row-last">
 				<span>危险品运输证号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" :value="dangerNum" />
+				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" v-model.lazy="dangerNum" />
 			</div>
 			<div class="input-box" v-if="isInputData1Show">
 				<div class="i-b-li lf" v-for="(item, index) of inputData1" :key="index" @click="getPro(item)">{{ item }}</div>
@@ -42,13 +42,13 @@
 		data() {
 			return {
 				router: "",
-				key:"",
+				key: "",
 				focus: false,
 				isFooterShow: true,
 				isInputData1Show: false,
 				isInputData2Show: false,
 				carName: '',
-				carNo: '',
+				carNo: '请输入',
 				driveNum: '',
 				dangerNum: '',
 				inputData1: ["京", "沪", "浙", "苏", "粤", "鲁",
@@ -69,6 +69,7 @@
 		methods: {
 			showInput() {
 				this.focus = false
+				this.carNo="";
 				var that = this
 				if (that.carNo == '') {
 					that.isFooterShow = false
@@ -91,6 +92,7 @@
 				if (this.carNo.length < 7) {
 					this.carNo += val
 				} else {
+					this.inputClose()
 					console.log("别再点了，再添加就不是祖国的车牌号了")
 				}
 
@@ -120,59 +122,60 @@
 				}
 			},
 			save: function () {
+				var that =this;
 				var params = {
-					carNumber:this.carNo,
-					drivingNumber:this.driveNum,
-					transportNumber:this.dangerNum,
-					remark:this.carName,
+					carNumber: this.carNo,
+					drivingNumber: this.driveNum,
+					transportNumber: this.dangerNum,
+					remark: this.carName,
 				};
-				if(this.key == ""){
-					this.$http.post(`/cars`,params)
-					.then(res => {
-						console.log(res)
-						if (res.status == "200") {
-							// this.carName = res.data.remark
-							// this.carNo = res.data.carNumber
-							// this.driveNum = res.data.drivingNumber
-							// this.dangerNum = res.data.transportNumber
-								wx.redirectTo({
-									url: '../../pages/selectCar/main?from='+this.router
+				if (this.key == "") {
+					this.$http.post(`/cars`, params)
+						.then(res => {
+							console.log(res)
+							if (res.status == "200") {
+								wx.showToast({
+									title: "车辆添加成功",
+									icon: "success",
+									success: function () {
+										wx.redirectTo({
+											url: '../../pages/selectCar/main?from=' + that.router
+										})
+									}
 								})
-						}
-					})
-					.catch(res => {
-						console.log(res)
-						// .response.data.message
-						wx.showToast({
-							title: res.response.data.message,
-							icon: 'none',
-							duration: 2000
+
+							}
 						})
-					})
-				}else{
-					params.id=this.key
-					this.$http.post(`/cars`,params)
-					.then(res => {
-						console.log(res)
-						if (res.status == "200") {
-							// this.carName = res.data.remark
-							// this.carNo = res.data.carNumber
-							// this.driveNum = res.data.drivingNumber
-							// this.dangerNum = res.data.transportNumber
-								wx.redirectTo({
-									url: '../../pages/selectCar/main?from='+this.router
+						.catch(res => {
+							console.log(res)
+							// .response.data.message
+							wx.showToast({
+								title: res.response.data.message,
+								icon: 'none',
+								duration: 2000
+							})
+						})
+				} else {
+					params.id = this.key
+					this.$http.post(`/cars`, params)
+						.then(res => {
+							console.log(res)
+							if (res.status == "200") {
+								wx.showToast({
+									title: "车辆修改成功",
+									icon: "success",
 								})
-						}
-					})
-					.catch(res => {
-						console.log(res)
-						// .response.data.message
-						wx.showToast({
-							title: res.response.data.message,
-							icon: 'none',
-							duration: 2000
+							}
 						})
-					})
+						.catch(res => {
+							console.log(res)
+							// .response.data.message
+							wx.showToast({
+								title: res.response.data.message,
+								icon: 'none',
+								duration: 2000
+							})
+						})
 				}
 			}
 		},
@@ -214,6 +217,7 @@
 		font-family: PingFang;
 		font-size: 14px;
 	}
+
 	.ccontent {
 		width: 100%;
 		height: 203px;

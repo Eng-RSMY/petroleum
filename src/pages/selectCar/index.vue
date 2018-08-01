@@ -226,6 +226,9 @@
 		components: {
 		},
 		created() {
+			
+		},
+		mounted() {
 			// 获取企业开票信息
 			var params = {
 				carNumber: this.carNumber,
@@ -246,8 +249,6 @@
 						})
 					}
 				})
-		},
-		mounted() {
 			var router = this.$root.$mp.query.from;
 			this.router = router
 			if (router == "workbench") {

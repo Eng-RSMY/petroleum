@@ -8,9 +8,9 @@
 					<input type="search" class="weui-search-bar__input" id="searchInput" @change="search" placeholder="搜索车牌号" required/>
 				</div>
 			</div>
-			<div class="search-box-img" @click="addItem">
+			<!-- <div class="search-box-img" @click="addItem">
 				<image class="search-box-img-inner" :src="addIconUrl" alt="addIcon" />
-			</div>
+			</div> -->
 		</div>
 		<!-- 单条信息 -->
 		<div v-for="(item,index) in driverList" @click="toSelfHelp" :data-key="item.id">

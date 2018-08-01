@@ -1,29 +1,33 @@
 <template>
 	<div class="container">
-		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.orderCode)">
+		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)">
 			<p>
 				<span>时间：</span>
-				<span>{{item.orderCreattime}}</span>
+				<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
 			</p>
 			<p>
 				<span>品类：</span>
-				<span>{{item.productType}}</span>
+				<span>{{item.categoryName  == null ? "暂无数据" : item.categoryName}}</span>
 			</p>
 			<p>
-				<span>物料:</span>
-				<span>{{item.wuliao}}</span>
+				<span>油品:</span>
+				<span>{{item.oilName  == null ? "暂无数据" : item.oilName}}</span>
 			</p>
 			<p>
 				<span>数量：</span>
-				<span>{{item.quantity}}</span>
+				<span>{{item.weight  == null ? "暂无数据" : item.weight}}</span>
 			</p>
 			<p>
 				<span>实际支付金额：</span>
-				<span>{{item.orderPrice}}</span>
+				<span>{{item.totalPrice  == null ? "暂无数据" : item.totalPrice}}</span>
 			</p>
 		</div>
-
-	</div>
+		<div class="footer" v-if="foot">
+			<p @click="loadingMore">加载更多</p>
+		</div>
+		<div class="footer" v-else>
+			<p>已经到底了</p>
+		</div>
 	</div>
 </template>
 
@@ -31,32 +35,9 @@
 	export default {
 		data() {
 			return {
-				orderList: [{
-					productType: "D品类",
-					wuliao:"E物料",
-					quantity: "12吨",
-					orderPrice: "204123.12元",
-					orderCreattime: "2018-07-17"
-				}, {
-					productType: "D品类",
-					wuliao:"E物料",
-					quantity: "12吨",
-					orderPrice: "204123.12元",
-					orderCreattime: "2018-07-17"
-				}, {
-					productType: "D品类",
-					wuliao:"E物料",
-					quantity: "12吨",
-					orderPrice: "204123.12元",
-					orderCreattime: "2018-07-17"
-				},{
-					productType: "D品类",
-					wuliao:"E物料",
-					quantity: "12吨",
-					orderPrice: "204123.12元",
-					orderCreattime: "2018-07-17"
-				}],
-
+				orderList: "",
+				foot:true,
+				page:0,
 			}
 		},
 
@@ -67,9 +48,39 @@
 			toggleTabs: function (index) {
 				this.nowIndex = index;
 			},
+			loadingMore: function () {
+				var page = this.page + 1;
+				this.page = page
+				var params = {
+					page: page,
+					size: 5,
+					sort: "orderedTime,desc"
+				}
+				this.$http.get("/bill", params)
+					.then(res => {
+						console.log(res)
+						if (res.data.content.length > 0) {
+							for (var i = 0; i < res.data.content.length; i++) {
+								this.orderList.push(res.data.content[i]);
+							}
+							console.log(this.orderList)
+						} else {
+							this.foot = false
+						}
+					})
+					.catch(res => {
+						console.log(res)
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
+			},
 			toOrderInfo: function (orderCode) {
 				wx.navigateTo({
-					url: "../../pages/order/orderInfo/main?orderCode=" + orderCode,
+					url: "../../pages/order/orderInfo/main?orderInfo=" + orderCode,
 					fail: function (res) {
 						console.log(res)
 					}
@@ -77,7 +88,29 @@
 			}
 		},
 
-		created() { }
+		created() {
+			var params = {
+				page: this.page,
+				size: 5,
+				sort: "orderedTime,desc"
+			}
+			this.$http.get("/bill", params)
+				.then(res => {
+					console.log(res)
+					if (res.status == "200") {
+						this.orderList = res.data.content
+					}
+				})
+				.catch(res => {
+					console.log(res)
+					// .response.data.message
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
+				})
+		}
 	}
 </script>
 
@@ -160,5 +193,17 @@
 		display: inline-block;
 		width: 30%;
 		padding-left: 40px;
+	}
+	.footer {
+		width: 375px;
+		height: 50px;
+		color: #898989;
+		background: #efeff4;
+		font-size: 13px;
+		text-align: center;
+	}
+
+	.footer p {
+		padding: 11px 0 0 0;
 	}
 </style>
