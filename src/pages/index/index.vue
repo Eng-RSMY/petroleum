@@ -221,7 +221,19 @@
 		},
 
 		created() {
-
+			// var params={
+			// 	grant_type:"password",
+			// 	username:"admin",
+			// 	password:"password"
+				
+			// }
+			// this.$http.post("/oauth/token",params)
+			// .then(res => {
+			// 	console.log(res)
+			// })
+			// .catch(res => {
+			// 	console.log(res)
+			// })
 		}
 	}
 </script>
