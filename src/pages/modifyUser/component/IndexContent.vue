@@ -62,7 +62,7 @@
 <script>
   export default {
     name: "IndexTitle",
-    props: ['user'],
+    props: ['user','address'],
     data () {
       return {
         accounts: [],
@@ -81,11 +81,29 @@
         this.accountIndex = e.mp.detail.value
       },
       history: function() {
-        wx.navigateTo({
-          url: "../../pages/userManagement/main",
-          fail: function (res) {
-          }
-        })
+        console.log(this.address)
+        if(this.address == "addDriver") {
+          wx.navigateTo({
+            url: "../../pages/selectDriver/main",
+            fail: function (res) {
+               console.log(res)
+            }
+          })
+        }else if(this.address == "addEscort") {
+          wx.navigateTo({
+            url: "../../pages/selectEscort/main",
+            fail: function(res) {
+              console.log(res)
+            }
+          })
+        }else{
+          wx.navigateTo({
+            url: "../../pages/userManagement/main",
+            fail: function (res) {
+              console.log(res)
+            }
+          })
+        }
       },
       update: function() {
         this.$http.post(`/users/${this.$root.$mp.query.id}`,{

@@ -1,6 +1,6 @@
 <template>
     <div>
-      <index-content :user="user" v-if="flag"></index-content>
+      <index-content :user="user" :address="address" v-if="flag"></index-content>
       <!--<index-bottom></index-bottom>-->
     </div>
 </template>
@@ -13,7 +13,8 @@
     data () {
       return {
         user: '',
-        flag:false
+        flag:false,
+        address: ''
       }
     },
     components: {
@@ -21,9 +22,11 @@
       IndexContent
     },
     beforeMount () {
+      var address = this.$root.$mp.query.address;
       this.$http.get(`/users/${this.$root.$mp.query.id}`).then(res => {
         if (res.status == "200") {
           this.user = res.data;
+          this.address = address;
           this.flag = true;
         } else {
           wx.showToast({

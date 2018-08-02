@@ -203,19 +203,7 @@
 			},
 			editItem(e) {
 				var key = e.currentTarget.dataset.key
-				var list = this.driverList
-				var index = null
-				for (let i = 0; i < list.length; i++) {
-					if (list[i].id == key) {
-						index = i
-					}
-				}
-				var realName = list[index].realName
-				var phone = list[index].phone
-				var idNumber = list[index].idNumber
-				var driverNumber = list[index].driverNumber
-				var url = "../addDriver/main?key=" + key + "&realName=" + realName + "&phone=" + phone +
-					"&idNumber=" + idNumber + "&driverNumber=" + driverNumber
+				var url = `../../pages/modifyUser/main?id=${key}&address=addDriver`
 				wx.navigateTo({ url })
 			}
 		},
