@@ -45,7 +45,6 @@
     width: 100%;
     display: flex;
     background: #2E79FF;
-    border-top: 1px solid #e7e7e7;
   }
   .top div{
     width: 50%;

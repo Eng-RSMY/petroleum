@@ -4,7 +4,6 @@
         <div class="row" @click="toDetail()">
             <div class="row-inner">
                 <div class="title">
-                    系统公告
                     <span>8月1日起，原油进行价格调整，每桶优惠2元</span>
                 </div>
                 <div class="time">
@@ -18,7 +17,6 @@
         <div class="row" @click="toDetail()">
             <div class="row-inner">
                 <div class="title">
-                    系统公告
                     <span>8月1日起，原油进行价格调整，每桶优惠2元</span>
                 </div>
                 <div class="time">
@@ -32,7 +30,6 @@
         <div class="row" @click="toDetail()">
             <div class="row-inner">
                 <div class="title">
-                    系统公告
                     <span>8月1日起，原油进行价格调整，每桶优惠2元</span>
                 </div>
                 <div class="time">
@@ -46,7 +43,6 @@
         <div class="row" @click="toDetail()">
             <div class="row-inner">
                 <div class="title">
-                    系统公告
                     <span>8月1日起，原油进行价格调整，每桶优惠2元</span>
                 </div>
                 <div class="time">
@@ -98,16 +94,17 @@
     background: #fff;
 }
 .title {
-    font-size: 13px;
+    font-size: 16px;
     color: #FF0000;
+	margin-bottom: 10px;
 }
 .title span {
-    margin: 0 0 0 2%;
     color: #000;
 }
 .time {
-    font-size: 11px;
-    color: #9B9B9B;
+    font-size: 14px;
+    color: #565656;
+
 }
 .words {
     margin: 2% 0 0 0;

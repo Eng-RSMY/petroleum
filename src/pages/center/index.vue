@@ -123,6 +123,8 @@
 		margin: 0 auto;
 		border-radius: 50px;
 		overflow: hidden;
+		vertical-align:middle;
+
 	}
 	.tuoxiang img {
 		width: 70px;
@@ -155,6 +157,7 @@
 		width: 50%;
 		position: relative;
 		margin: 0 0 0 8%;
+
 	}
 	.a-left span {
 		margin: 0 0 0 10px;
@@ -162,6 +165,8 @@
 	.a-left img {
 		width: 15px;
 		height: 20px;
+		vertical-align:middle;
+
 	}
 	.a-right {
 		position: relative;

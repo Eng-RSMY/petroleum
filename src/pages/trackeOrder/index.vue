@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)">
+		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.id)">
 			<p>
 				<span>订单号：</span>
 				<span>{{item.number == null ? "暂无数据" : item.number}}</span>

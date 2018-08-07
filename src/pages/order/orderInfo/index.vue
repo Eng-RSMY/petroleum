@@ -1,17 +1,21 @@
 <template>
 	<div class="container">
 		<div class="orderInfo">
+			<p class="title">订单详情</p>
 			<p>
 				<span>订单号：</span>
-				<span>{{orderInfo.number}}</span>
+				<span>{{orderInfo.number == null ? "暂无数据" : orderInfo.number}}</span>
 			</p>
 			<p>
 				<span>订购货物:</span>
-				<span>{{orderInfo.categoryName}} {{orderInfo.oilName}}</span>
+				<span>
+					{{orderInfo.categoryName}} 
+					{{orderInfo.oilName}}
+				</span>
 			</p>
 			<p>
 				<span>订购量：</span>
-				<span>{{orderInfo.orderWeight}}</span>
+				<span>{{orderInfo.orderWeight == null ? "暂无数据" : orderInfo.orderWeight}}</span>
 			</p>
 			<p>
 				<span>下单价格：</span>
@@ -19,19 +23,19 @@
 			</p>
 			<p>
 				<span>货车司机：</span>
-				<span>{{orderInfo.driverName}}</span>
+				<span>{{orderInfo.driverName == null ? "暂无数据" : orderInfo.driverName}}</span>
 			</p>
 			<p>
 				<span>车牌号：</span>
-				<span>{{orderInfo.carNumber}}</span>
+				<span>{{orderInfo.carNumber == null ? "暂无数据" : orderInfo.carNumber}}</span>
 			</p>
 			<p>
 				<span>司机手机号:</span>
-				<span>{{orderInfo.driverPhone}}</span>
+				<span>{{orderInfo.driverPhone == null ? "暂无数据" : orderInfo.driverPhone}}</span>
 			</p>
 			<p>
 				<span>司机身份证号：</span>
-				<span>{{orderInfo.driverIdNumber}}</span>
+				<span>{{orderInfo.driverIdNumber  == null ? "暂无数据" : orderInfo.driverIdNumber}}</span>
 			</p>
 			<p>
 				<span>押运员：</span>
@@ -43,19 +47,19 @@
 			</p>
 			<p>
 				<span>下单时间：</span>
-				<span>{{orderInfo.orderedTime}}</span>
+				<span>{{orderInfo.orderedTime == null ? "暂无数据" : orderInfo.orderedTime}}</span>
 			</p>
 			<p>
 				<span>操作人：</span>
-				<span>{{orderInfo.operatorName}}</span>
+				<span>{{orderInfo.operatorName == null ? "暂无数据" : orderInfo.operatorName}}</span>
 			</p>
 			<p>
 				<span>操作帐号</span>
-				<span>{{orderInfo.operatorUsername}}</span>
+				<span>{{orderInfo.operatorUsername == null ? "暂无数据" : orderInfo.operatorUsername}}</span>
 			</p>
 			<p>
 				<span>操作人手机号：</span>
-				<span>{{orderInfo.operatorPhone}}</span>
+				<span>{{orderInfo.operatorPhone == null ? "暂无数据" : orderInfo.operatorPhone}}</span>
 			</p>
 		</div>
 		<div class="weui-cell" style="border-top: none">
@@ -90,6 +94,7 @@
 		data() {
 			return {
 				orderInfo: "",
+				from:"",
 			}
 		},
 
@@ -97,11 +102,26 @@
 		},
 
 		methods: {
+			
 
 
 		},
+
+		onUnload(){
+			console.log("页面已卸载")
+			if(this.from == "selfHelp"){
+				wx.switchTab({
+					url:"/pages/workbench/main"
+				})
+			}
+			
+		},
 		mounted() {
 			var orderId = this.$root.$mp.query.orderInfo;
+			var from=this.$root.$mp.query.from;
+			if(from){
+				this.from=from;
+			}
 			this.$http.get(`/orders/${orderId}`)
 				.then(res => {
 					console.log(res)
@@ -141,7 +161,16 @@
 		background-color: #efeff4;
 		overflow-x: hidden;
 	}
-
+	.title {
+		width: 100%;
+		background-color: #fff;
+		color: #000;
+		font-size: 14px;
+		border-bottom: 1px solid #ddd;
+		height: 50px;
+		line-height: 50px;
+		padding-left: 5%;
+	}
 	.weui-cell__bd {
 		padding-left: 5%;
 		color: #000;

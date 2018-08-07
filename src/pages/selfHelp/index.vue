@@ -55,8 +55,8 @@
 					<p>物料名称</p>
 				</div>
 				<div class="weui-cell__ft">
-					<span class="dw">(吨)</span>
-					<input class="input" type="number" @change="input" pattern="[0-9]*" v-model.lazy="num" placeholder="请输入">
+					<span class="dw" style="color: #000">(吨)</span>
+					<input class="input" style="color: #000" type="number" @change="input" pattern="[0-9]*" v-model.lazy="num" placeholder="请输入">
 				</div>
 			</div>
 		</div>
@@ -64,24 +64,24 @@
 			<p>
 				<span>选择司机</span>
 			</p>
-			<button class="weui-btn weui-btn_default" v-if="showDriver" @click="chooseDriver">选择司机</button>
+			<button class="weui-btn weui-btn_default" v-if="showDriver" @click="chooseDriver" style="background-color: #fff;border-color: #dedede">选择司机</button>
 			<div class="driver" v-else>
 				<p class="close" @click="reset">x</p>
 				<p class="driver_name driverInfo">
 					<span>司机真实姓名：</span>
-					<span>{{driverInfo.realName}}</span>
+					<span>{{driverInfo.realName == "null" ? "暂无数据" : driverInfo.realName }}</span>
 				</p>
 				<p class="driver_phone driverInfo">
 					<span>绑定手机号：</span>
-					<span>{{driverInfo.phone}}</span>
+					<span>{{driverInfo.phone == "null" ? "暂无数据" : driverInfo.phone}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>身份证号：</span>
-					<span>{{driverInfo.idNumber}}</span>
+					<span>{{driverInfo.idNumber == 'null' ? "暂无数据" : driverInfo.idNumber}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>驾证号码：</span>
-					<span>{{driverInfo.driverNumber}}</span>
+					<span>{{driverInfo.driverNumber == "null" ? "暂无数据" : driverInfo.driverNumber}}</span>
 				</p>
 			</div>
 		</div>
@@ -89,24 +89,24 @@
 			<p>
 				<span>选择车辆</span>
 			</p>
-			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar">选择车辆</button>
+			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar" style="background-color: #fff;border-color: #dedede">选择车辆</button>
 			<div class="driver" v-else>
 				<p class="close" @click="reset1">x</p>
 				<p class="driver_name driverInfo">
 					<span>车辆名：</span>
-					<span>{{carInfo.remark}}</span>
+					<span>{{carInfo.remark == "null" ? "暂无数据" : carInfo.remark}}</span>
 				</p>
 				<p class="driver_phone driverInfo">
 					<span>车牌号：</span>
-					<span>{{carInfo.carNumber}}</span>
+					<span>{{carInfo.carNumber == "null" ? "暂无数据" : carInfo.carNumber}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>行驶证号：</span>
-					<span>{{carInfo.drivingNumber}}</span>
+					<span>{{carInfo.drivingNumber == "null" ? "暂无数据" : carInfo.drivingNumber}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>危险品运输证号：</span>
-					<span>{{carInfo.transportNumber}}</span>
+					<span>{{carInfo.transportNumber == "null" ? "暂无数据" : carInfo.transportNumber}}</span>
 				</p>
 			</div>
 		</div>
@@ -114,24 +114,24 @@
 			<p>
 				<span>选择已有押车员下单(可不选)</span>
 			</p>
-			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle">选择压车员</button>
+			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle" style="background-color: #fff;border-color: #dedede">选择压车员</button>
 			<div class="driver" v-else>
 				<p class="close" @click="reset2">x</p>
 				<p class="driver_name driverInfo">
 					<span>用户名：</span>
-					<span>{{escortInfo.username}}</span>
+					<span>{{escortInfo.username == "null" ? "暂无数据" : escortInfo.username}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>真实姓名：</span>
-					<span>{{escortInfo.realName}}</span>
+					<span>{{escortInfo.realName == "null" ? "暂无数据" : escortInfo.realName}}</span>
 				</p>
 				<p class="driver_phone driverInfo">
 					<span>绑定手机号：</span>
-					<span>{{escortInfo.phone}}</span>
+					<span>{{escortInfo.phone == "null" ? "暂无数据" : escortInfo.phone}}</span>
 				</p>
 				<p class="driver_name driverInfo">
 					<span>身份证号：</span>
-					<span>{{escortInfo.idNumber}}</span>
+					<span>{{escortInfo.idNumber == "null" ? "暂无数据" : escortInfo.idNumber}}</span>
 				</p>
 
 			</div>
@@ -191,12 +191,19 @@
 		methods: {
 			bindPickerChange: function (e) {
 				console.log('picker发送选择改变，携带值为', e)
+				wx.showLoading({
+					title: "正在获取油品",
+					mask: true
+				})
 				this.pickSelect = this.categories[e.mp.detail.value];
 				var categoryName = this.categories[e.mp.detail.value];
 				this.$http.get("/self_order/oils", { "categoryName": categoryName })
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
+							this.oils = [];
+							this.pickSelect1 = "请选择"
+							wx.hideLoading()
 							if (res) {
 								for (var i = 0; i < res.data.length; i++) {
 									this.oils.push(res.data[i].name)
@@ -281,12 +288,17 @@
 
 			},
 			creatOrder: function () {
+
 				// 判断当前账户余额是否能够支付，不能支付弹出警告，点击继续支付可以跳转到订单详情页，如果余额够支付 不提示直接跳转到订单详情
 				if (this.sumPrice > this.companyInfo.balance) {
 					// 余额不足弹窗
 					this.showDialog = true;
 				} else {
 					// 下单
+					wx.showLoading({
+						title: "正在下单",
+						mask: true
+					})
 					var params = {
 						categoryName: this.pickSelect,
 						oilName: this.pickSelect1,
@@ -301,8 +313,9 @@
 							if (res.status == "200") {
 								var orderInfo = res.data.id
 								console.log(orderInfo)
+								wx.hideLoading()
 								wx.navigateTo({
-									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo,
+									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo+"&from=selfHelp",
 									fail: function (res) {
 										console.log(res)
 									}
@@ -317,6 +330,7 @@
 						})
 						.catch(res => {
 							console.log(res)
+							wx.hideLoading()
 							// .response.data.message
 							wx.showToast({
 								title: res.response.data.message,
@@ -331,7 +345,10 @@
 				this.showDialog = false;
 			},
 			sure: function () {
-
+				wx.showLoading({
+					title: "正在下单",
+					mask: true
+				})
 				var params = {
 					categoryName: this.pickSelect,
 					oilName: this.pickSelect1,
@@ -343,6 +360,7 @@
 				this.$http.post("/self_order", params)
 					.then(res => {
 						console.log(res)
+						wx.hideLoading()
 						this.showDialog = false;
 						if (res.status == "200") {
 							var orderInfo = JSON.stringify(res.data)
@@ -496,12 +514,16 @@
 	.product>p {
 		text-align: center;
 		margin: 15px 0px;
-		color: #4a4a4a;
+		color: #898989;
 	}
 
 	.product p span {
-		color: #ddd;
+		color: #898989;
 
+	}
+
+	.picker {
+		color: #000
 	}
 
 	.choose {
@@ -518,9 +540,9 @@
 
 	.weui-btn {
 		margin: 50px 0px;
-		width: 84%;
+		width: 80%;
 		color: #2E79FF;
-		margin-left: 8%
+		margin-left: 10%
 	}
 
 	.driver {

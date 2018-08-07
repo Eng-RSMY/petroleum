@@ -8,7 +8,7 @@
 						<div class="subtitle">使用手机号登录</div>
 						<div class="input-frame">
 							<span class="prefix">+86</span>
-							<input type="text" placeholder="手机号" v-model="phone" class="input1">
+							<input type="number" placeholder="手机号" v-model="phone" class="input1">
 						</div>
 						<!-- <picker bindchange="bindPickerChange" placeholder="请选择公司" value="{{index}}" range="{{array}}"> -->
 						<picker @change="bindPickerChange" :value="index" :range="array">

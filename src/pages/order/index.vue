@@ -5,7 +5,7 @@
 			<li class="li-tab" v-for="(item,index) in tabsParam" :key="index" @click="toggleTabs(index)" :class="{active:index == nowIndex}">{{item}}</li>
 		</ul>
 		<div class="divTab" v-show="nowIndex===0">
-			<p class="title">订单详情</p>
+			
 			<div class="orderInfo" v-for="(item,index) in waiting" :key="index" @click="toOrderInfo(item.id)">
 				<p>
 					<span>订单号：</span>
@@ -53,7 +53,6 @@
 			</div>
 		</div>
 		<div class="divTab" v-show="nowIndex===1">
-			<p class="title">订单详情</p>
 			<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.id)">
 				<p>
 					<span>订单号：</span>
@@ -204,17 +203,17 @@
 										sort: "orderedTime,desc"
 									}
 									that.$http.get("/orders/waiting", params)
-										.then(res => {
-											console.log(res)
-											if (res.status == "200") {
-												this.waiting = res.data.content
+										.then(re => {
+											console.log(re)
+											if (re.status == "200") {
+												that.waiting = re.data.content
 											}
 										})
-										.catch(res => {
-											console.log(res)
+										.catch(re => {
+											console.log(re)
 											// .response.data.message
 											wx.showToast({
-												title: res.response.data.message,
+												title: re.response.data.message,
 												icon: 'none',
 												duration: 2000
 											})
@@ -225,17 +224,17 @@
 										sort: "orderedTime,desc"
 									}
 									that.$http.get("/orders/complete", params1)
-										.then(res => {
-											console.log(res)
-											if (res.status == "200") {
-												this.orderList = res.data.content
+										.then(re => {
+											console.log(re)
+											if (re.status == "200") {
+												that.orderList = re.data.content
 											}
 										})
-										.catch(res => {
-											console.log(res)
+										.catch(re => {
+											console.log(re)
 											// .response.data.message
 											wx.showToast({
-												title: res.response.data.message,
+												title: re.response.data.message,
 												icon: 'none',
 												duration: 2000
 											})
@@ -263,7 +262,7 @@
 				})
 			}
 		},
-		mounted() {
+		onShow() {
 			var params = {
 				page: this.page,
 				size: 5,
@@ -346,6 +345,7 @@
 
 	.divTab {
 		width: 100%;
+		margin-top: 50px;
 	}
 
 	.title {
@@ -358,7 +358,13 @@
 		line-height: 50px;
 		padding-left: 5%;
 	}
-
+	.button{
+		width:60px;
+		height:30px;
+		line-height: 30px;
+		font-size: 14px;
+		font-weight: normal
+	}
 	.weui-cell__bd {
 		padding-left: 5%;
 		color: #000;

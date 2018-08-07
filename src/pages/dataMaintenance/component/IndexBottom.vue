@@ -1,34 +1,28 @@
 <template>
-  <div>
-    <div class="bottom">
-      <div>
-        <button>取消编辑</button>
-        <button>保存并更新</button>
-      </div>
-    </div>
-  </div>
+	<div>
+
+		<button class="weui-btn weui-btn_primary button" @click="save">保存并更新</button>
+
+	</div>
 </template>
 
 <script>
-  export default {
-    name: "IndexTitle",
-    data () {
-      return {
-      }
-    },
-    methods: {
-    }
-  };
+	export default {
+		name: "IndexTitle",
+		data() {
+			return {
+			}
+		},
+		methods: {
+		}
+	};
 </script>
 
 <style scoped>
-  .bottom{
-    padding: 20px 20px;
-  }
-  .bottom button {
-    margin-top: 10px;
-  }
-  .bottom button:nth-child(1) {
-    color: red;
-  }
+	.button{
+		position: fixed;
+		bottom:20px;
+		left:5%;
+		width:90%;
+	}
 </style>
