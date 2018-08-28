@@ -1,32 +1,38 @@
 <template>
 	<div class="container">
-		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)">
+		<!-- <div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)"> -->
+		<div class="orderInfo" v-for="(item,index) in orderList" :key="index">
 			<p>
 				<span>时间：</span>
 				<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
 			</p>
 			<p>
 				<span>品类：</span>
-				<span>{{item.categoryName  == null ? "暂无数据" : item.categoryName}}</span>
+				<span>{{item.categoryName == null ? "暂无数据" : item.categoryName}}</span>
 			</p>
 			<p>
 				<span>油品:</span>
-				<span>{{item.oilName  == null ? "暂无数据" : item.oilName}}</span>
+				<span>{{item.oilName == null ? "暂无数据" : item.oilName}}</span>
 			</p>
 			<p>
 				<span>数量：</span>
-				<span>{{item.weight  == null ? "暂无数据" : item.weight}}</span>
+				<span>{{item.weight == null ? "暂无数据" : item.weight}}</span>
 			</p>
 			<p>
 				<span>实际支付金额：</span>
-				<span>{{item.totalPrice  == null ? "暂无数据" : item.totalPrice}}</span>
+				<span>{{item.totalPrice == null ? "暂无数据" : item.totalPrice}}</span>
 			</p>
 		</div>
-		<div class="footer" v-if="foot">
-			<p @click="loadingMore">加载更多</p>
+		<div v-if="isshow">
+			<div class="footer" v-if="foot">
+				<p @click="loadingMore">加载更多</p>
+			</div>
+			<div class="footer" v-else>
+				<p>已经到底了</p>
+			</div>
 		</div>
-		<div class="footer" v-else>
-			<p>已经到底了</p>
+		<div v-else>
+			暂无数据
 		</div>
 	</div>
 </template>
@@ -36,8 +42,9 @@
 		data() {
 			return {
 				orderList: "",
-				foot:true,
-				page:0,
+				foot: true,
+				page: 0,
+				isshow: true
 			}
 		},
 
@@ -98,7 +105,11 @@
 				.then(res => {
 					console.log(res)
 					if (res.status == "200") {
-						this.orderList = res.data.content
+						if (res.data.content.length > 0) {
+							this.orderList = res.data.content
+						} else {
+							this.isshow = false
+						}
 					}
 				})
 				.catch(res => {
@@ -194,6 +205,7 @@
 		width: 30%;
 		padding-left: 40px;
 	}
+
 	.footer {
 		width: 375px;
 		height: 50px;

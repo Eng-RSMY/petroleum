@@ -21,7 +21,7 @@
       IndexBottom,
       IndexContent
     },
-    beforeMount () {
+    mounted() {
       var address = this.$root.$mp.query.address;
       this.$http.get(`/users/${this.$root.$mp.query.id}`).then(res => {
         if (res.status == "200") {

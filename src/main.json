@@ -25,7 +25,9 @@
 	"pages/news/main",
 	"pages/newsDetail/main",
 	"pages/customerService/main",
-  "pages/dataMaintenance/main"
+  	"pages/dataMaintenance/main",
+	"pages/warning/main",
+	"pages/permission/setRole/main"  
   ],
   "window": {
     "backgroundTextStyle": "light",

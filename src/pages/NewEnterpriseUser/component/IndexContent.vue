@@ -26,6 +26,14 @@
 						</view>
 					</span>
 				</div>
+				<div class="input-list" v-if="isDriver">
+					<span>司机身份证</span>
+					<span><input type="text" placeholder="请输入司机身份证" v-model="idNumber"></span>
+				</div>
+				<div class="input-list"  v-if="isDriver">
+					<span>司机驾驶证号</span>
+					<span><input type="text" placeholder="请输入司机驾驶证号" v-model="driverNumber"></span>
+				</div>
 				<div class="input-list">
 					<span>用激活账户</span>
 					<span>
@@ -65,12 +73,21 @@
 				newUserPhone: '',
 				newRealName: '',
 				newRemark: '',
-				checked: false
+				checked: false,
+				roleList: [],
+				idNumber:"",
+				driverNumber:"",
+				isDriver:false
 			}
 		},
 		methods: {
 			bindAccountChange: function (e) {
-				this.accountIndex = e.mp.detail.value
+				this.accountIndex = e.mp.detail.value;
+				if(this.roleList[e.mp.detail.value].name == "司机"){
+					this.isDriver=true;
+				}else{
+					this.isDriver=false
+				}
 			},
 			history: function () {
 				wx.switchTab({
@@ -90,27 +107,16 @@
 				})
 			},
 			update: function () {
-				switch (this.accounts[this.accountIndex]) {
-					case '业务员':
-						var roleid = 2;
-						break;
-					case '司机':
-						var roleid = 3;
-						break;
-					case '押运员':
-						var roleid = 4;
-						break;
-					case '财务':
-						var roleid = 5;
-						break;
-				}
+				var roleid = this.roleList[this.accountIndex].id;
 				this.$http.post(`/users`, {
 					username: this.newUserName,
 					phone: this.newUserPhone,
 					realName: this.newUserName,
 					remark: this.newRemark,
 					roleId: roleid,
-					enabled: this.checked
+					enabled: this.checked,
+					idNumber:this.idNumber,
+					driverNumber:this.driverNumber,
 				}).then(res => {
 					this.prompt('新建成功');
 					setTimeout(() => {
@@ -133,6 +139,7 @@
 			// 获取角色
 			this.$http.get("/users/roles").then((res) => {
 				if (res.status == "200") {
+					this.roleList = res.data;
 					for (let item of res.data) {
 						this.accounts.push(item.name);
 					};
@@ -187,6 +194,7 @@
 		height: 30px;
 		text-indent: .1rem;
 	}
+
 	.button {
 		position: fixed;
 		bottom: 20px;

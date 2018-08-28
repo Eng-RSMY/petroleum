@@ -4,7 +4,7 @@
 			<div class="from">
 				<div class="input-list">
 					<span>用户名</span>
-					<span><input type="text" :placeholder="user.username" v-model="newUserName"></span>
+					<span><input type="text" :placeholder="user.username" v-model="newUserName" :disabled="disabled"></span>
 				</div>
 				<div class="input-list">
 					<span>绑定手机号</span>
@@ -25,6 +25,14 @@
 							</view>
 						</view>
 					</span>
+				</div>
+				<div class="input-list" v-if="isDriver">
+					<span>司机身份证</span>
+					<span><input type="text" placeholder="user.idNumber" v-model="idNumber"></span>
+				</div>
+				<div class="input-list" v-if="isDriver">
+					<span>司机驾驶证号</span>
+					<span><input type="text" placeholder="user.driverNumber" v-model="driverNumber"></span>
 				</div>
 				<div class="input-list">
 					<span>用激活账户</span>
@@ -55,102 +63,132 @@
 </template>
 
 <script>
-  export default {
-    name: "IndexTitle",
-    props: ['user','address'],
-    data () {
-      return {
-        accounts: [],
-        accountIndex: 0,
-        newUserName: '',
-        newUserPhone:'',
-        newRealName:'',
-        newRemark:'',
-        checked:''
-      }
-    },
-    computed: {
-    },
-    methods: {
-      bindAccountChange: function(e) {
-        this.accountIndex = e.mp.detail.value
-      },
-      history: function() {
-        console.log(this.address)
-        if(this.address == "addDriver") {
-          wx.navigateTo({
-            url: "../../pages/selectDriver/main",
-            fail: function (res) {
-               console.log(res)
-            }
-          })
-        }else if(this.address == "addEscort") {
-          wx.navigateTo({
-            url: "../../pages/selectEscort/main",
-            fail: function(res) {
-              console.log(res)
-            }
-          })
-        }else{
-          wx.navigateTo({
-            url: "../../pages/userManagement/main",
-            fail: function (res) {
-              console.log(res)
-            }
-          })
-        }
-      },
-      update: function() {
-        this.$http.post(`/users/${this.$root.$mp.query.id}`,{
-          username:this.newUserName || this.user.username,
-          phone:this.newUserPhone || this.user.phone,
-          realName:this.newUserName || this.user.realName,
-          remark:this.newRemark || this.user.remark,
-          roleId:this.$root.$mp.query.id
-        }).then(res => {
-          if (res.status == "200") {
-            this.user = res.data;
-            this.flag = true;
-          } else {
-            wx.showToast({
-              title: res.statusText,
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        })
-      }
-    },
-    beforeMount () {
-      if(this.user.enabled){
-        this.checked = true
-      }else {
-        this.checked = false
-      }
-      // 获取角色
-      this.$http.get("/users/roles").then((res)=>{
-        if (res.status == "200") {
-          for (let item of res.data) {
-            this.accounts.push(item.name)
-          }
-        } else {
-          wx.showToast({
-            title: res.statusText,
-            icon: 'none',
-            duration: 2000
-          })
-        }
-      })
-    }
-  };
+	export default {
+		name: "IndexTitle",
+		props: ['user', 'address'],
+		data() {
+			return {
+				disabled: true,
+				accounts: [],
+				accounts1: [],
+				accountIndex: 0,
+				newUserName: '',
+				newUserPhone: '',
+				newRealName: '',
+				newRemark: '',
+				checked: '',
+				idNumber:"",
+				driverNumber:"",
+				isDriver:false,
+				roleList:[],
+				
+			}
+		},
+		computed: {
+		},
+		methods: {
+			bindAccountChange: function (e) {
+				this.accountIndex = e.mp.detail.value;
+				if(this.roleList[e.mp.detail.value].name == "司机"){
+					this.isDriver=true;
+				}else{
+					this.isDriver=false
+				}
+			},
+			history: function () {
+				console.log(this.address)
+				if (this.address == "addDriver") {
+					wx.navigateTo({
+						url: "../../pages/selectDriver/main",
+						fail: function (res) {
+							console.log(res)
+						}
+					})
+				} else if (this.address == "addEscort") {
+					wx.navigateTo({
+						url: "../../pages/selectEscort/main",
+						fail: function (res) {
+							console.log(res)
+						}
+					})
+				} else {
+					wx.navigateTo({
+						url: "../../pages/userManagement/main",
+						fail: function (res) {
+							console.log(res)
+						}
+					})
+				}
+			},
+			save: function () {
+				this.$http.post(`/users/${this.$root.$mp.query.id}`, {
+					username: this.newUserName || this.user.username,
+					phone: this.newUserPhone || this.user.phone,
+					realName: this.newRealName || this.user.realName,
+					remark: this.newRemark || this.user.remark,
+					roleId: this.accounts1[this.accountIndex].id || this.$root.$mp.query.id
+				}).then(res => {
+					if (res.status == "200") {
+						this.user = res.data;
+						this.flag = true;
+						wx.showToast({
+							title: "修改成功",
+							icon: 'none',
+							duration: 2000,
+						})
+					} else {
+						wx.showToast({
+							title: res.statusText,
+							icon: 'none',
+							duration: 2000
+						})
+					}
+				})
+					.catch(res => {
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
+			}
+		},
+		mounted() {
+			if (this.user.enabled) {
+				this.checked = true
+			} else {
+				this.checked = false
+			}
+			// 获取角色
+			this.$http.get("/users/roles").then((res) => {
+				if (res.status == "200") {
+					this.roleList = res.data;
+					for (let item of res.data) {
+						this.accounts.push(item.name)
+					}
+					this.accounts1 = res.data;
+				} else {
+					wx.showToast({
+						title: res.statusText,
+						icon: 'none',
+						duration: 2000
+					})
+				}
+			})
+		},
+		onShow() {
+			console.log(this.user)
+			this.accountIndex=this.accounts.indexOf(this.user.roleName)
+			this.user.roleName == "司机" ? this.isDriver=true : this.isDriver=false
+			console.log(this.accountIndex)
+		}
+	};
 </script>
 
 <style scoped>
 	.content {
 		background: #e7e7e7;
 	}
-
-	.from {}
 
 	.input-list {
 		display: flex;

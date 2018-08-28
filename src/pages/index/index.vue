@@ -8,28 +8,27 @@
 						<div class="subtitle">使用手机号登录</div>
 						<div class="input-frame">
 							<span class="prefix">+86</span>
-							<input type="number" placeholder="手机号" v-model="phone" class="input1">
+							<input type="number" placeholder="手机号" v-model="phone" class="input1" @change="inputFinish">
 						</div>
-						<!-- <picker bindchange="bindPickerChange" placeholder="请选择公司" value="{{index}}" range="{{array}}"> -->
 						<picker @change="bindPickerChange" :value="index" :range="array">
 							<view class="picker">
-								{{pickSelect}}
+								{{pickSelect }}
 							</view>
 						</picker>
 						<div class="checkbox" v-if="select" @click="isselect">
 							<img class="img" src="/static/images/selected.png" alt="" align="middle">
 							<span class="span">记住公司名称</span>
 						</div>
-						<div class="checkbox" v-else  @click="isselect">
+						<div class="checkbox" v-else @click="isselect">
 							<img class="img" src="/static/images/select.png" alt="" align="middle">
 							<span class="span">记住公司名称</span>
 						</div>
-						<div class="input-title" v-if="select1"  @click="isselect1">
+						<div class="input-title" v-if="select1" @click="isselect1">
 							<img class="img" src="/static/images/selected.png" alt="" align="middle">
 							<span class="span"> 同意《垦利石化小程序服务条款》</span>
 						</div>
-						<div class="input-title" v-else  @click="isselect1">
-							<img class="img" src="/static/images/select.png" alt="" align="middle" >
+						<div class="input-title" v-else @click="isselect1">
+							<img class="img" src="/static/images/select.png" alt="" align="middle">
 							<span class="span"> 同意《垦利石化小程序服务条款》</span>
 						</div>
 						<!-- <button type="primary" size="default" style="height: 50px;background-color: #f1f1f1;height: 40px;line-height: 40px" v-if="isEnty">下一步</button> -->
@@ -45,7 +44,7 @@
 					<div class="subtitle1">请输入验证码</div>
 					<view class="code">
 						<view class="input-content-wrap">
-							<view catchtap="set_Focus" class="input-code-wrap">
+							<view @click="set_Focus" class="input-code-wrap">
 								<view :class="length==1||length==0?'input':'input_none'">
 									<text>{{code[0]}}</text>
 								</view>
@@ -79,15 +78,17 @@
 </template>
 
 <script>
+	import cookies from 'weapp-cookie'
 	export default {
 		data() {
 			return {
 				select: true,
 				select1: true,
-				isEnty:true,
+				isEnty: true,
 				pickSelect: "公司名称请选择",
 				index: 0,
-				array: ['美国', '中国', '巴西', '日本'],
+				array: [],
+				array1: null,
 				phone: "",
 				height: "",
 				login: true,
@@ -103,29 +104,74 @@
 				code: [],
 				focus_status: [],
 				length: 0,//已经输入的长度
+				company:""
 			};
 		},
 
 		components: {
 		},
-		watch:{
-			isEnty:function(val){
+		watch: {
+			isEnty: function (val) {
 				cpnsole.log(val)
-				if(this.phone != "" && this.pickSelect !="公司请选择" && this.select==true && this.select1==true){
-					this.isEnty=false
+				if (this.phone != "" && this.pickSelect != "公司请选择" && this.select == true && this.select1 == true) {
+					this.isEnty = false
 				}
 			}
 		},
 		methods: {
-			isselect:function(){
-				this.select == true ? this.select=false : this.select=true;
+			inputFinish: function (val) {
+				console.log(val)
+				var phone = val.target.value
+				var params={
+					phone,
+				}
+				this.$http.get(`/public/companies`,params).then(res => {
+					console.log(res)
+					for (let item of res.data) {
+						this.array.push(item.name)
+					}
+					this.array1 = res.data;
+				}).catch(res => {
+					console.log(res)
+					// .response.data.message
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
+				})
 			},
-			isselect1:function(){
-				this.select1 == true ? this.select1=false : this.select1=true;
+			isselect: function () {
+				this.select == true ? this.select = false : this.select = true;
 			},
-			bindPickerChange:function(e){
+			isselect1: function () {
+				this.select1 == true ? this.select1 = false : this.select1 = true;
+			},
+			bindPickerChange: function (e) {
 				console.log(e)
+				this.company=this.array1[e.mp.detail.value]
 				this.pickSelect = this.array[e.mp.detail.value];
+			},
+			getCode() {
+				var params = {
+					mobile: this.phone,
+				}
+				this.$http.post("/public/login_code", params).then(res => {
+					console.log(res)
+					wx.showToast({
+						title: "验证码发送成功",
+						icon: 'none',
+						duration: 2000
+					})
+				}).catch(res => {
+					console.log(res)
+					// .response.data.message
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
+				})
 			},
 			nextStep: function () {
 				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
@@ -143,25 +189,51 @@
 					})
 				} else {
 					this.login = false;
-					this.reset();
+					this.timeout();
+					this.getCode()
 				}
 			},
 			sureStep: function () {
-				console.log(this.code)
-				wx.switchTab({
-					url: "../../pages/workbench/main",
-					fail: function (res) {
+				var params = {
+					grant_type: "mobile",
+					username: this.phone,
+					password: this.code,
+					company:this.company.id
+				}
+				this.$http.post("/oauth/token", params)
+					.then(res => {
 						console.log(res)
-					}
-				})
+						wx.setStorageSync('access_token', res.data.access_token)
+						wx.setStorageSync('token_type',res.data.token_type)
+						wx.setStorageSync('refresh_token',res.data.refresh_token)
+						// cookies.set("access_token",res.data.access_token)
+						// cookies.set("token_type",res.data.token_type)
+						wx.switchTab({
+							url: "../../pages/workbench/main",
+							fail: function (res) {
+								console.log(res)
+							}
+						})
+					})
+					.catch(res => {
+						console.log(res)
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
+
 			},
 			reset: function () {
 				this.show = false;
 				this.timeout();
 				// 获取验证码
+				this.getCode()
 			},
 			timeout() {
-				const TIME_COUNT = 60;
+				const TIME_COUNT = 90;
 				if (!this.timer) {
 					this.count = TIME_COUNT;
 					this.show = false;
@@ -209,31 +281,20 @@
 				if (that.code.length == 6) {
 					that.length = e.mp.detail.value.length,
 						console.log(that.code)
-					this.code_isFocus = false;
+						this.code_isFocus = false
+
+
 				}
 			},
 			set_Focus() { //聚焦input
-				var that = this
-				that.code_isFocus = true
+				this.code_isFocus = true
 
 			},
 
 		},
 
 		mounted() {
-			// var params={
-			// 	grant_type:"password",
-			// 	username:"admin",
-			// 	password:"password"
-				
-			// }
-			// this.$http.post("/oauth/token",params)
-			// .then(res => {
-			// 	console.log(res)
-			// })
-			// .catch(res => {
-			// 	console.log(res)
-			// })
+			
 		}
 	}
 </script>
@@ -267,7 +328,7 @@
 		width: 100%;
 		box-sizing: border-box;
 		text-align: left;
-		color:#565656;
+		color: #565656;
 		font-size: 16px;
 		margin-bottom: 10px
 	}
@@ -478,12 +539,12 @@
 		height: 16px;
 		display: inline-block;
 		margin-right: 5px;
-		vertical-align:middle
+		vertical-align: middle
 	}
 
 	.span {
 		display: inline-block;
 		height: 100%;
-		line-height:16px;
+		line-height: 16px;
 	}
 </style>

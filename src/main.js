@@ -2,8 +2,10 @@ import Vue from 'vue'
 import App from './App'
 import "../static/weui.css"
 import animate from "animate.css"
+import cookies from 'weapp-cookie'
 //在项目入口文件
 import VueInputCode from 'vue-input-code'
+let Base64 = require('js-base64').Base64;
 Vue.component('VueInputCode', VueInputCode)
 var Fly=require("flyio/dist/npm/wx")
 var fly=new Fly
@@ -11,9 +13,27 @@ fly.config.timeout=10000;
 //设置请求基地址
 fly.config.baseURL="http://123.206.17.18:8081";
 fly.interceptors.request.use((request)=>{
-    //给所有请求添加自定义header
-	request.headers["Content-Type"]="application/json"
-  request.headers["Authorization"]="bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiLllYrllYrllYoiLCJzY29wZSI6WyJyb2xlX2N1c3RvbSJdLCJleHAiOjE1NDIwOTIwODIsImF1dGhvcml0aWVzIjpbIuWPuOacuiJdLCJqdGkiOiIzYTMwYTU2Yy02YzAwLTRlNTYtODM2Ni1iN2YxMzA4YzE5ZDIiLCJjbGllbnRfaWQiOiJjdXN0b20iLCJ1c2VybmFtZSI6IuWViuWViuWViiJ9.E_AvDubjQGmIc2SeB0KtHom5W8aMoKOMxaJrW8OrRDme98gccdQSPgoXNQR-sr6cXMBSpXkjIGxcul2sBRZ-PjmSHI2Z7r8tI-NISgrgET5Ai_w3RX99ufaBfcfJ6v-y3xuapJkc4p17Kk7DE2jG8kvffaPaK0n5R4aPQuxCd095-E26fqZQUx3C9VswQADvmrg_Y0dN1nqth2uy5qzHV24nBskspuXrSubDZgFjMznyE5DbooF6dxc6NZC6EjCRj_cZFb9ss3hvXQIiuwui0ukIFg5F9KdObm8dQfTuiy2Op60Kveu0C0CVpDYA2r11z98JZM-nJXaLUrc3Fwv3bw";
+	//给所有请求添加自定义header
+	console.log(request)
+	if(request.url=="/public/companies"){
+		request.headers["Content-Type"]="application/json"
+	}else if(request.url == "/public/login_code"){
+		request.headers["Content-Type"]="application/x-www-form-urlencoded"
+	}else if(request.url == "/oauth/token"){
+		var Authorization=Base64.encode("custom:password")
+		console.log(Authorization)
+		request.headers["Authorization"]="Basic "+Authorization;
+		request.headers["Content-Type"]="application/x-www-form-urlencoded"
+	}else{
+		var token_type=wx.getStorageSync("token_type")
+		var access_token=wx.getStorageSync("access_token")
+		request.headers["Content-Type"]="application/json"
+		request.headers["Authorization"]=token_type+access_token;
+
+	}
+	// request.headers["Content-Type"]="application/json"
+	// request.headers["Authorization"]="bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJvbGVfY3VzdG9tIl0sImV4cCI6MTU0NDE4NTEwOSwiYXV0aG9yaXRpZXMiOlsi6K6i5Y2VIiwi6LSm5Y2V5p-l6K-iIiwi6Ieq5Yqp5LiL5Y2VIiwi5byA56Wo5L-h5oGvIiwi5Lu35qC85p-l6K-iIiwi5a6i5pyN55S16K-dIiwi5rGH5qy-5L-h5oGv5p-l6K-iIiwi6K6i5Y2V6Lef6LiqIiwi5Lia5Yqh5ZGYIiwi5YWs5Y-46LSm5oi35L2Z6aKdIiwi5oiR55qEIl0sImp0aSI6IjE1YWIzZjQzLWU5ZmEtNDBiNi1iZTU5LWQzMTNiMzE1NjdjMyIsImNsaWVudF9pZCI6ImN1c3RvbSIsInVzZXJuYW1lIjoiYWRtaW4ifQ.Qq5WFMr73BeHr_l9RqAIm8OE3a-XQ-FykqBLme5C0pyv4jO16L1b2-xPRvPvIPIFkFbEWjENEKctpyUA4l0buu6p1TCh4j1sdP7iSLKJDluQTdhUxJBLmOzssJw7JGSeFNjsqSbWcm8x7wu_i5Dcgx9bu4-66nyCNnuM9TAvR6CF7CFZn93VS1UJiQSv41gzUekIW1lm8jEGljhr5KkNAhyBQPr0xYEg-pAQWt1bG-1DmGyFKPGh2251FnbNksRT9-aDuF39Ggeil9wBibS7mzX3ghX-TekgDzLqH3Ch8bcQUeQDl2hG_puCiHN226JApeuT-Nz2Yc7p93l3cPxrPg";
+
       //打印出请求体
       console.log(request.body)
       //终止请求

@@ -2,9 +2,9 @@
   <div>
     <div class="table">
       <ul v-for="(item,index) in tableList" :key="index">
-        <li>{{item.serialNumber}}</li>
-        <li>{{item.category}}</li>
-        <li>{{item.type}}</li>
+        <li>{{(index+1)}}</li>
+        <li>{{item.categoryName}}</li>
+        <li>{{item.oilName}}</li>
         <li>{{item.price}}</li>
       </ul>
     </div>
@@ -16,44 +16,22 @@
     name: "IndexTitle",
     data () {
       return {
-        tableList:[{
-          serialNumber: '1',
-          category: '97#',
-          type: '92#',
-          price:'100'
-          },
-          {
-            serialNumber: '1',
-            category: '97#',
-            type: '92#',
-            price:'100'
-          },
-          {
-            serialNumber: '1',
-            category: '97#',
-            type: '92#',
-            price:'100'
-          },
-          {
-            serialNumber: '1',
-            category: '97#',
-            type: '92#',
-            price:'100'
-          },
-          {
-            serialNumber: '1',
-            category: '97#',
-            type: '92#',
-            price:'100'
-          },
-          {
-            serialNumber: '1',
-            category: '97#',
-            type: '92#',
-            price:'100'
-          },]
+        tableList:""
       }
     },
+	mounted() {
+		this.$http.get("/prices")
+		.then(res => {
+			console.log(res)
+			if(res.status=="200"){
+				this.tableList=res.data
+			}
+
+		})
+		.catch(res => {
+			console.log(res)
+		})
+	},
   };
 </script>
 
@@ -76,6 +54,7 @@
     line-height: 35px;
     text-align: center;
     color: black;
+	font-size: 12px;
   }
   .table ul li:nth-child(-n+3) {
     border-right: 1px solid #ccc;

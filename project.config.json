@@ -1,5 +1,8 @@
 {
 	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
@@ -7,10 +10,16 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"miniprogramRoot": "./dist/",
 	"compileType": "miniprogram",
+	"libVersion": "2.2.0",
 	"appid": "wx8f41a35d021844a6",
 	"projectname": "petroleum",
+	"svr": "",
+	"client": "",
+	"qcloudRoot": "",
+	"miniprogramRoot": "./dist/",
+	"pluginRoot": "",
+	"scripts": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -25,11 +34,10 @@
 			"list": []
 		},
 		"game": {
-			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": 10,
+			"current": 12,
 			"list": [
 				{
 					"id": -1,
@@ -86,16 +94,6 @@
 					"query": "orderInfo=30"
 				},
 				{
-					"id": -1,
-					"name": "用户管理",
-					"pathName": "pages/userManagement/main",
-					"query": ""
-				},
-				{
-					"id": -1,
-					"name": "新建用户",
-					"pathName": "pages/NewEnterpriseUser/main",
-					"query": ""
 					"id": 8,
 					"name": "选择车辆",
 					"pathName": "pages/selectCar/main",
@@ -106,6 +104,17 @@
 					"name": "添加车辆",
 					"pathName": "pages/addCar/main",
 					"query": "from=workbench&key=1"
+				},
+				{
+					"id": -1,
+					"name": "角色管理",
+					"pathName": "pages/permission/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "用户管理",
+					"pathName": "pages/userManagement/main"
 				}
 			]
 		}

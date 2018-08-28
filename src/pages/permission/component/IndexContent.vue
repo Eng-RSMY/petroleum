@@ -2,9 +2,9 @@
   <div class="title">
     <div class="title-content-wrap">
       <div class="title-content" v-for="item in titleList" :key="item.id">
-        <span>{{item.id}}</span>
+        <span>{{(index+1)}}</span>
         <span>{{item.name}}</span>
-        <span>设置</span>
+        <span @click="toSetRole(item.id)">设置</span>
       </div>
     </div>
   </div>
@@ -19,6 +19,12 @@
       }
     },
     methods: {
+		toSetRole(id){
+			wx.navigateTo({
+  				url: `./setRole/main?id=${id}`
+			})
+
+		}
     },
     beforeMount () {
       // 获取角色
