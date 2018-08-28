@@ -25,7 +25,7 @@
 				</div>
 				<div class="a-right">
 					<span>{{ personList.roleName }}</span>
-					<img src="/static/images/more.png" />
+					<!-- <img src="/static/images/more.png" /> -->
 				</div>
 			</div>
 			<div class="account">
@@ -35,7 +35,7 @@
 				</div>
 				<div class="a-right">
 					<span>{{ personList.phone }}</span>
-					<img src="/static/images/more.png" />
+					<!-- <img src="/static/images/more.png" /> -->
 				</div>
 			</div>
 			<div class="footer" @click="logout">
@@ -59,7 +59,7 @@
 		methods: {
 			logout () {
 				this.personList = {}
-				wx.navigateTo({
+				wx.reLaunch({
 					url: "../../pages/index/main",
 					fail: function (res) {
 						console.log(res)

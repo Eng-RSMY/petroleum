@@ -28,18 +28,24 @@
 			<div class="weui-cell" style="border-top: none">
 				<div class="weui-cell__bd">
 					<p style="display: inline-block;width:40%">订购金额</p>
-					<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">{{item.orderTotalPrice == null ? "暂无数据" : "¥"+item.orderTotalPrice}}</p>
+					<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">{{item.orderTotalPrice == null ? "暂无数据" :
+						"¥"+item.orderTotalPrice}}</p>
 				</div>
 				<div class="weui-cell__ft">
 					<p style="color: #2E79FF;font-size: 17px">{{item.statusName}}</p>
 				</div>
 			</div>
 		</div>
-		<div class="footer" v-if="foot">
-			<p @click="loadingMore">加载更多</p>
+		<div v-if="isshow">
+			<div class="footer" v-if="foot">
+				<p @click="loadingMore">加载更多</p>
+			</div>
+			<div class="footer" v-else>
+				<p>已经到底了</p>
+			</div>
 		</div>
-		<div class="footer" v-else>
-			<p>已经到底了</p>
+		<div v-else>
+			暂无数据
 		</div>
 	</div>
 </template>
@@ -51,6 +57,7 @@
 				orderList: "",
 				foot: true,
 				page: 0,
+				isshow:true
 			}
 		},
 
@@ -111,7 +118,12 @@
 				.then(res => {
 					console.log(res)
 					if (res.status == "200") {
-						this.orderList = res.data.content
+						if(res.data.content.length>0){
+							this.orderList = res.data.content
+						}else{
+							this.isshow=false
+						}
+						
 					}
 				})
 				.catch(res => {

@@ -5,7 +5,7 @@
 				<p>公司名称</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.fullName"  placeholder="请输入公司名称">
+				<input class="input" type="text" v-model.lazy="companyInfo.fullName"  placeholder="请输入公司名称" :disabled="disabled">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -56,7 +56,8 @@
 	export default {
 		data() {
 			return {
-				companyInfo:""
+				companyInfo:"",
+				disabled:true
 			}
 		},
 

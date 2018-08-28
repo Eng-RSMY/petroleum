@@ -52,7 +52,7 @@
 			</div>
 			<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
 				<div class="weui-cell__bd">
-					<p>物料名称</p>
+					<p>物料重量</p>
 				</div>
 				<div class="weui-cell__ft">
 					<span class="dw" style="color: #000">(吨)</span>
@@ -227,7 +227,7 @@
 					console.log('picker发送选择改变，携带值为', e)
 					this.pickSelect1 = this.oils[e.mp.detail.value];
 					var oilName = this.oils[e.mp.detail.value];
-					this.$http.get("/self_order/oil_product", { "categoryName": this.categoryName, "oilName": oilName })
+					this.$http.get("/self_order/oil_product", { "categoryName": this.pickSelect, "oilName": oilName })
 						.then(res => {
 							console.log(res)
 							if (res.status == "200") {
@@ -236,7 +236,11 @@
 							}
 						})
 						.catch(res => {
-							console.log(res)
+							wx.showToast({
+								title: res.response.data.message,
+								icon: 'none',
+								duration: 2000
+							})
 						})
 				}
 
@@ -315,7 +319,7 @@
 								console.log(orderInfo)
 								wx.hideLoading()
 								wx.navigateTo({
-									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo+"&from=selfHelp",
+									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo + "&from=selfHelp",
 									fail: function (res) {
 										console.log(res)
 									}
@@ -452,6 +456,11 @@
 		padding: 0px;
 		background-color: #efeff4;
 		overflow-x: hidden;
+	}
+
+	.weui-flex__item {
+		width: 33%;
+		display: inline-block;
 	}
 
 	.input {

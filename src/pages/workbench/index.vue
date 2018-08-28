@@ -26,19 +26,19 @@
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item" @click="toSelfHelp()">
+			<div class="weui-flex__item" @click="toSelfHelp()" v-if="roleList.selfOrder">
 				<div class="placeholder">
 					<img src="/static/images/selfHelp.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">自助下单</div>
 			</div>
-			<div class="weui-flex__item" @click="toBill()">
+			<div class="weui-flex__item" @click="toBill()" v-if="roleList.billInquiry">
 				<div class="placeholder">
 					<img src="/static/images/zdcx.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">账单查询</div>
 			</div>
-			<div class="weui-flex__item" @click="toTrackeOrder()">
+			<div class="weui-flex__item" @click="toTrackeOrder()" v-if="roleList.orderTracking">
 				<div class="placeholder">
 					<img src="/static/images/trackeOrder.png" alt="" class="img">
 				</div>
@@ -52,34 +52,31 @@
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item" @click="toUserManagement">
+			<div class="weui-flex__item" @click="toUserManagement" v-if="roleList.userManagement">
 				<div class="placeholder">
 					<img src="/static/images/yhgl.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">用户管理</div>
 			</div>
-			<div class="weui-flex__item" @click="toNewEnterpriseUser">
+			<div class="weui-flex__item" @click="toNewEnterpriseUser" v-if="roleList.newUser">
 				<div class="placeholder">
 					<img src="/static/images/xjzh.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">新建用户</div>
 			</div>
-			<div class="weui-flex__item" @click="toCheckPrice()">
+			<div class="weui-flex__item" @click="toCheckPrice()" v-if="roleList.checkPrice">
 				<div class="placeholder">
 					<img src="/static/images/jgcx.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">价格查询</div>
 			</div>
-
-		</div>
-		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item" @click="toMakeCard">
+			<div class="weui-flex__item" @click="toMakeCard" v-if="roleList.admissionCard">
 				<div class="placeholder">
 					<img src="/static/images/rczk.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">入场制卡</div>
 			</div>
-			<div class="weui-flex__item" @click="toMoneyInQuiry">
+			<div class="weui-flex__item" @click="toMoneyInQuiry" v-if="roleList.remittanceInformationInquiry">
 				<div class="placeholder">
 					<img src="/static/images/hkcx.png" alt="" class="img">
 				</div>
@@ -91,36 +88,33 @@
 				</div>
 				<div class="placeholder1">账户充值</div>
 			</div>
-		</div>
-		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item" @click="toDataMaintenance">
+
+			<div class="weui-flex__item" @click="toDataMaintenance" v-if="roleList.dataMaintenance">
 				<div class="placeholder">
 					<img src="/static/images/zlwh.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">资料维护</div>
 			</div>
-			<div class="weui-flex__item" @click="toTicket()">
+			<div class="weui-flex__item" @click="toTicket()" v-if="roleList.billingInformation">
 				<div class="placeholder">
 					<img src="/static/images/kpxx.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">开票信息</div>
 			</div>
-			<div class="weui-flex__item" @click="toKF()">
+			<div class="weui-flex__item" @click="toKF()" v-if="roleList.consumerHotline">
 				<div class="placeholder">
 					<img src="/static/images/kf.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">客服电话</div>
 			</div>
-		</div>
-		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item">
+			<div class="weui-flex__item" @click="toWarning">
 				<div class="placeholder">
 					<img src="/static/images/yjcl.png" alt="" class="img">
 				</div>
 				<div class="placeholder1">预警管理</div>
 
 			</div>
-			<div class="weui-flex__item" @click="toCar">
+			<div class="weui-flex__item" @click="toCar" v-if="roleList.vehicleManagement">
 				<div class="placeholder">
 					<img src="/static/images/car.png" alt="" class="img">
 				</div>
@@ -141,6 +135,20 @@
 		data() {
 			return {
 				companyInfo: "",
+				roleList: {
+					selfOrder: false,//自助下单
+					billInquiry: false,//账单查询
+					orderTracking: false,//订单跟踪
+					userManagement: false,//用户管理
+					newUser: false,//新建用户
+					checkPrice: false,//价格查询
+					admissionCard: false,//入场制卡
+					remittanceInformationInquiry: false,//汇款信息查询
+					dataMaintenance: false,//资料维护
+					billingInformation: false,//开票信息
+					consumerHotline: false,//客服电话
+					vehicleManagement: false,//车辆管理
+				}
 			}
 		},
 
@@ -156,14 +164,14 @@
 					}
 				})
 			},
-      toDataMaintenance () {
-        wx.navigateTo({
-          url: "../../pages/dataMaintenance/main",
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      },
+			toDataMaintenance() {
+				wx.navigateTo({
+					url: "../../pages/dataMaintenance/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
 			toMoneyInquiry: function () {
 				wx.navigateTo({
 					url: "../../pages/moneyInquiry/main",
@@ -228,6 +236,14 @@
 					}
 				})
 			},
+			toWarning: function () {
+				wx.navigateTo({
+					url: "../../pages/warning/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+			},
 			toTicket: function () {
 				wx.navigateTo({
 					url: "../../pages/ticket/main",
@@ -260,6 +276,7 @@
 		},
 
 		mounted() {
+			// 公司信息
 			this.$http.get("/workbench/company_account")
 				.then(res => {
 					console.log(res)
@@ -273,7 +290,66 @@
 						})
 					}
 
+				}).catch(res => {
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
 				})
+			var that = this;
+			// 获取当前用户的登录信息
+			this.$http.get("/mine").then(res => {
+				console.log(res.data.role.permissions)
+				// that.$http.get("")
+				for (var i = 0; i < res.data.role.permissions.length; i++) {
+					console.log(res.data.role.permissions[i].name == "入场制卡")
+					if (res.data.role.permissions[i].name == "自助下单") {
+						this.roleList.selfOrder = true;
+					}
+					if (res.data.role.permissions[i].name == "账单查询") {
+						this.roleList.billInquiry = true;
+					}
+					if (res.data.role.permissions[i].name == "订单跟踪") {
+						this.roleList.orderTracking = true;
+					}
+					if (res.data.role.permissions[i].name == "用户管理") {
+						this.roleList.userManagement = true;
+					}
+					if (res.data.role.permissions[i].name == "新建用户") {
+						this.roleList.newUser = true;
+					}
+					if (res.data.role.permissions[i].name == "价格查询") {
+						this.roleList.checkPrice = true;
+					}
+					if (res.data.role.permissions[i].name == "入场制卡") {
+						this.roleList.admissionCard = true;
+					}
+					if (res.data.role.permissions[i].name == "汇款信息查询") {
+						this.roleList.remittanceInformationInquiry = true;
+					}
+					if (res.data.role.permissions[i].name == "资料维护") {
+						this.roleList.dataMaintenance = true;
+					}
+					if (res.data.role.permissions[i].name == "开票信息") {
+						this.roleList.billingInformation = true;
+					}
+					if (res.data.role.permissions[i].name == "客服电话") {
+						this.roleList.consumerHotline = true;
+					}
+					if (res.data.role.permissions[i].name == "车辆管理") {
+						this.roleList.vehicleManagement = true;
+					}
+				}
+			}).catch(res => {
+				wx.showToast({
+					title: res.response.data.message,
+					icon: 'none',
+					duration: 2000
+				})
+			})
+			// 根据用户获取权限
+
 		},
 	}
 </script>
@@ -288,6 +364,13 @@
 
 	.weui-cell__bd {
 		margin-left: 10px;
+	}
+
+	.weui-flex {}
+
+	.weui-flex__item {
+		width: 33%;
+		display: inline-block;
 	}
 
 	.weui-cell {

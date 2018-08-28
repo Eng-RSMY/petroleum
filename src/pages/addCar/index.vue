@@ -9,7 +9,7 @@
 			</div>
 			<div class="c-row">
 				<span>车牌号</span>
-				<div class="c-row-input" contenteditable="true"  style="width: 100px;height:30px;border:1px solid #ddd" @click.stop="showInput">{{carNo}}</div>
+				<div class="c-row-input" contenteditable="true"  style="width: 100px" @click.stop="showInput">{{carNo}}</div>
 			</div>
 			<div class="c-row">
 				<span>行驶证号</span>
@@ -227,8 +227,9 @@
 	.c-row {
 		width: 90%;
 		height: 50px;
+		line-height: 50px;
 		margin: 0 auto;
-		padding: 15px 0 0 0;
+		padding: 0;
 		box-sizing: border-box;
 		border-bottom: 1px solid #DEDEDE;
 		display: flex;
@@ -237,6 +238,8 @@
 
 	.c-row-input {
 		text-align: right;
+		height: 100%;
+		line-height: 50px;
 	}
 
 	.c-row-last {
