@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="content">
+		<div class="content" v-if="isshow">
 			<div class="contentList" v-for="(item,index) in finance" ::key="index">
 				<p>
 					<span>时间:</span>
@@ -49,11 +49,16 @@
 
 			</div>
 		</div>
-		<div class="footer" v-if="foot1">
-			<p @click="loadingMore1">加载更多</p>
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img">
 		</div>
-		<div class="footer" v-else>
-			<p>已经到底了</p>
+		<div v-if="length">
+			<div class="footer" v-if="foot1">
+				<p @click="loadingMore1">加载更多</p>
+			</div>
+			<div class="footer" v-else>
+				<p>已经到底了</p>
+			</div>
 		</div>
 	</div>
 </template>
@@ -66,6 +71,8 @@
 				page: 0,
 				finance: null,
 				foot1: true,
+				length:false,
+				isshow:false
 			}
 		},
 		methods: {
@@ -73,6 +80,11 @@
 				this.$http.get(`/finance?page=${this.page}&size=5`).then(res => {
 					console.log(res)
 					this.finance = res.data.content;
+					if(res.data.content.length<5){
+						this.length=false
+					}else{
+						this.length=true
+					}
 				})
 					.catch(res => {
 						console.log(res)
@@ -127,7 +139,7 @@
 
 	.contentList p span:nth-child(1) {
 		display: inline-block;
-		width:100px;
+		width:170px;
 	}
 
 	.contentList p {
@@ -152,5 +164,14 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+	.img{
+		width:200px;
+		height: 200px;
+		position:fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>

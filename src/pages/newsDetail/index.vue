@@ -1,12 +1,17 @@
 <template>
 	<div class="bbody">
 		<article class="weui-article">
-			<h1 class="title">{{bulletin.title}}</h1>
+			<h1 class="title">
+				{{bulletin.title}}
+			</h1>
+			<h2 class="title1">
+				{{bulletin.subtitle}}
+			</h2>
 			<div class="toptop">
-				<span>发表于{{bulletin.publishTime}}</span>
+				发表于{{bulletin.publishTime}}
 			</div>
 			<section>
-				<h2 >{{bulletin.subtitle}}</h2>
+				<img :src="bulletin.coverUri" mode="widthFix" alt="" class="img">
 				<section v-text="bulletin.content">
 
 				</section>
@@ -65,9 +70,11 @@
 		height: auto;
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: right;
 		font-size: 14px;
 		color: #B5B5B5;
+		text-align: right;
+		margin-bottom:20px;
 	}
 
 	.t-left {
@@ -96,6 +103,11 @@
 		font-size: 20px;
 		font-weight: bold;
 		color: #000;
+	}
+	.title1{
+		padding-bottom: 10px;
+		font-size: 16px;
+		color: #000;
 		border-bottom: 2px solid #B5B5B5;
 	}
 
@@ -104,5 +116,10 @@
 		margin: 4% 0 0 0;
 		font-size: 14px;
 		font-weight: normal;
+	}
+	.img{
+		width: 96%;
+		margin-left: 2%;
+	
 	}
 </style>

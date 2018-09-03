@@ -15,14 +15,6 @@
 								{{pickSelect }}
 							</view>
 						</picker>
-						<div class="checkbox" v-if="select" @click="isselect">
-							<img class="img" src="/static/images/selected.png" alt="" align="middle">
-							<span class="span">记住公司名称</span>
-						</div>
-						<div class="checkbox" v-else @click="isselect">
-							<img class="img" src="/static/images/select.png" alt="" align="middle">
-							<span class="span">记住公司名称</span>
-						</div>
 						<div class="input-title" v-if="select1" @click="isselect1">
 							<img class="img" src="/static/images/selected.png" alt="" align="middle">
 							<span class="span"> 同意《垦利石化小程序服务条款》</span>
@@ -32,7 +24,7 @@
 							<span class="span"> 同意《垦利石化小程序服务条款》</span>
 						</div>
 						<!-- <button type="primary" size="default" style="height: 50px;background-color: #f1f1f1;height: 40px;line-height: 40px" v-if="isEnty">下一步</button> -->
-						<button type="primary" size="default" @click="nextStep" style="height: 50px;background-color: #2E79FF;height: 40px;line-height: 40px" >下一步</button>
+						<button type="primary" size="default"  @click="nextStep" style="height: 50px;background-color: #2E79FF;height: 40px;line-height: 40px" >下一步</button>
 
 					</div>
 				</div>
@@ -104,7 +96,7 @@
 				code: [],
 				focus_status: [],
 				length: 0,//已经输入的长度
-				company:""
+				company: ""
 			};
 		},
 
@@ -113,24 +105,47 @@
 		watch: {
 			isEnty: function (val) {
 				cpnsole.log(val)
-				if (this.phone != "" && this.pickSelect != "公司请选择" && this.select == true && this.select1 == true) {
+				if (this.phone != "" && this.pickSelect != "公司名称请选择" && this.select == true && this.select1 == true) {
 					this.isEnty = false
 				}
 			}
 		},
 		methods: {
 			inputFinish: function (val) {
+				wx.showLoading({
+					title: "正在获取公司",
+					mask: true
+				})
 				console.log(val)
 				var phone = val.target.value
-				var params={
+				var params = {
 					phone,
 				}
-				this.$http.get(`/public/companies`,params).then(res => {
+				this.$http.get(`/public/companies`, params).then(res => {
 					console.log(res)
-					for (let item of res.data) {
-						this.array.push(item.name)
+					wx.hideLoading()
+					if (res.data.length > 0) {
+						for (let item of res.data) {
+							this.array.push(item.name)
+						}
+						
+						this.array1 = res.data;
+						this.pickSelect = res.data[0].name;
+						this.company = res.data[0];
+					} else {
+						wx.showModal({
+							title: '提示',
+							showCancel:false,
+							content: '您的手机号未注册垦利油好小程序，请联系管理员开通账号',
+							success: function (res) {
+								if (res.confirm) {
+									console.log('用户点击确定')
+								} 
+							}
+						})
 					}
-					this.array1 = res.data;
+
+
 				}).catch(res => {
 					console.log(res)
 					// .response.data.message
@@ -141,15 +156,12 @@
 					})
 				})
 			},
-			isselect: function () {
-				this.select == true ? this.select = false : this.select = true;
-			},
 			isselect1: function () {
 				this.select1 == true ? this.select1 = false : this.select1 = true;
 			},
 			bindPickerChange: function (e) {
 				console.log(e)
-				this.company=this.array1[e.mp.detail.value]
+				this.company = this.array1[e.mp.detail.value]
 				this.pickSelect = this.array[e.mp.detail.value];
 			},
 			getCode() {
@@ -187,6 +199,12 @@
 						icon: 'none',
 						duration: 1000
 					})
+				} else if (this.pickSelect == "公司名称请选择" || this.pickSelect == "") {
+					wx.showToast({
+						title: '请选择公司',
+						icon: 'none',
+						duration: 1000
+					})
 				} else {
 					this.login = false;
 					this.timeout();
@@ -198,14 +216,14 @@
 					grant_type: "mobile",
 					username: this.phone,
 					password: this.code,
-					company:this.company.id
+					company: this.company.id
 				}
 				this.$http.post("/oauth/token", params)
 					.then(res => {
 						console.log(res)
 						wx.setStorageSync('access_token', res.data.access_token)
-						wx.setStorageSync('token_type',res.data.token_type)
-						wx.setStorageSync('refresh_token',res.data.refresh_token)
+						wx.setStorageSync('token_type', res.data.token_type)
+						wx.setStorageSync('refresh_token', res.data.refresh_token)
 						// cookies.set("access_token",res.data.access_token)
 						// cookies.set("token_type",res.data.token_type)
 						wx.switchTab({
@@ -281,7 +299,7 @@
 				if (that.code.length == 6) {
 					that.length = e.mp.detail.value.length,
 						console.log(that.code)
-						this.code_isFocus = false
+					this.code_isFocus = false
 
 
 				}
@@ -294,7 +312,7 @@
 		},
 
 		mounted() {
-			
+			this.login = true;
 		}
 	}
 </script>

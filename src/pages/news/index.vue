@@ -1,32 +1,34 @@
 <template>
 	<div class="bbody">
 		<!-- 行消息 -->
-		<div class="row" v-for="(item,index) in bulletin" :key="index" @click="toDetail(item.id)">
-			<div class="row-inner">
-				<div class="title">
-					<span>{{item.title}}</span>
-				</div>
-				<div class="subtitle">
-					<span>{{item.subtitle}}</span>
-				</div>
-				<div class="time">
-					{{item.publishTime}}
-				</div>
-				<div class="words">
-					{{item.content}}
+		<div v-if="ishave">
+			<div class="row" v-for="(item,index) in bulletin" :key="index" @click="toDetail(item.id)">
+				<div class="row-inner">
+					<div class="title">
+						<span>{{item.title}}</span>
+					</div>
+					<div class="subtitle">
+						<span>{{item.subtitle}}</span>
+					</div>
+					<div class="time">
+						{{item.publishTime}}
+					</div>
+					<div class="words">
+						{{item.content}}
+					</div>
 				</div>
 			</div>
-		</div>
-		<div v-if="isshow">
-			<div class="footer" v-if="foot">
-				<p @click="loadingMore">加载更多</p>
-			</div>
-			<div class="footer" v-else>
-				<p>已经到底了</p>
+			<div v-if="isshow">
+				<div class="footer" v-if="foot">
+					<p @click="loadingMore">加载更多</p>
+				</div>
+				<div class="footer" v-else>
+					<p>已经到底了</p>
+				</div>
 			</div>
 		</div>
 		<div v-else>
-			暂无数据
+			<img src="/static/images/none.png" alt="" class="img">
 		</div>
 	</div>
 </template>
@@ -37,7 +39,8 @@
 				bulletin: [],
 				foot: true,
 				page: 0,
-				isshow: true
+				isshow: true,
+				ishave: false
 			}
 		},
 		methods: {
@@ -54,12 +57,16 @@
 					// this.bulletin
 					console.log(res)
 					if (res.data.content.length > 0) {
+						this.ishave = true
 						for (var i = 0; i < res.data.content.length; i++) {
 							this.bulletin.push(res.data.content[i]);
 						}
-						console.log(this.bulletin)
-					} else {
-						this.foot = false
+					}
+					if (res.data.content.length > 0 && res.data.content.length < 5) {
+						this.isshow = false
+					} else if (res.data.content.length = 5) {
+						this.isshow = true
+						this.foot = true
 					}
 				}).catch(res => {
 					console.log(res)
@@ -139,5 +146,15 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+
+	.img {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>

@@ -8,7 +8,7 @@
 				</div>
 				<div class="input-list">
 					<span>绑定手机号</span>
-					<span><input type="text" placeholder="请输入手机号" v-model="newUserPhone"></span>
+					<span><input type="number" maxlength="11" placeholder="请输入手机号" v-model="newUserPhone"></span>
 				</div>
 				<div class="input-list">
 					<span>用户真实姓名</span>
@@ -28,7 +28,7 @@
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机身份证</span>
-					<span><input type="text" placeholder="请输入司机身份证" v-model="idNumber"></span>
+					<span><input type="idcard" placeholder="请输入司机身份证号" v-model="idNumber"></span>
 				</div>
 				<div class="input-list"  v-if="isDriver">
 					<span>司机驾驶证号</span>

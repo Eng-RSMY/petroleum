@@ -1,85 +1,90 @@
 <template>
 	<div class="container">
-		<div class="orderInfo">
-			<p>
-				<span>订单号：</span>
-				<span>{{orderInfo.number}}</span>
-			</p>
-			<p>
-				<span>订购货物:</span>
-				<span>{{orderInfo.categoryName}} {{orderInfo.oilName}}</span>
-			</p>
-			<p>
-				<span>订购量：</span>
-				<span>{{orderInfo.orderWeight}}</span>
-			</p>
-			<p>
-				<span>下单价格：</span>
-				<span>{{orderInfo.orderPrice}}</span>
-			</p>
-			<p>
-				<span>货车司机：</span>
-				<span>{{orderInfo.driverName}}</span>
-			</p>
-			<p>
-				<span>车牌号：</span>
-				<span>{{orderInfo.carNumber}}</span>
-			</p>
-			<p>
-				<span>司机手机号:</span>
-				<span>{{orderInfo.driverPhone}}</span>
-			</p>
-			<p>
-				<span>司机身份证号：</span>
-				<span>{{orderInfo.driverIdNumber}}</span>
-			</p>
-			<p>
-				<span>押运员：</span>
-				<span>{{orderInfo.escortName == null ? "未选择押运员" : orderInfo.escortName }}</span>
-			</p>
-			<p>
-				<span>押运员手机号：</span>
-				<span>{{orderInfo.escortPhone == null ? "未选择押运员" : orderInfo.escortPhone }}</span>
-			</p>
-			<p>
-				<span>下单时间：</span>
-				<span>{{orderInfo.orderedTime}}</span>
-			</p>
-			<p>
-				<span>操作人：</span>
-				<span>{{orderInfo.operatorName}}</span>
-			</p>
-			<p>
-				<span>操作帐号</span>
-				<span>{{orderInfo.operatorUsername}}</span>
-			</p>
-			<p>
-				<span>操作人手机号：</span>
-				<span>{{orderInfo.operatorPhone}}</span>
-			</p>
+		<div v-if="ishave" style="width:100%;">
+			<div class="orderInfo">
+				<p>
+					<span>订单号：</span>
+					<span>{{orderInfo.number}}</span>
+				</p>
+				<p>
+					<span>订购货物:</span>
+					<span>{{orderInfo.categoryName}} {{orderInfo.oilName}}</span>
+				</p>
+				<p>
+					<span>订购量：</span>
+					<span>{{orderInfo.orderWeight}}</span>
+				</p>
+				<p>
+					<span>下单价格：</span>
+					<span>{{orderInfo.orderPrice}}</span>
+				</p>
+				<p>
+					<span>货车司机：</span>
+					<span>{{orderInfo.driverName}}</span>
+				</p>
+				<p>
+					<span>车牌号：</span>
+					<span>{{orderInfo.carNumber}}</span>
+				</p>
+				<p>
+					<span>司机手机号:</span>
+					<span>{{orderInfo.driverPhone}}</span>
+				</p>
+				<p>
+					<span>司机身份证号：</span>
+					<span>{{orderInfo.driverIdNumber}}</span>
+				</p>
+				<p>
+					<span>押运员：</span>
+					<span>{{orderInfo.escortName == null ? "未选择押运员" : orderInfo.escortName }}</span>
+				</p>
+				<p>
+					<span>押运员手机号：</span>
+					<span>{{orderInfo.escortPhone == null ? "未选择押运员" : orderInfo.escortPhone }}</span>
+				</p>
+				<p>
+					<span>下单时间：</span>
+					<span>{{orderInfo.orderedTime}}</span>
+				</p>
+				<p>
+					<span>操作人：</span>
+					<span>{{orderInfo.operatorName}}</span>
+				</p>
+				<p>
+					<span>操作帐号</span>
+					<span>{{orderInfo.operatorUsername}}</span>
+				</p>
+				<p>
+					<span>操作人手机号：</span>
+					<span>{{orderInfo.operatorPhone}}</span>
+				</p>
+			</div>
+			<div class="weui-cell" style="border-top: none">
+				<div class="weui-cell__bd">
+					<p>订购状态</p>
+				</div>
+				<div class="weui-cell__ft">
+					<p style="color: #2E79FF;">{{orderInfo.statusName}}</p>
+				</div>
+			</div>
+			<div class="weui-cell" style="border-top: none">
+				<div class="weui-cell__bd">
+					<p>订购金额</p>
+				</div>
+				<div class="weui-cell__ft">
+					<p style="color: #FF001F;font-size: 17px">¥ {{orderInfo.orderTotalPrice}}</p>
+				</div>
+			</div>
+			<div class="two-bar-codes" @click="showImg">
+				<p>二维码</p>
+				<canvas class="img" style="width: 200px; height: 200px;" canvas-id="myQrcode1"></canvas>
+			</div>
+			<div class="mask" v-if="isShowImg" @click="hideImg">
+				<canvas class="img1" style="width: 250px; height: 250px;" canvas-id="myQrcode2"></canvas>
+			</div>
 		</div>
-		<div class="weui-cell" style="border-top: none">
-			<div class="weui-cell__bd">
-				<p>订购状态</p>
-			</div>
-			<div class="weui-cell__ft">
-				<p style="color: #2E79FF;">{{orderInfo.statusName}}</p>
-			</div>
-		</div>
-		<div class="weui-cell" style="border-top: none">
-			<div class="weui-cell__bd">
-				<p>订购金额</p>
-			</div>
-			<div class="weui-cell__ft">
-				<p style="color: #FF001F;font-size: 17px">¥ {{orderInfo.orderTotalPrice}}</p>
-			</div>
-		</div>
-		<div class="two-bar-codes">
-			<p>二维码</p>
-			<canvas class="img" style="width: 200px; height: 200px;" canvas-id="myQrcode1"></canvas>
-			<!-- <div class="img">
-						<img src="https://qr.api.cli.im/qr?data=www.baidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=f33aa9d4852b6c3e3439d4e50f311c26" alt="">
-				</div> -->
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img3">
 		</div>
 	</div>
 </template>
@@ -89,7 +94,9 @@
 	export default {
 		data() {
 			return {
-				orderInfo: ""
+				orderInfo: "",
+				ishave: false,
+				isShowImg:false
 			}
 		},
 
@@ -97,7 +104,12 @@
 		},
 
 		methods: {
-
+			showImg(){
+				this.isShowImg=true
+			},
+			hideImg(){
+				this.isShowImg=false
+			}
 		},
 
 		mounted() {
@@ -106,11 +118,18 @@
 					console.log(res)
 					if (res.status == "200") {
 						this.orderInfo = res.data
+						this.ishave = true
 						// this.qrcode(res.data.encryptOrderNumber)
 						drawQrcode({
 							width: 200,
 							height: 200,
 							canvasId: 'myQrcode1',
+							text: res.data.encryptOrderNumber
+						})
+						drawQrcode({
+							width: 200,
+							height: 200,
+							canvasId: 'myQrcode2',
 							text: res.data.encryptOrderNumber
 						})
 					} else {
@@ -194,11 +213,39 @@
 	.two-bar-codes .img {
 		width: 200px;
 		height: 200px;
-		margin: 20px auto
+		margin: 20px auto;
+		padding-bottom:20px; 
 	}
 
 	.two-bar-codes .img img {
 		width: 100%;
 		height: 100%;
+	}
+	.img3 {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
+	}
+	.mask{
+		width:100%;
+		height: 100%;
+		position: fixed;
+		left: 0px;
+		top: 0px;
+		background-color: rgba(0,0,0,0.8);
+		z-index: 99;
+	}
+	.img1 {
+		width: 250px;
+		height: 250px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -125px;
+		margin-top: -125px;
 	}
 </style>

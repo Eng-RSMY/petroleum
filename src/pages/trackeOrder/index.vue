@@ -1,40 +1,45 @@
 <template>
 	<div class="container">
-		<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.id)">
-			<p>
-				<span>订单号：</span>
-				<span>{{item.number == null ? "暂无数据" : item.number}}</span>
-			</p>
-			<p>
-				<span>订购货物:</span>
-				<span>{{item.categoryName}} {{item.oilName}}</span>
-			</p>
-			<p>
-				<span>订购量：</span>
-				<span>{{item.orderWeight == null ? "暂无数据" : item.orderWeight}}</span>
-			</p>
-			<p>
-				<span>货车司机：</span>
-				<span>{{item.driverName == null ? "暂无数据" : item.driverName}}</span>
-			</p>
-			<p>
-				<span>车牌号：</span>
-				<span>{{item.carNumber == null ? "暂无数据" : item.carNumber}}</span>
-			</p>
-			<p>
-				<span>下单时间：</span>
-				<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
-			</p>
-			<div class="weui-cell" style="border-top: none">
-				<div class="weui-cell__bd">
-					<p style="display: inline-block;width:40%">订购金额</p>
-					<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">{{item.orderTotalPrice == null ? "暂无数据" :
-						"¥"+item.orderTotalPrice}}</p>
-				</div>
-				<div class="weui-cell__ft">
-					<p style="color: #2E79FF;font-size: 17px">{{item.statusName}}</p>
+		<div v-if="ishave" style="width:100%">
+			<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.id)">
+				<p>
+					<span>订单号：</span>
+					<span>{{item.number == null ? "暂无数据" : item.number}}</span>
+				</p>
+				<p>
+					<span>订购货物:</span>
+					<span>{{item.categoryName}} {{item.oilName}}</span>
+				</p>
+				<p>
+					<span>订购量：</span>
+					<span>{{item.orderWeight == null ? "暂无数据" : item.orderWeight}}</span>
+				</p>
+				<p>
+					<span>货车司机：</span>
+					<span>{{item.driverName == null ? "暂无数据" : item.driverName}}</span>
+				</p>
+				<p>
+					<span>车牌号：</span>
+					<span>{{item.carNumber == null ? "暂无数据" : item.carNumber}}</span>
+				</p>
+				<p>
+					<span>下单时间：</span>
+					<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
+				</p>
+				<div class="weui-cell" style="border-top: none">
+					<div class="weui-cell__bd">
+						<p style="display: inline-block;width:40%">订购金额</p>
+						<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">{{item.orderTotalPrice == null ? "暂无数据" :
+							"¥"+item.orderTotalPrice}}</p>
+					</div>
+					<div class="weui-cell__ft">
+						<p style="color: #2E79FF;font-size: 17px">{{item.statusName}}</p>
+					</div>
 				</div>
 			</div>
+		</div>
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img">
 		</div>
 		<div v-if="isshow">
 			<div class="footer" v-if="foot">
@@ -43,9 +48,6 @@
 			<div class="footer" v-else>
 				<p>已经到底了</p>
 			</div>
-		</div>
-		<div v-else>
-			暂无数据
 		</div>
 	</div>
 </template>
@@ -57,7 +59,8 @@
 				orderList: "",
 				foot: true,
 				page: 0,
-				isshow:true
+				isshow:false,
+				ishave:false
 			}
 		},
 
@@ -80,12 +83,17 @@
 					.then(res => {
 						console.log(res)
 						if (res.data.content.length > 0) {
-							for (var i = 0; i < res.data.content.length; i++) {
-								this.orderList.push(res.data.content[i]);
-							}
-							console.log(this.orderList)
+							this.ishave = true
+							this.orderList.push(res.data.content[i]);
+						}
+						if (res.data.content.length > 0 && res.data.content.length < 5) {
+							this.isshow = true;
+							this.foot = false;
+						} else if (res.data.content.length = 5) {
+							this.isshow = true;
+							this.foot = true;
 						} else {
-							this.foot = false
+							this.ishave = false
 						}
 					})
 					.catch(res => {
@@ -120,8 +128,11 @@
 					if (res.status == "200") {
 						if(res.data.content.length>0){
 							this.orderList = res.data.content
-						}else{
-							this.isshow=false
+							this.ishave=true;
+						}else if(res.data.content.length<5){
+							this.isshow=false;
+						} else{
+							this.isshow=true;
 						}
 						
 					}
@@ -231,5 +242,23 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+	.img{
+		width:200px;
+		height: 200px;
+		position:fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
+	}
+	.img {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>

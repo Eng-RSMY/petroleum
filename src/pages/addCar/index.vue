@@ -13,7 +13,7 @@
 			</div>
 			<div class="c-row">
 				<span>行驶证号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" v-model.lazy="driveNum" />
+				<input class="c-row-input" type="text" placeholder="请输入" maxlength="16" dir="rtl" v-model.lazy="driveNum" />
 			</div>
 			<div class="c-row c-row-last">
 				<span>危险品运输证号</span>
@@ -63,9 +63,6 @@
 				]
 			}
 		},
-		mounted() {
-
-		},
 		methods: {
 			showInput() {
 				this.focus = false
@@ -89,11 +86,13 @@
 				}
 			},
 			getNum(val) {
-				if (this.carNo.length < 7) {
+				if (this.carNo.length < 6) {
 					this.carNo += val
-				} else {
-					this.inputClose()
-					console.log("别再点了，再添加就不是祖国的车牌号了")
+				}else if (this.carNo.length == 6){
+					this.carNo += val
+					this.isInputData1Show = false
+					this.isInputData2Show = false
+					this.isFooterShow = true
 				}
 
 			},

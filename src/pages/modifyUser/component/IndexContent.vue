@@ -8,7 +8,7 @@
 				</div>
 				<div class="input-list">
 					<span>绑定手机号</span>
-					<span><input type="text" :placeholder="user.phone" v-model="newUserPhone"></span>
+					<span><input type="number" :placeholder="user.phone" maxlength="11" v-model="newUserPhone"></span>
 				</div>
 				<div class="input-list">
 					<span>用户真实姓名</span>
@@ -28,11 +28,11 @@
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机身份证</span>
-					<span><input type="text" placeholder="user.idNumber" v-model="idNumber"></span>
+					<span><input type="idcard" :placeholder="user.idNumber" maxlength="18" minlength="18" v-model="idNumber"></span>
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机驾驶证号</span>
-					<span><input type="text" placeholder="user.driverNumber" v-model="driverNumber"></span>
+					<span><input type="text" :placeholder="user.driverNumber" maxlength="12" v-model="driverNumber"></span>
 				</div>
 				<div class="input-list">
 					<span>用激活账户</span>
@@ -135,6 +135,12 @@
 							title: "修改成功",
 							icon: 'none',
 							duration: 2000,
+						})
+						// pages/userManagement/main
+						wx.switchTab({
+							url: "../../pages/userManagement/main",
+							fail: function (res) {
+							}
 						})
 					} else {
 						wx.showToast({

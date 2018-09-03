@@ -1,27 +1,32 @@
 <template>
 	<div class="container">
 		<!-- <div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)"> -->
-		<div class="orderInfo" v-for="(item,index) in orderList" :key="index">
-			<p>
-				<span>时间：</span>
-				<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
-			</p>
-			<p>
-				<span>品类：</span>
-				<span>{{item.categoryName == null ? "暂无数据" : item.categoryName}}</span>
-			</p>
-			<p>
-				<span>油品:</span>
-				<span>{{item.oilName == null ? "暂无数据" : item.oilName}}</span>
-			</p>
-			<p>
-				<span>数量：</span>
-				<span>{{item.weight == null ? "暂无数据" : item.weight}}</span>
-			</p>
-			<p>
-				<span>实际支付金额：</span>
-				<span>{{item.totalPrice == null ? "暂无数据" : item.totalPrice}}</span>
-			</p>
+		<div v-if="ishave">
+			<div class="orderInfo" v-for="(item,index) in orderList" :key="index">
+				<p>
+					<span>时间：</span>
+					<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
+				</p>
+				<p>
+					<span>品类：</span>
+					<span>{{item.categoryName == null ? "暂无数据" : item.categoryName}}</span>
+				</p>
+				<p>
+					<span>油品:</span>
+					<span>{{item.oilName == null ? "暂无数据" : item.oilName}}</span>
+				</p>
+				<p>
+					<span>数量：</span>
+					<span>{{item.weight == null ? "暂无数据" : item.weight}}</span>
+				</p>
+				<p>
+					<span>实际支付金额：</span>
+					<span>{{item.totalPrice == null ? "暂无数据" : item.totalPrice}}</span>
+				</p>
+			</div>
+		</div>
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img">
 		</div>
 		<div v-if="isshow">
 			<div class="footer" v-if="foot">
@@ -30,9 +35,6 @@
 			<div class="footer" v-else>
 				<p>已经到底了</p>
 			</div>
-		</div>
-		<div v-else>
-			暂无数据
 		</div>
 	</div>
 </template>
@@ -44,7 +46,8 @@
 				orderList: "",
 				foot: true,
 				page: 0,
-				isshow: true
+				isshow: false,
+				ishave: false
 			}
 		},
 
@@ -106,9 +109,17 @@
 					console.log(res)
 					if (res.status == "200") {
 						if (res.data.content.length > 0) {
-							this.orderList = res.data.content
-						} else {
+							this.ishave = true
+							for (var i = 0; i < res.data.content.length; i++) {
+								this.orderList = res.data.content
+							}
+							
+						}
+						if (res.data.content.length > 0 && res.data.content.length < 5) {
 							this.isshow = false
+						} else if (res.data.content.length = 5) {
+							this.isshow = true
+							this.foot = true
 						}
 					}
 				})
@@ -217,5 +228,15 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+
+	.img {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>
