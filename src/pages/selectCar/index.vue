@@ -13,43 +13,50 @@
 			</div>
 		</div>
 		<!-- 单条信息 -->
-		<div v-for="(item,index) in carList" :data-key="item.id" @click.stop="toSelfHelp">
-			<div class="single-msg-box" :style="item.sstyle">
-				<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
-					<div class="s-m-b-inner">
-						<div class="single-msg-box-left">
-							<p>车辆名：</p>
-							<p>车牌号：</p>
-							<p>行驶证号：</p>
-							<p>危险品运输号：</p>
-						</div>
-						<div class="single-msg-box-center">
-							<p>{{ item.remark ==null ? "暂无信息" : item.remark }}</p>
-							<p>{{ item.carNumber ==null ? "暂无信息" : item.carNumber }}</p>
-							<p>{{ item.drivingNumber ==null ? "暂无信息" : item.drivingNumber}}</p>
-							<p>{{ item.transportNumber ==null ? "暂无信息" : item.transportNumber}}</p>
-						</div>
-						<div class="single-msg-box-status" v-if="item.working ">
-							工作中
-						</div>
-						<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
-							未工作
+		<div style="width:100%" v-if="ishave">
+			<div v-for="(item,index) in carList" :data-key="item.id" @click.stop="toSelfHelp">
+				<div class="single-msg-box" :style="item.sstyle">
+					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
+						<div class="s-m-b-inner">
+							<div class="single-msg-box-left">
+								<p>车辆名：</p>
+								<p>车牌号：</p>
+								<p>行驶证号：</p>
+								<p>危险品运输号：</p>
+							</div>
+							<div class="single-msg-box-center">
+								<p>{{ item.remark ==null ? "暂无信息" : item.remark }}</p>
+								<p>{{ item.carNumber ==null ? "暂无信息" : item.carNumber }}</p>
+								<p>{{ item.drivingNumber ==null ? "暂无信息" : item.drivingNumber}}</p>
+								<p>{{ item.transportNumber ==null ? "暂无信息" : item.transportNumber}}</p>
+							</div>
+							<div class="single-msg-box-status" v-if="item.working ">
+								工作中
+							</div>
+							<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
+								未工作
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="s-m-b-right">
-					<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
-					<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
-					<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
+					<div class="s-m-b-right">
+						<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
+						<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
+						<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
+					</div>
 				</div>
 			</div>
 		</div>
-		<!-- 底部 -->
-		<div class="footer" v-if="foot">
-			<p @click="loadingMore">加载更多</p>
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img3">
 		</div>
-		<div class="footer" v-else>
-			<p>已经到底了</p>
+		<!-- 底部 -->
+		<div v-if="isshow">
+			<div class="footer" v-if="foot">
+				<p @click="loadingMore">加载更多</p>
+			</div>
+			<div class="footer" v-else>
+				<p>已经到底了</p>
+			</div>
 		</div>
 	</div>
 
@@ -69,6 +76,8 @@
 				carNumber: "",
 				foot: true,
 				router: "",
+				isshow: false,
+				ishave:false
 			}
 		},
 		methods: {
@@ -90,10 +99,18 @@
 						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
+								this.ishave = true
 								this.driverList = res.data.content;
+							}
+							if (res.data.content.length > 0 && res.data.content.length < 5) {
+								this.isshow = true;
+								this.foot = false;
+							} else if (res.data.content.length = 5) {
+								this.isshow = true;
+								this.foot = true;
 							} else {
+								this.ishave = false
 								this.driverList = []
-
 							}
 						} else {
 							wx.showToast({
@@ -105,7 +122,7 @@
 					})
 			},
 			addItem() {
-				var url = "../addCar/main?from="+this.router;
+				var url = "../addCar/main?from=" + this.router;
 				wx.navigateTo({ url })
 			},
 			loadingMore: function () {
@@ -218,14 +235,14 @@
 				// var driveNum = list[index].driveNum
 				// var dangerNum = list[index].dangerNum
 				// var url = "../addCar/main?key=" + key + "&carName=" + carName + "&carPlate=" + carPlate +
-					// "&driveNum=" + driveNum + "&dangerNum=" + dangerNum
-					var url = "../addCar/main?key=" + key + "&from=selfHelp"
+				// "&driveNum=" + driveNum + "&dangerNum=" + dangerNum
+				var url = "../addCar/main?key=" + key + "&from=selfHelp"
 				wx.navigateTo({ url })
 			}
 		},
 		components: {
 		},
-		mounted() {
+		onShow() {
 			// 获取企业开票信息
 			var params = {
 				carNumber: this.carNumber,
@@ -237,7 +254,17 @@
 				.then(res => {
 					console.log(res)
 					if (res.status == "200") {
-						this.carList = res.data.content;
+						if (res.data.content.length > 0) {
+								this.ishave = true
+								this.carList = res.data.content;
+						}
+						if (res.data.content.length > 0 && res.data.content.length < 5) {
+							this.isshow = true;
+							this.foot = false;
+						} else if (res.data.content.length = 5) {
+							this.isshow = true;
+							this.foot = true;
+						} 
 					} else {
 						wx.showToast({
 							title: res.statusText,
@@ -271,7 +298,6 @@
 		width: 100%;
 		height: 100%;
 		background-color: #efeff4;
-		overflow: hidden;
 	}
 
 	.searchBox {
@@ -411,5 +437,15 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+
+	.img3 {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>

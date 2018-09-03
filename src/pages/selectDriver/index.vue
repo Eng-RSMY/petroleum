@@ -13,43 +13,50 @@
 			</div> -->
 		</div>
 		<!-- 单条信息 -->
-		<div v-for="(item,index) in driverList" @click.stop="toSelfHelp" :data-key="item.id">
-			<div class="single-msg-box" :style="item.sstyle">
-				<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
-					<div class="s-m-b-inner">
-						<div class="single-msg-box-left">
-							<p>司机真实姓名：</p>
-							<p>绑定手机号：</p>
-							<p>身份证号：</p>
-							<p>驾驶号码：</p>
-						</div>
-						<div class="single-msg-box-center">
-							<p>{{ item.realName  == null? "暂无信息 " : item.realName}}</p>
-							<p>{{ item.phone == null? "暂无信息 " :item.phone }}</p>
-							<p>{{ item.idNumber == null? " 暂无信息" :item.idNumber}}</p>
-							<p>{{ item.driverNumber == null? "暂无信息" : item.driverNumber }}</p>
-						</div>
-						<div class="single-msg-box-status" v-if="item.working ">
-							工作中
-						</div>
-						<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
-							未工作
+		<div style="width:100%" v-if="ishave">
+			<div v-for="(item,index) in driverList" @click.stop="toSelfHelp" :data-key="item.id">
+				<div class="single-msg-box" :style="item.sstyle">
+					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
+						<div class="s-m-b-inner">
+							<div class="single-msg-box-left">
+								<p>司机真实姓名：</p>
+								<p>绑定手机号：</p>
+								<p>身份证号：</p>
+								<p>驾驶号码：</p>
+							</div>
+							<div class="single-msg-box-center">
+								<p>{{ item.realName == null? "暂无信息 " : item.realName}}</p>
+								<p>{{ item.phone == null? "暂无信息 " :item.phone }}</p>
+								<p>{{ item.idNumber == null? " 暂无信息" :item.idNumber}}</p>
+								<p>{{ item.driverNumber == null? "暂无信息" : item.driverNumber }}</p>
+							</div>
+							<div class="single-msg-box-status" v-if="item.working ">
+								工作中
+							</div>
+							<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
+								未工作
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="s-m-b-right">
-					<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
-					<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
-					<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
+					<div class="s-m-b-right">
+						<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
+						<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
+						<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
+					</div>
 				</div>
 			</div>
 		</div>
-		<!-- 底部 -->
-		<div class="footer" v-if="foot">
-			<p @click="loadingMore">加载更多</p>
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img3">
 		</div>
-		<div class="footer" v-else>
-			<p>已经到底了</p>
+		<!-- 底部 -->
+		<div v-if="isshow">
+			<div class="footer" v-if="foot">
+				<p @click="loadingMore">加载更多</p>
+			</div>
+			<div class="footer" v-else>
+				<p>已经到底了</p>
+			</div>
 		</div>
 	</div>
 
@@ -67,7 +74,9 @@
 				driverList: [],
 				page: 0,
 				nameOrPhone: "",
-				foot:true
+				foot: true,
+				isshow: false,
+				ishave: false
 			}
 		},
 		methods: {
@@ -88,11 +97,19 @@
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
-							if(res.data.content.length>0){
+							if (res.data.content.length > 0) {
+								this.ishave = true
 								this.driverList = res.data.content;
-							}else{
-								this.driverList=[]
-								
+							}
+							if (res.data.content.length > 0 && res.data.content.length < 5) {
+								this.isshow = true;
+								this.foot = false;
+							} else if (res.data.content.length = 5) {
+								this.isshow = true;
+								this.foot = true;
+							} else {
+								this.ishave = false
+								this.driverList = []
 							}
 						} else {
 							wx.showToast({
@@ -116,13 +133,13 @@
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
-							if(res.data.content.length>0){
-								for(var i=0;i<res.data.content.length;i++){
-								this.driverList.push(res.data.content[i]);
-								}	
+							if (res.data.content.length > 0) {
+								for (var i = 0; i < res.data.content.length; i++) {
+									this.driverList.push(res.data.content[i]);
+								}
 								console.log(this.driverList)
-							}else{
-								this.foot=false
+							} else {
+								this.foot = false
 							}
 						} else {
 							wx.showToast({
@@ -138,11 +155,11 @@
 				var url = "../addDriver/main"
 				wx.navigateTo({ url })
 			},
-			toSelfHelp:function(e){
+			toSelfHelp: function (e) {
 				console.log(e)
 				var key = e.currentTarget.dataset.key
 				var list = this.driverList
-				var index = null		 
+				var index = null
 				for (let i = 0; i < list.length; i++) {
 					if (list[i].id == key) {
 						index = i
@@ -219,7 +236,21 @@
 				.then(res => {
 					console.log(res)
 					if (res.status == "200") {
-						this.driverList = res.data.content;
+						if (res.data.content.length > 0) {
+							this.ishave = true
+							this.driverList = res.data.content;
+						}
+						if (res.data.content.length > 0 && res.data.content.length < 5) {
+							this.isshow = true;
+							this.foot = false;
+						} else if (res.data.content.length = 5) {
+							this.isshow = true;
+							this.foot = true;
+						} else {
+							this.ishave = false
+							this.driverList = []
+						}
+
 					} else {
 						wx.showToast({
 							title: res.statusText,
@@ -376,5 +407,15 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+
+	.img3 {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>

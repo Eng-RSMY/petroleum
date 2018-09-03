@@ -13,7 +13,7 @@
 				<p>纳税人识别号</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.taxpayerNumber" placeholder="请输入纳税人识别号">
+				<input class="input" type="text" v-model.lazy="companyInfo.taxpayerNumber" maxlength="20" placeholder="请输入纳税人识别号">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -21,7 +21,7 @@
 				<p>电话号码</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.contactNumber" placeholder="请输入电话号码">
+				<input class="input" type="number" v-model.lazy="companyInfo.contactNumber" placeholder="请输入电话号码">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -37,7 +37,7 @@
 				<p>银行帐号</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.bankAccount" placeholder="请输入银行账号">
+				<input class="input" type="number" v-model.lazy="companyInfo.bankAccount" placeholder="请输入银行账号">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -107,6 +107,7 @@
 		overflow-x: hidden;
 		padding: 0px;
 		background-color: #efeff4;
+		display: inherit;
 	}
 
 	.weui-cell__bd {

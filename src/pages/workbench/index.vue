@@ -6,47 +6,49 @@
 			<p>{{companyInfo.name}}</p>
 			<div class="weui-flex top_maddle">
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.balance}}</div>
+					<div class="placeholder">{{companyInfo.balance ? companyInfo.balance:"无"}}</div>
 					<div class="placeholder2">账户余额</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.orderedMoney}}</div>
+					<div class="placeholder">{{companyInfo.orderedMoney ? companyInfo.orderedMoney : "无"}}</div>
 					<div class="placeholder2">已下单</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.availableBalance}}</div>
+					<div class="placeholder">{{companyInfo.availableBalance ? companyInfo.availableBalance : "无"}}</div>
 					<div class="placeholder2">可用金额</div>
 				</div>
 			</div>
 		</div>
 		<!-- 常用功能 -->
-		<div class="weui-cell">
-			<div class="weui-cell__bd">
-				<p style="font-size: 16px;font-weight: bold">常用功能</p>
-			</div>
-		</div>
-		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
-			<div class="weui-flex__item" @click="toSelfHelp()" v-if="roleList.selfOrder">
-				<div class="placeholder">
-					<img src="/static/images/selfHelp.png" alt="" class="img">
+		<div v-if="isdisplay">
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<p style="font-size: 16px;font-weight: bold;">常用功能</p>
 				</div>
-				<div class="placeholder1">自助下单</div>
 			</div>
-			<div class="weui-flex__item" @click="toBill()" v-if="roleList.billInquiry">
-				<div class="placeholder">
-					<img src="/static/images/zdcx.png" alt="" class="img">
+			<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px;">
+				<div class="weui-flex__item" @click="toSelfHelp()" v-if="roleList.selfOrder">
+					<div class="placeholder">
+						<img src="/static/images/selfHelp.png" alt="" class="img">
+					</div>
+					<div class="placeholder1">自助下单</div>
 				</div>
-				<div class="placeholder1">账单查询</div>
-			</div>
-			<div class="weui-flex__item" @click="toTrackeOrder()" v-if="roleList.orderTracking">
-				<div class="placeholder">
-					<img src="/static/images/trackeOrder.png" alt="" class="img">
+				<div class="weui-flex__item" @click="toBill()" v-if="roleList.billInquiry">
+					<div class="placeholder">
+						<img src="/static/images/zdcx.png" alt="" class="img">
+					</div>
+					<div class="placeholder1">账单查询</div>
 				</div>
-				<div class="placeholder1">订单跟踪</div>
+				<div class="weui-flex__item" @click="toTrackeOrder()" v-if="roleList.orderTracking">
+					<div class="placeholder">
+						<img src="/static/images/trackeOrder.png" alt="" class="img">
+					</div>
+					<div class="placeholder1">订单跟踪</div>
+				</div>
 			</div>
 		</div>
 		<!-- 全部功能 -->
-		<div class="weui-cell" style="margin-top: 10px;">
+		<div class="weui-cell" style="margin-top: 10px;display:block;">
 			<div class="weui-cell__bd">
 				<p style="font-size: 16px;font-weight: bold">全部功能</p>
 			</div>
@@ -82,13 +84,6 @@
 				</div>
 				<div class="placeholder1">汇款查询</div>
 			</div>
-			<div class="weui-flex__item">
-				<div class="placeholder">
-					<img src="/static/images/zhcz.png" alt="" class="img">
-				</div>
-				<div class="placeholder1">账户充值</div>
-			</div>
-
 			<div class="weui-flex__item" @click="toDataMaintenance" v-if="roleList.dataMaintenance">
 				<div class="placeholder">
 					<img src="/static/images/zlwh.png" alt="" class="img">
@@ -107,7 +102,7 @@
 				</div>
 				<div class="placeholder1">客服电话</div>
 			</div>
-			<div class="weui-flex__item" @click="toWarning">
+			<div class="weui-flex__item" @click="toWarning" v-if="roleList.earlyWarning">
 				<div class="placeholder">
 					<img src="/static/images/yjcl.png" alt="" class="img">
 				</div>
@@ -148,7 +143,9 @@
 					billingInformation: false,//开票信息
 					consumerHotline: false,//客服电话
 					vehicleManagement: false,//车辆管理
-				}
+					earlyWarning: false,
+				},
+				isdisplay:false
 			}
 		},
 
@@ -340,6 +337,14 @@
 					if (res.data.role.permissions[i].name == "车辆管理") {
 						this.roleList.vehicleManagement = true;
 					}
+					if (res.data.role.permissions[i].name == "预警管理") {
+						this.roleList.earlyWarning = true;
+					}
+
+				}
+				if (res.data.role.permissions.length > 3) {
+					console.log(1111111)
+					this.isdisplay = true
 				}
 			}).catch(res => {
 				wx.showToast({
@@ -360,14 +365,12 @@
 		overflow-x: hidden;
 		padding: 0px;
 		background-color: #efeff4;
+		display:inherit;
 	}
 
 	.weui-cell__bd {
 		margin-left: 10px;
 	}
-
-	.weui-flex {}
-
 	.weui-flex__item {
 		width: 33%;
 		display: inline-block;
@@ -387,7 +390,6 @@
 	.top p {
 		text-align: center;
 		font-size: 20px;
-		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 

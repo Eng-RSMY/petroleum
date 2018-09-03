@@ -57,30 +57,44 @@
 		},
 
 		methods: {
-			logout () {
-				this.personList = {}
-				wx.reLaunch({
-					url: "../../pages/index/main",
-					fail: function (res) {
-						console.log(res)
+			logout() {
+				var that = this
+				wx.showModal({
+					title: '提示',
+					content: '是否退出登录',
+					success: function (res) {
+						if (res.confirm) {
+							console.log('用户点击确定')
+							that.personList = {}
+							wx.clearStorageSync()
+							wx.reLaunch({
+								url: "../../pages/index/main",
+								fail: function (res) {
+									console.log(res)
+								}
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消')
+						}
 					}
 				})
+
 			}
 		},
 
 		mounted() {
 			this.$http.get("/mine")
 				.then(res => {
-					if(res.status == "200") {
+					if (res.status == "200") {
 						this.personList = res.data
 						let p = this.personList.phone
 						p = p.split("")
-						for(let i=3; i < 7; i++) {
+						for (let i = 3; i < 7; i++) {
 							p[i] = "*"
 						}
 						p = p.join("")
 						this.personList.phone = p
-					}else {
+					} else {
 						console.log("获取个人信息失败")
 					}
 				})
@@ -93,6 +107,7 @@
 		padding: 0;
 		background: #efeff4;
 	}
+
 	.bbody {
 		width: 100%;
 		height: 100%;
@@ -105,11 +120,13 @@
 		background: #efeff4;
 		font-size: 14px;
 	}
+
 	.header {
 		width: 100%;
 		height: 120px;
 		background: #fff;
 	}
+
 	.tuoxiang {
 		width: 30%;
 		height: 100%;
@@ -117,19 +134,22 @@
 		align-items: center;
 		float: left;
 	}
+
 	.touxiang-inner {
-		width:70px;
+		width: 70px;
 		height: 70px;
 		margin: 0 auto;
 		border-radius: 50px;
 		overflow: hidden;
-		vertical-align:middle;
+		vertical-align: middle;
 
 	}
+
 	.tuoxiang img {
 		width: 70px;
 		height: 70px;
 	}
+
 	.header-words {
 		width: 70%;
 		height: 100%;
@@ -138,12 +158,15 @@
 		align-items: center;
 		/* flex-direction: column; */
 	}
+
 	.h-w-inner {
 		height: auto;
 	}
+
 	.h-w-name {
 		font-size: 17px;
 	}
+
 	.account {
 		width: 100%;
 		height: 50px;
@@ -153,32 +176,39 @@
 		justify-content: space-between;
 		background: #fff;
 	}
+
 	.a-left {
 		width: 50%;
 		position: relative;
 		margin: 0 0 0 8%;
 
 	}
+
 	.a-left span {
 		margin: 0 0 0 10px;
 	}
+
 	.a-left img {
 		width: 15px;
 		height: 20px;
-		vertical-align:middle;
+		vertical-align: middle;
 
 	}
+
 	.a-right {
 		position: relative;
 		margin: 0 8% 0 0;
 	}
+
 	.a-right span {
 		margin: 0 10px 0 0;
 	}
+
 	.a-right img {
 		width: 7.2px;
 		height: 12px;
 	}
+
 	.footer {
 		width: 100%;
 		/* height: 45px; */

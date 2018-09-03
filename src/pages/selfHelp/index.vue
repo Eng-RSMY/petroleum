@@ -219,7 +219,7 @@
 			bindPickerChange1: function (e) {
 				if (this.pickSelect == "请选择") {
 					wx.showToast({
-						title: "请先选择预提货品类",
+						title: "请选择提货品类",
 						icon: 'none',
 						duration: 2000
 					})
@@ -349,6 +349,7 @@
 				this.showDialog = false;
 			},
 			sure: function () {
+				var that = this
 				wx.showLoading({
 					title: "正在下单",
 					mask: true
@@ -369,12 +370,34 @@
 						if (res.status == "200") {
 							var orderInfo = JSON.stringify(res.data)
 							console.log(orderInfo)
-							// wx.navigateTo({
-							// 	url: "../../pages/order/orderInfo/main?orderInfo="+JSON.stringify(res.data),
-							// 	fail: function (res) {
-							// 		console.log(res)
-							// 	}
-							// })
+							that.data = {
+								companyInfo: "",
+								pickSelect: "请选择",
+								pickSelect1: "请选择",
+								index: 0,
+								showDriver: true,
+								showCar: true,
+								showPeople: true,
+								showDialog: false,
+								categories: [],
+								num: "",
+								oils: [],
+								// 库存
+								stock: "",
+								// 油品单价
+								oilPrice: "",
+								// 总价
+								sumPrice: "¥0",
+								driverInfo: "",
+								carInfo: "",
+								escortInfo: ""
+							}
+							wx.navigateTo({
+								url: "../../pages/order/orderInfo/main?orderInfo=" + JSON.stringify(res.data),
+								fail: function (res) {
+									console.log(res)
+								}
+							})
 						} else {
 							wx.showToast({
 								title: res.statusText,

@@ -3,7 +3,7 @@
      <div class="title">
       <ul>
         <li v-for="(item,index) in titleList" :key="index">
-          {{item.title}}
+          {{item.title =="null" ? "暂无信息" : item.title}}
         </li>
       </ul>
      </div>
