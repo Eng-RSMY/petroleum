@@ -13,8 +13,8 @@
 				<div class="header-words">
 					<div class="h-w-inner">
 						<p class="h-w-name">{{ personList.realName }}</p>
-						<p>{{ personList.companyName }}</p>
-						<p>{{ personList.roleName }}</p>
+						<p class="color">{{ personList.companyName }}</p>
+						<p class="color">{{ personList.roleName }}</p>
 					</div>
 				</div>
 			</div>
@@ -164,9 +164,12 @@
 	}
 
 	.h-w-name {
-		font-size: 17px;
+		font-weight: bold;
+		font-size: 20px;
 	}
-
+	.color{
+		color: #898989
+	}
 	.account {
 		width: 100%;
 		height: 50px;
@@ -198,6 +201,7 @@
 	.a-right {
 		position: relative;
 		margin: 0 8% 0 0;
+		color: #898989
 	}
 
 	.a-right span {

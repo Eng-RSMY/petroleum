@@ -1,20 +1,25 @@
 <template>
-	<div>
-		<transition name="fade" mode="out-in">
+	<div style="height:100%;background-color: #fff">
+		<transition name="fade" mode="out-in" style="height:100%">
 			<div v-if="login" class="animated" :key="1">
 				<div class="container">
-					<div class="title">欢迎使用</div>
+					<div class="title" style="font-size: 40px">欢迎使用</div>
 					<div class="login-form">
 						<div class="subtitle">使用手机号登录</div>
 						<div class="input-frame">
 							<span class="prefix">+86</span>
-							<input type="number" placeholder="手机号" v-model="phone" class="input1" @change="inputFinish">
+							<input type="number" placeholder="手机号" v-model="phone" class="input1" maxlength="11" @change="inputFinish">
 						</div>
-						<picker @change="bindPickerChange" :value="index" :range="array">
-							<view class="picker">
-								{{pickSelect }}
-							</view>
-						</picker>
+						<div v-if="isInputFinish">
+							<span class="pic">{{pickSelect}}</span>
+						</div>
+						<div v-else>
+							<picker @change="bindPickerChange" :value="index" :range="array">
+								<view class="picker">
+									{{pickSelect }}
+								</view>
+							</picker>
+						</div>
 						<div class="input-title" v-if="select1" @click="isselect1">
 							<img class="img" src="/static/images/selected.png" alt="" align="middle">
 							<span class="span"> 同意《垦利石化小程序服务条款》</span>
@@ -31,7 +36,7 @@
 			</div>
 			<div v-if="!login" class="animated" :key="2">
 				<div class="container">
-					<div class="title1">短信已发送至{{phone}}</div>
+					<div class="title1">短信已发送至{{showPhone}}</div>
 
 					<div class="subtitle1">请输入验证码</div>
 					<view class="code">
@@ -62,6 +67,7 @@
 					<div class="time color" v-show="show" @click="reset">重新获取验证码</div>
 					<div class="time" v-show="!show">重新发送短信({{count}}秒)</div>
 					<button type="primary" size="default" @click="sureStep" class="sure">登录</button>
+					<div @click="pevStep" class="pevStep">返回上一步</div>
 
 				</div>
 			</div>
@@ -77,6 +83,7 @@
 				select: true,
 				select1: true,
 				isEnty: true,
+				isInputFinish: true,
 				pickSelect: "公司名称请选择",
 				index: 0,
 				array: [],
@@ -92,11 +99,12 @@
 				popup: "请输入手机号",
 				phoneNumber: "",
 				code: null,
-				code_isFocus: true,//控制input 聚焦
+				code_isFocus: false,//控制input 聚焦
 				code: [],
 				focus_status: [],
 				length: 0,//已经输入的长度
-				company: ""
+				company: "",
+				showPhone: ""
 			};
 		},
 
@@ -112,49 +120,77 @@
 		},
 		methods: {
 			inputFinish: function (val) {
-				wx.showLoading({
-					title: "正在获取公司",
-					mask: true
-				})
+				var that = this
 				console.log(val)
-				var phone = val.target.value
-				var params = {
-					phone,
-				}
-				this.$http.get(`/public/companies`, params).then(res => {
-					console.log(res)
-					wx.hideLoading()
-					if (res.data.length > 0) {
-						for (let item of res.data) {
-							this.array.push(item.name)
-						}
-						
-						this.array1 = res.data;
-						this.pickSelect = res.data[0].name;
-						this.company = res.data[0];
-					} else {
-						wx.showModal({
-							title: '提示',
-							showCancel:false,
-							content: '您的手机号未注册垦利油好小程序，请联系管理员开通账号',
-							success: function (res) {
-								if (res.confirm) {
-									console.log('用户点击确定')
-								} 
-							}
-						})
-					}
-
-
-				}).catch(res => {
-					console.log(res)
-					// .response.data.message
+				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if (val.target.value == "") {
+					that.isInputFinish = true;
+					this.pickSelect = "公司名称请选择"
+					this.array = []
 					wx.showToast({
-						title: res.response.data.message,
+						title: '请输入手机号',
 						icon: 'none',
-						duration: 2000
+						duration: 1000
 					})
-				})
+				} else if (!reg.test(val.target.value) || val.target.value.length < 11) {
+					that.isInputFinish = true;
+					this.pickSelect = "公司名称请选择"
+					this.array = []
+					wx.showToast({
+						title: '请输入正确的11位手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} else {
+					wx.showLoading({
+						title: "正在获取公司",
+						mask: true
+					})
+					console.log(val)
+					var phone = val.target.value
+					var params = {
+						phone,
+					}
+					this.$http.get(`/public/companies`, params).then(res => {
+						console.log(res)
+						wx.hideLoading()
+						this.array = []
+						this.pickSelect = "公司名称请选择"
+						if (res.data.length > 0) {
+							for (let item of res.data) {
+								this.array.push(item.name)
+							}
+
+							this.array1 = res.data;
+							this.pickSelect = res.data[0].name;
+							this.company = res.data[0];
+							this.isInputFinish = false;
+						} else {
+							wx.showModal({
+								title: '提示',
+								showCancel: false,
+								content: '您的手机号未注册垦利油好小程序，请联系管理员开通账号',
+								success: function (res) {
+									if (res.confirm) {
+										console.log('用户点击确定')
+									}
+								}
+							})
+						}
+
+
+					}).catch(res => {
+						console.log(res)
+						wx.hideLoading()
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
+				}
+
 			},
 			isselect1: function () {
 				this.select1 == true ? this.select1 = false : this.select1 = true;
@@ -205,44 +241,68 @@
 						icon: 'none',
 						duration: 1000
 					})
+				} else if (!this.select1) {
+					wx.showToast({
+						title: '请同意服务条款',
+						icon: 'none',
+						duration: 1000
+					})
 				} else {
 					this.login = false;
+					this.showPhone = this.phone;
+					this.showPhone = this.showPhone.split("")
+					for (let i = 3; i < 7; i++) {
+						this.showPhone[i] = "*"
+					}
+					this.showPhone = this.showPhone.join("")
 					this.timeout();
 					this.getCode()
 				}
 			},
 			sureStep: function () {
-				var params = {
-					grant_type: "mobile",
-					username: this.phone,
-					password: this.code,
-					company: this.company.id
+				if (this.code.length < 6) {
+					wx.showToast({
+						title: "请输入完整验证码",
+						icon: 'none',
+						duration: 2000
+					})
+				} else {
+					var params = {
+						grant_type: "mobile",
+						username: this.phone,
+						password: this.code,
+						company: this.company.id
+					}
+					this.$http.post("/oauth/token", params)
+						.then(res => {
+							console.log(res)
+							wx.setStorageSync('access_token', res.data.access_token)
+							wx.setStorageSync('token_type', res.data.token_type)
+							wx.setStorageSync('refresh_token', res.data.refresh_token)
+							// cookies.set("access_token",res.data.access_token)
+							// cookies.set("token_type",res.data.token_type)
+							wx.switchTab({
+								url: "../../pages/workbench/main",
+								fail: function (res) {
+									console.log(res)
+								}
+							})
+						})
+						.catch(res => {
+							console.log(res)
+							// .response.data.message.response.data.error_description
+							wx.showToast({
+								title: res.response.data.error_description || res.response.data.message ,
+								icon: 'none',
+								duration: 2000
+							})
+						})
 				}
-				this.$http.post("/oauth/token", params)
-					.then(res => {
-						console.log(res)
-						wx.setStorageSync('access_token', res.data.access_token)
-						wx.setStorageSync('token_type', res.data.token_type)
-						wx.setStorageSync('refresh_token', res.data.refresh_token)
-						// cookies.set("access_token",res.data.access_token)
-						// cookies.set("token_type",res.data.token_type)
-						wx.switchTab({
-							url: "../../pages/workbench/main",
-							fail: function (res) {
-								console.log(res)
-							}
-						})
-					})
-					.catch(res => {
-						console.log(res)
-						// .response.data.message
-						wx.showToast({
-							title: res.response.data.message,
-							icon: 'none',
-							duration: 2000
-						})
-					})
 
+
+			},
+			pevStep: function () {
+				this.login = true
 			},
 			reset: function () {
 				this.show = false;
@@ -299,13 +359,13 @@
 				if (that.code.length == 6) {
 					that.length = e.mp.detail.value.length,
 						console.log(that.code)
-					this.code_isFocus = false
+						this.code_isFocus = !this.code_isFocus
 
 
 				}
 			},
 			set_Focus() { //聚焦input
-				this.code_isFocus = true
+				this.code_isFocus = !this.code_isFocus
 
 			},
 
@@ -349,6 +409,18 @@
 		color: #565656;
 		font-size: 16px;
 		margin-bottom: 10px
+	}
+
+	.pic {
+		display: inline-block;
+		/* height: 45px; */
+		line-height: 45px;
+		width: 100%;
+		background-color: #fff;
+		padding-left: 16px;
+		box-sizing: border-box;
+		color: #565656;
+		border: 1px solid #4a4a4a;
 	}
 
 	.subtitle1 {
@@ -397,17 +469,23 @@
 
 	.input-title {
 		text-align: center;
-		font-size: 14px;
+		font-size: 12px;
 		color: #4a4a4a;
 		margin-top: 130px;
-		margin-bottom: 30px;
+		margin-bottom: 15px;
 
 	}
 
+	.pevStep {
+		text-align: center;
+		font-size: 14px;
+		color: #4a4a4a;
+		margin-top: 30px;
+	}
 
 	.picker {
 		display: inline-block;
-		height: 45px;
+		/* height: 45px; */
 		line-height: 45px;
 		width: 100%;
 		background-color: #fff;

@@ -13,11 +13,11 @@
 			</div>
 			<div class="c-row">
 				<span>行驶证号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" maxlength="16" dir="rtl" v-model.lazy="driveNum" />
+				<input class="c-row-input" type="text" placeholder="请输入" maxlength="16" @change="wancheng" dir="rtl" v-model.lazy="driveNum" />
 			</div>
 			<div class="c-row c-row-last">
 				<span>危险品运输证号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" v-model.lazy="dangerNum" />
+				<input class="c-row-input" type="text" placeholder="请输入" dir="rtl" maxlength="20" v-model.lazy="dangerNum" />
 			</div>
 			<div class="input-box" v-if="isInputData1Show">
 				<div class="i-b-li lf" v-for="(item, index) of inputData1" :key="index" @click="getPro(item)">{{ item }}</div>
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		<div class="footer" v-if="isFooterShow" @click="save">
-			<span>保存并更新</span>
+			<span style="font-size:16px">保存并更新</span>
 		</div>
 	</div>
 </template>
@@ -96,6 +96,17 @@
 				}
 
 			},
+			wancheng:function(val){
+				console.log(val)
+				this.driverNumber=val.target.value
+				if(val.target.value.length !=16){
+					wx.showToast({
+						title: '请输入正确的16位证件号',
+						icon: 'none',
+						duration: 1000
+					})
+				}
+			},
 			inputClose() {
 				this.isInputData1Show = false
 				this.isFooterShow = true
@@ -133,6 +144,10 @@
 						.then(res => {
 							console.log(res)
 							if (res.status == "200") {
+								that.carName= ''
+								that.carNo= '请输入'
+								that.driveNum=''
+								that.dangerNum=''
 								wx.showToast({
 									title: "车辆添加成功",
 									icon: "success",

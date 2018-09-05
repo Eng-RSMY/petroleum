@@ -5,7 +5,7 @@
 			<div class="weui-search-bar" :class="{'weui-search-bar_focusing': isSearchBarFocus}" id="searchBar">
 				<div class="weui-search-bar__box">
 					<i class="weui-icon-search"></i>
-					<input type="search" class="weui-search-bar__input" id="searchInput"  @change="search" placeholder="搜索车牌号" required/>
+					<input type="search" class="weui-search-bar__input" id="searchInput" @change="search" placeholder="搜索车牌号" required/>
 				</div>
 			</div>
 			<!-- <div class="search-box-img" @click="addItem">
@@ -13,45 +13,52 @@
 			</div> -->
 		</div>
 		<!-- 单条信息 -->
-		<div v-for="(item,index) of escortList" @click.stop="toSelfHelp" :data-key="item.id">
-			<div class="single-msg-box" :style="item.sstyle">
-				<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
-					<div class="s-m-b-inner">
-						<div class="single-msg-box-left">
-							<p>用户名：</p>
-							<p>绑定手机号：</p>
-							<p>身份证号：</p>
-							<p>驾驶号码：</p>
-							<p>真实姓名：</p>
-						</div>
-						<div class="single-msg-box-center">
-							<p>{{ item.username == null ? "暂无信息" : item.username}}</p>
-							<p>{{ item.phone == null? "暂无信息 " :item.phone }}</p>
-							<p>{{ item.idNumber == null? " 暂无信息" :item.idNumber}}</p>
-							<p>{{ item.driverNumber == null? "暂无信息" : item.driverNumber }}</p>
-							<p>{{ item.realName == null? "暂无信息 " : item.realName}}</p>
-						</div>
-						<div class="single-msg-box-status" v-if="item.working ">
-							工作中
-						</div>
-						<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
-							未工作
+		<div v-if="ishave">
+			<div v-for="(item,index) of escortList" @click.stop="toSelfHelp" :data-key="item.id">
+				<div class="single-msg-box" :style="item.sstyle">
+					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
+						<div class="s-m-b-inner">
+							<div class="single-msg-box-left">
+								<p>用户名：</p>
+								<p>绑定手机号：</p>
+								<p>身份证号：</p>
+								<p>驾驶号码：</p>
+								<p>真实姓名：</p>
+							</div>
+							<div class="single-msg-box-center">
+								<p>{{ item.username == null ? "暂无信息" : item.username}}</p>
+								<p>{{ item.phone == null? "暂无信息 " :item.phone }}</p>
+								<p>{{ item.idNumber == null? " 暂无信息" :item.idNumber}}</p>
+								<p>{{ item.driverNumber == null? "暂无信息" : item.driverNumber }}</p>
+								<p>{{ item.realName == null? "暂无信息 " : item.realName}}</p>
+							</div>
+							<div class="single-msg-box-status" v-if="item.working ">
+								工作中
+							</div>
+							<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
+								未工作
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="s-m-b-right">
-					<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
-					<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
-					<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
+					<div class="s-m-b-right">
+						<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
+						<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
+						<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
+					</div>
 				</div>
 			</div>
 		</div>
-		<!-- 底部 -->
-		<div class="footer" v-if="foot">
-			<p @click="loadingMore">加载更多</p>
+		<div v-else>
+			<img src="/static/images/none.png" alt="" class="img3">
 		</div>
-		<div class="footer" v-else>
-			<p>已经到底了</p>
+		<!-- 底部 -->
+		<div v-if="isshow">
+			<div class="footer" v-if="foot">
+				<p @click="loadingMore">加载更多</p>
+			</div>
+			<div class="footer" v-else>
+				<p>已经到底了</p>
+			</div>
 		</div>
 	</div>
 
@@ -69,7 +76,9 @@
 				escortList: [],
 				page: 0,
 				nameOrPhone: "",
-				foot:true
+				foot: true,
+				isshow: false,
+				ishave: false
 			}
 		},
 		methods: {
@@ -94,11 +103,11 @@
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
-							if(res.data.content.length>0){
+							if (res.data.content.length > 0) {
 								this.escortList = res.data.content;
-							}else{
-								this.escortList=[]
-								
+							} else {
+								this.escortList = []
+
 							}
 						} else {
 							wx.showToast({
@@ -122,13 +131,13 @@
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
-							if(res.data.content.length>0){
-								for(var i=0;i<res.data.content.length;i++){
-								this.escortList.push(res.data.content[i]);
-								}	
+							if (res.data.content.length > 0) {
+								for (var i = 0; i < res.data.content.length; i++) {
+									this.escortList.push(res.data.content[i]);
+								}
 								console.log(this.escortList)
-							}else{
-								this.foot=false
+							} else {
+								this.foot = false
 							}
 						} else {
 							wx.showToast({
@@ -140,17 +149,17 @@
 					})
 
 			},
-			toSelfHelp:function(e){
+			toSelfHelp: function (e) {
 				console.log(e)
 				var key = e.currentTarget.dataset.key
 				var list = this.escortList
-				var index = null		 
+				var index = null
 				for (let i = 0; i < list.length; i++) {
 					if (list[i].id == key) {
 						index = i
 					}
 				}
-				var username=list[index].username
+				var username = list[index].username
 				var realName = list[index].realName
 				var phone = list[index].phone
 				var idNumber = list[index].idNumber
@@ -221,7 +230,21 @@
 				.then(res => {
 					console.log(res)
 					if (res.status == "200") {
-						this.escortList = res.data.content;
+						if (res.data.content.length > 0) {
+							this.ishave = true
+							this.escortList = res.data.content;
+						}
+						if (res.data.content.length > 0 && res.data.content.length < 5) {
+							this.isshow = false;
+							this.foot = false;
+						} else if (res.data.content.length == 5) {
+							this.isshow = true;
+							this.foot = true;
+						} else {
+							this.ishave = false
+							this.isshow = false;
+							this.escortList = []
+						}
 					} else {
 						wx.showToast({
 							title: res.statusText,
@@ -377,5 +400,15 @@
 
 	.footer p {
 		padding: 11px 0 0 0;
+	}
+
+	.img3 {
+		width: 200px;
+		height: 200px;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -100px;
+		margin-top: -100px
 	}
 </style>

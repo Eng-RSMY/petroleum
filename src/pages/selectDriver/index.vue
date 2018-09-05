@@ -14,7 +14,7 @@
 		</div>
 		<!-- 单条信息 -->
 		<div style="width:100%" v-if="ishave">
-			<div v-for="(item,index) in driverList" @click.stop="toSelfHelp" :data-key="item.id">
+			<div v-for="(item,index) in driverList" @click.stop="toSelfHelp" :data-key="item.id" :data-iswork="item.working">
 				<div class="single-msg-box" :style="item.sstyle">
 					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
 						<div class="s-m-b-inner">
@@ -102,9 +102,9 @@
 								this.driverList = res.data.content;
 							}
 							if (res.data.content.length > 0 && res.data.content.length < 5) {
-								this.isshow = true;
+								this.isshow = false;
 								this.foot = false;
-							} else if (res.data.content.length = 5) {
+							} else if (res.data.content.length == 5) {
 								this.isshow = true;
 								this.foot = true;
 							} else {
@@ -158,20 +158,34 @@
 			toSelfHelp: function (e) {
 				console.log(e)
 				var key = e.currentTarget.dataset.key
-				var list = this.driverList
-				var index = null
-				for (let i = 0; i < list.length; i++) {
-					if (list[i].id == key) {
-						index = i
+				var iswork = e.currentTarget.dataset.iswork
+				if (iswork) {
+					wx.showModal({
+						title: '提示',
+						content: '该司机正在工作中，请选择其他司机',
+						showCancel: false,
+						success: function (res) {
+							if (res.confirm) {
+								console.log('用户点击确定')
+							}
+						}
+					})
+				} else {
+					var list = this.driverList
+					var index = null
+					for (let i = 0; i < list.length; i++) {
+						if (list[i].id == key) {
+							index = i
+						}
 					}
+					var realName = list[index].realName
+					var phone = list[index].phone
+					var idNumber = list[index].idNumber
+					var driverNumber = list[index].driverNumber
+					var url = "../selfHelp/main?from=selectDriver&key=" + key + "&realName=" + realName + "&phone=" + phone +
+						"&idNumber=" + idNumber + "&driverNumber=" + driverNumber
+					wx.navigateTo({ url })
 				}
-				var realName = list[index].realName
-				var phone = list[index].phone
-				var idNumber = list[index].idNumber
-				var driverNumber = list[index].driverNumber
-				var url = "../selfHelp/main?from=selectDriver&key=" + key + "&realName=" + realName + "&phone=" + phone +
-					"&idNumber=" + idNumber + "&driverNumber=" + driverNumber
-				wx.navigateTo({ url })
 			},
 			touchS(e) {
 				if (e.touches.length === 1) {
@@ -241,9 +255,9 @@
 							this.driverList = res.data.content;
 						}
 						if (res.data.content.length > 0 && res.data.content.length < 5) {
-							this.isshow = true;
+							this.isshow = false;
 							this.foot = false;
-						} else if (res.data.content.length = 5) {
+						} else if (res.data.content.length == 5) {
 							this.isshow = true;
 							this.foot = true;
 						} else {

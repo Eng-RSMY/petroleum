@@ -3,18 +3,19 @@
 		<!-- This is a workbence -->
 		<!-- 顶部公司信息 -->
 		<div class="top">
-			<p>{{companyInfo.name}}</p>
-			<div class="weui-flex top_maddle">
+			<p >{{companyInfo.name}}</p>
+			<!-- <p >中国石油化工股份有限公司山东石油分公司</p> -->
+			<div class="weui-flex top_maddle marginTop" >
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.balance ? companyInfo.balance:"无"}}</div>
+					<div class="placeholder fontWight">{{companyInfo.balance ? companyInfo.balance:"无"}}</div>
 					<div class="placeholder2">账户余额</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.orderedMoney ? companyInfo.orderedMoney : "无"}}</div>
+					<div class="placeholder fontWight">{{companyInfo.orderedMoney ? companyInfo.orderedMoney : "无"}}</div>
 					<div class="placeholder2">已下单</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.availableBalance ? companyInfo.availableBalance : "无"}}</div>
+					<div class="placeholder fontWight">{{companyInfo.availableBalance ? companyInfo.availableBalance : "无"}}</div>
 					<div class="placeholder2">可用金额</div>
 				</div>
 			</div>
@@ -23,10 +24,10 @@
 		<div v-if="isdisplay">
 			<div class="weui-cell">
 				<div class="weui-cell__bd">
-					<p style="font-size: 16px;font-weight: bold;">常用功能</p>
+					<p style="font-size: 18px;font-weight: bold;">常用功能</p>
 				</div>
 			</div>
-			<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px;">
+			<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px;margin-top:-15px;">
 				<div class="weui-flex__item" @click="toSelfHelp()" v-if="roleList.selfOrder">
 					<div class="placeholder">
 						<img src="/static/images/selfHelp.png" alt="" class="img">
@@ -50,10 +51,10 @@
 		<!-- 全部功能 -->
 		<div class="weui-cell" style="margin-top: 10px;display:block;">
 			<div class="weui-cell__bd">
-				<p style="font-size: 16px;font-weight: bold">全部功能</p>
+				<p style="font-size: 18px;font-weight: bold">全部功能</p>
 			</div>
 		</div>
-		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px">
+		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px;margin-top:-15px;">
 			<div class="weui-flex__item" @click="toUserManagement" v-if="roleList.userManagement">
 				<div class="placeholder">
 					<img src="/static/images/yhgl.png" alt="" class="img">
@@ -145,7 +146,7 @@
 					vehicleManagement: false,//车辆管理
 					earlyWarning: false,
 				},
-				isdisplay:false
+				isdisplay: false
 			}
 		},
 
@@ -274,6 +275,10 @@
 
 		mounted() {
 			// 公司信息
+			wx.showLoading({
+				title: "加载中...",
+				mask: true
+			})
 			this.$http.get("/workbench/company_account")
 				.then(res => {
 					console.log(res)
@@ -354,7 +359,9 @@
 				})
 			})
 			// 根据用户获取权限
-
+			setTimeout(function () {
+				wx.hideLoading()
+			}, 2000)
 		},
 	}
 </script>
@@ -365,12 +372,15 @@
 		overflow-x: hidden;
 		padding: 0px;
 		background-color: #efeff4;
-		display:inherit;
+		display: inherit;
 	}
-
+	.marginTop{
+		margin-top: 40px;
+	}
 	.weui-cell__bd {
 		margin-left: 10px;
 	}
+
 	.weui-flex__item {
 		width: 33%;
 		display: inline-block;
@@ -382,14 +392,17 @@
 
 	.top {
 		background-color: #2E79FF;
-		height: 150px;
 		color: #fff;
 		width: 100%;
+		padding-bottom: 10px
 	}
 
 	.top p {
 		text-align: center;
+		width:90%;
+		margin-left: 5%;
 		font-size: 20px;
+		font-weight: bold;
 		margin-bottom: 20px;
 	}
 
@@ -404,9 +417,10 @@
 
 	.placeholder2 {
 		font-size: 14px;
-		margin-top: 10px;
 	}
-
+	.fontWight{
+		font-weight: bold
+	}
 	.weui-cell {
 		width: 100%;
 		height: 30px;

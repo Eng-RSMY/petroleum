@@ -2,16 +2,28 @@ import Vue from 'vue'
 import App from './App'
 import "../static/weui.css"
 import animate from "animate.css"
-import cookies from 'weapp-cookie'
 //在项目入口文件
 import VueInputCode from 'vue-input-code'
+import VueQrcode from '@xkeshi/vue-qrcode';
+Vue.component(VueQrcode.name, VueQrcode);
 let Base64 = require('js-base64').Base64;
 Vue.component('VueInputCode', VueInputCode)
 var Fly=require("flyio/dist/npm/wx")
 var fly=new Fly
 fly.config.timeout=10000;
 //设置请求基地址
-fly.config.baseURL="http://123.206.17.18:8081";
+var Authorization=''
+// 生产环境下配置
+console.log(process.env.NODE_ENV)
+if(process.env.NODE_ENV ==='development'){
+
+	fly.config.baseURL="http://123.206.17.18:8081";
+	Authorization=Base64.encode("custom:password")
+// 伪正式环境下配置
+}else{
+	fly.config.baseURL="http://youhao.klsh.com:8081";
+	Authorization=Base64.encode("custom:2VbHalTP5%#PdhaP")
+}
 fly.interceptors.request.use((request)=>{
 	//给所有请求添加自定义header
 	console.log(request)
@@ -20,8 +32,7 @@ fly.interceptors.request.use((request)=>{
 	}else if(request.url == "/public/login_code"){
 		request.headers["Content-Type"]="application/x-www-form-urlencoded"
 	}else if(request.url == "/oauth/token"){
-		var Authorization=Base64.encode("custom:password")
-		console.log(Authorization)
+		
 		request.headers["Authorization"]="Basic "+Authorization;
 		request.headers["Content-Type"]="application/x-www-form-urlencoded"
 	}else{

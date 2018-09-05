@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="content" v-if="isshow">
+		<div class="content" v-if="ishave">
 			<div class="contentList" v-for="(item,index) in finance" ::key="index">
 				<p>
 					<span>时间:</span>
@@ -71,19 +71,27 @@
 				page: 0,
 				finance: null,
 				foot1: true,
-				length:false,
-				isshow:false
+				length: false,
+				isshow: false,
+				ishave: false,
 			}
 		},
 		methods: {
 			getFinance() {
 				this.$http.get(`/finance?page=${this.page}&size=5`).then(res => {
 					console.log(res)
-					this.finance = res.data.content;
-					if(res.data.content.length<5){
-						this.length=false
-					}else{
-						this.length=true
+					if (res.data.content.length > 0) {
+						this.ishave = true
+						this.finance = res.data.content;
+					}
+					if (res.data.content.length > 0 && res.data.content.length < 5) {
+						this.length = false;
+						this.foot = false;
+					} else if (res.data.content.length == 5) {
+						this.length = true;
+						this.foot = true;
+					} else {
+						this.length = false
 					}
 				})
 					.catch(res => {
@@ -101,22 +109,22 @@
 				this.$http.get(`/finance?page=${this.page}&size=5`).then(res => {
 					console.log(res)
 					if (res.data.content.length > 0) {
-							for (var i = 0; i < res.data.content.length; i++) {
-								this.finance.push(res.data.content[i]);
-							}
-							console.log(this.finance)
-						} else {
-							this.foot = false
+						for (var i = 0; i < res.data.content.length; i++) {
+							this.finance.push(res.data.content[i]);
 						}
+						console.log(this.finance)
+					} else {
+						this.foot = false
+					}
 				})
-				.catch(res => {
-					console.log(res)
-					wx.showToast({
-						title: res.response.data.message,
-						icon: 'none',
-						duration: 2000
+					.catch(res => {
+						console.log(res)
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
 					})
-				})
 			}
 		},
 		mounted() {
@@ -139,11 +147,13 @@
 
 	.contentList p span:nth-child(1) {
 		display: inline-block;
-		width:170px;
+		width:30%;
 	}
-
+	.contentList p span:nth-child(2) {
+		display: inline-block;
+		width: 70%;
+	}
 	.contentList p {
-		height: 30px;
 		line-height: 30px;
 		font-size: 14px;
 	}
@@ -165,10 +175,11 @@
 	.footer p {
 		padding: 11px 0 0 0;
 	}
-	.img{
-		width:200px;
+
+	.img {
+		width: 200px;
 		height: 200px;
-		position:fixed;
+		position: fixed;
 		left: 50%;
 		top: 50%;
 		margin-left: -100px;

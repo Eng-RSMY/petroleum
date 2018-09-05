@@ -87,9 +87,9 @@
 							this.orderList.push(res.data.content[i]);
 						}
 						if (res.data.content.length > 0 && res.data.content.length < 5) {
-							this.isshow = true;
+							this.isshow = false;
 							this.foot = false;
-						} else if (res.data.content.length = 5) {
+						} else if (res.data.content.length == 5) {
 							this.isshow = true;
 							this.foot = true;
 						} else {
@@ -227,7 +227,7 @@
 
 	.orderInfo p span:first-child {
 		display: inline-block;
-		width: 30%;
+		width: 20%;
 		padding-left: 40px;
 	}
 

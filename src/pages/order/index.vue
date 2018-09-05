@@ -163,7 +163,7 @@
 						}
 						if (res.data.content.length > 0 && res.data.content.length < 5) {
 							this.isshow = false
-						} else if (res.data.content.length = 5) {
+						} else if (res.data.content.length == 5) {
 							this.isshow = true
 							this.foot = true
 						}
@@ -199,7 +199,7 @@
 							}
 							if (res.data.content.length > 0 && res.data.content.length < 5) {
 								this.isshow = false
-							} else if (res.data.content.length = 5) {
+							} else if (res.data.content.length == 5) {
 								this.isshow = true
 								this.foot = true
 							}

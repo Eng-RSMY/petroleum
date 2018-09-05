@@ -1,19 +1,21 @@
 <template>
 	<div class="container">
 		<div class="top">
-			<p>公司名称：{{companyInfo.name}}</p>
+			<p>{{companyInfo.name}}</p>
+			<!-- <p >中国石油化工股份有限公司山东石油分公司</p> -->
+
 			<div class="weui-flex top_maddle">
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.balance}}</div>
+					<div class="placeholder fontWight">{{companyInfo.balance}}</div>
 					<div class="placeholder1">账户余额</div>
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.orderedMoney}}</div>
+					<div class="placeholder fontWight">{{companyInfo.orderedMoney}}</div>
 					<div class="placeholder1">已下单</div>
 
 				</div>
 				<div class="weui-flex__item">
-					<div class="placeholder">{{companyInfo.availableBalance}}</div>
+					<div class="placeholder fontWight">{{companyInfo.availableBalance}}</div>
 					<div class="placeholder1">可用金额</div>
 
 				</div>
@@ -22,9 +24,9 @@
 		<!-- 订购货物信息 -->
 		<div class="product">
 			<p>
-				<span>------</span>
+				<span class="line"></span>
 				<span style="margin: 0px 30px;">订购货物信息</span>
-				<span>------</span>
+				<span class="line"></span>
 			</p>
 			<div class="weui-cell" style="border-top: none">
 				<div class="weui-cell__bd">
@@ -43,7 +45,7 @@
 					<p>物料名称</p>
 				</div>
 				<div class="weui-cell__ft">
-					<picker @change="bindPickerChange1" :value="index" :range="oils">
+					<picker @change="bindPickerChange1" @click.stop="ishave" :value="index" :range="oils">
 						<view class="picker">
 							{{pickSelect1}}
 						</view>
@@ -55,16 +57,17 @@
 					<p>物料重量</p>
 				</div>
 				<div class="weui-cell__ft">
-					<span class="dw" style="color: #000">(吨)</span>
-					<input class="input" style="color: #000" type="number" @change="input" pattern="[0-9]*" v-model.lazy="num" placeholder="请输入">
+					<span class="dw" style="color: #b5b5b5">(吨)</span>
+					<input class="input" style="color: #b5b5b5" type="number" @change="input" maxlength="2" v-model="num"
+					 placeholder="请输入">
 				</div>
 			</div>
 		</div>
 		<div class="choose">
 			<p>
-				<span>选择司机</span>
+				<span class="fontSize">选择司机</span>
 			</p>
-			<button class="weui-btn weui-btn_default" v-if="showDriver" @click="chooseDriver" style="background-color: #fff;border-color: #dedede">选择司机</button>
+			<button class="weui-btn weui-btn_default" v-if="showDriver" @click="chooseDriver" style="background-color: #fff;border-color: #dedede">请选择</button>
 			<div class="driver" v-else>
 				<p class="close" @click="reset">x</p>
 				<p class="driver_name driverInfo">
@@ -87,9 +90,9 @@
 		</div>
 		<div class="choose">
 			<p>
-				<span>选择车辆</span>
+				<span class="fontSize">选择车辆</span>
 			</p>
-			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar" style="background-color: #fff;border-color: #dedede">选择车辆</button>
+			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar" style="background-color: #fff;border-color: #dedede">请选择</button>
 			<div class="driver" v-else>
 				<p class="close" @click="reset1">x</p>
 				<p class="driver_name driverInfo">
@@ -112,9 +115,9 @@
 		</div>
 		<div class="choose" style="margin-bottom: 60px">
 			<p>
-				<span>选择已有押车员下单(可不选)</span>
+				<span class="fontSize">选择已有押车员下单(可不选)</span>
 			</p>
-			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle" style="background-color: #fff;border-color: #dedede">选择压车员</button>
+			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle" style="background-color: #fff;border-color: #dedede">请选择</button>
 			<div class="driver" v-else>
 				<p class="close" @click="reset2">x</p>
 				<p class="driver_name driverInfo">
@@ -172,6 +175,7 @@
 				showDialog: false,
 				categories: [],
 				num: "",
+				num1: "",
 				oils: [],
 				// 库存
 				stock: "",
@@ -185,9 +189,6 @@
 
 			}
 		},
-		components: {
-		},
-
 		methods: {
 			bindPickerChange: function (e) {
 				console.log('picker发送选择改变，携带值为', e)
@@ -213,8 +214,21 @@
 
 					})
 					.catch(res => {
-						console.log(res)
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
 					})
+			},
+			ishave: function () {
+				if (this.pickSelect == "请选择") {
+					wx.showToast({
+						title: "请先选择提货品类",
+						icon: 'none',
+						duration: 2000
+					})
+				}
 			},
 			bindPickerChange1: function (e) {
 				if (this.pickSelect == "请选择") {
@@ -248,7 +262,28 @@
 			input: function (val) {
 				console.log(val)
 				var num = val.mp.detail.value;
-				this.sumPrice = "¥" + (this.oilPrice * num).toFixed(2)
+				if (this.pickSelect == "请选择") {
+					wx.showToast({
+						title: "请先选择提货品类",
+						icon: 'none',
+						duration: 2000
+					})
+				}else if (this.pickSelect1 == "请选择") {
+					wx.showToast({
+						title: "请先选择物料品类",
+						icon: 'none',
+						duration: 2000
+					})
+				}else if (num >= 50) {
+					wx.showToast({
+						title: "下单数量不能大于49吨",
+						icon: 'none',
+						duration: 2000
+					})
+				} else {
+					this.sumPrice = "¥" + (this.oilPrice * num).toFixed(2)
+				}
+
 			},
 			reset: function () {
 				this.showDriver = true;
@@ -420,8 +455,12 @@
 
 		},
 
-		created() {
+		onShow() {
 			// 获取企业信息
+			wx.showLoading({
+				title: "正在获取数据",
+				mask: true
+			})
 			this.$http.get("/self_order/company_account")
 				.then(res => {
 					console.log(res)
@@ -438,7 +477,9 @@
 			// 获取预提货品类
 			this.$http.get("/self_order/categories")
 				.then(res => {
+					this.categories = []
 					console.log(res)
+					wx.hideLoading()
 					if (res.status == "200") {
 						for (var i = 0; i < res.data.length; i++) {
 							this.categories.push(res.data[i].name)
@@ -451,10 +492,18 @@
 						})
 					}
 				})
+				.catch(res => {
+					wx.showToast({
+						title: res.response.data.message,
+						icon: 'none',
+						duration: 2000
+					})
+				})
 			// 获取物料列表
 		},
 		mounted(query) {
 			// 接收页面参数
+
 			console.log(this.$root.$mp.query)
 			var router = this.$root.$mp.query;
 			if (router.from == "selectDriver") {
@@ -481,6 +530,14 @@
 		overflow-x: hidden;
 	}
 
+	.line {
+		display: inline-block;
+		height: 1px;
+		width: 50px;
+		background-color: #898989;
+		vertical-align: middle
+	}
+
 	.weui-flex__item {
 		width: 33%;
 		display: inline-block;
@@ -495,7 +552,7 @@
 	}
 
 	input-placeholder {
-		text-align: right
+		text-align: right;
 	}
 
 	.dw {
@@ -507,22 +564,29 @@
 		margin-left: 10px;
 	}
 
+	.weui-cell__ft {
+		color: #b5b5b5 !important
+	}
+
 	.weui-cell {
 		background-color: #fff;
 	}
 
 	.top {
 		background-color: #fff;
-		height: 150px;
 		color: #4a4a4a;
 		width: 100%;
+		padding-bottom: 10px;
 	}
 
 	.top p {
+		padding-top: 10px;
 		text-align: center;
-		font-size: 16px;
-		margin-top: 20px;
-		margin-bottom: 20px;
+		font-size: 20px;
+		font-weight: bold;
+		width:90%;
+		margin-left: 5%;
+		margin-bottom: 40px;
 	}
 
 	.weui-flex__item {
@@ -533,7 +597,6 @@
 
 	.placeholder1 {
 		font-size: 14px;
-		margin-top: 10px;
 	}
 
 	.product {
@@ -555,7 +618,7 @@
 	}
 
 	.picker {
-		color: #000
+		color: #b5b5b5
 	}
 
 	.choose {
@@ -571,10 +634,11 @@
 	}
 
 	.weui-btn {
-		margin: 50px 0px;
+		margin: 25px 0px;
 		width: 80%;
 		color: #2E79FF;
-		margin-left: 10%
+		margin-left: 10%;
+		border-color: #2E79FF
 	}
 
 	.driver {
@@ -582,6 +646,10 @@
 		width: 94%;
 		border: 1px solid #ddd;
 
+	}
+
+	.fontWight {
+		font-weight: bold
 	}
 
 	.close {
@@ -639,6 +707,10 @@
 
 	.weui-dialog__hd {
 		padding: 10px 0px 20px 0px;
+	}
+
+	.fontSize {
+		font-size: 18px;
 	}
 
 	.weui-dialog {
