@@ -14,7 +14,7 @@
 		</div>
 		<!-- 单条信息 -->
 		<div style="width:100%" v-if="ishave">
-			<div v-for="(item,index) in carList" :data-key="item.id" @click.stop="toSelfHelp">
+			<div v-for="(item,index) in carList" :data-key="item.id" :data-iswork="item.working" @click.stop="toSelfHelp">
 				<div class="single-msg-box" :style="item.sstyle">
 					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
 						<div class="s-m-b-inner">
@@ -77,7 +77,7 @@
 				foot: true,
 				router: "",
 				isshow: false,
-				ishave:false
+				ishave: false
 			}
 		},
 		methods: {
@@ -103,9 +103,9 @@
 								this.driverList = res.data.content;
 							}
 							if (res.data.content.length > 0 && res.data.content.length < 5) {
-								this.isshow = true;
+								this.isshow = false;
 								this.foot = false;
-							} else if (res.data.content.length = 5) {
+							} else if (res.data.content.length == 5) {
 								this.isshow = true;
 								this.foot = true;
 							} else {
@@ -159,22 +159,37 @@
 			toSelfHelp: function (e) {
 				console.log(e)
 				var key = e.currentTarget.dataset.key
-				var list = this.carList
-				var index = null
-				for (let i = 0; i < list.length; i++) {
-					if (list[i].id == key) {
-						index = i
+				var iswork = e.currentTarget.dataset.iswork
+				if (iswork) {
+					wx.showModal({
+						title: '提示',
+						content: '该车辆正在工作中，请选择其他车辆',
+						showCancel: false,
+						success: function (res) {
+							if (res.confirm) {
+								console.log('用户点击确定')
+							}
+						}
+					})
+				} else {
+					var list = this.carList
+					var index = null
+					for (let i = 0; i < list.length; i++) {
+						if (list[i].id == key) {
+							index = i
+						}
+					}
+					var remark = list[index].remark
+					var carNumber = list[index].carNumber
+					var drivingNumber = list[index].drivingNumber
+					var transportNumber = list[index].transportNumber
+					var url = "../selfHelp/main?from=selectCar&key=" + key + "&remark=" + remark + "&carNumber=" + carNumber +
+						"&drivingNumber=" + drivingNumber + "&transportNumber=" + transportNumber
+					if (this.router == "selfHelp") {
+						wx.navigateTo({ url })
 					}
 				}
-				var remark = list[index].remark
-				var carNumber = list[index].carNumber
-				var drivingNumber = list[index].drivingNumber
-				var transportNumber = list[index].transportNumber
-				var url = "../selfHelp/main?from=selectCar&key=" + key + "&remark=" + remark + "&carNumber=" + carNumber +
-					"&drivingNumber=" + drivingNumber + "&transportNumber=" + transportNumber
-				if (this.router == "selfHelp") {
-					wx.navigateTo({ url })
-				}
+
 			},
 			touchS(e) {
 				if (e.touches.length === 1) {
@@ -255,16 +270,16 @@
 					console.log(res)
 					if (res.status == "200") {
 						if (res.data.content.length > 0) {
-								this.ishave = true
-								this.carList = res.data.content;
+							this.ishave = true
+							this.carList = res.data.content;
 						}
 						if (res.data.content.length > 0 && res.data.content.length < 5) {
-							this.isshow = true;
+							this.isshow = false;
 							this.foot = false;
-						} else if (res.data.content.length = 5) {
+						} else if (res.data.content.length == 5) {
 							this.isshow = true;
 							this.foot = true;
-						} 
+						}
 					} else {
 						wx.showToast({
 							title: res.statusText,

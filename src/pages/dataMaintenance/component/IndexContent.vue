@@ -4,15 +4,15 @@
 			<div class="from">
 				<div class="input-list">
 					<span>公司名称</span>
-					<span><input type="text" :placeholder="company.name" v-model="name"></span>
+					<span><input type="text" class="input" readonly :placeholder="company.name" v-model="company.name"></span>
 				</div>
 				<div class="input-list">
 					<span>公司联系人</span>
-					<span><input type="text" :placeholder="company.contact" v-model="contact"></span>
+					<span><input type="text" class="input" :placeholder="company.contact" v-model="company.contact"></span>
 				</div>
 				<div class="input-list">
 					<span>联系人电话</span>
-					<span><input type="text" :placeholder="company.phone" v-model="phone"></span>
+					<span><input type="number" class="input"  @change="panduan" :placeholder="company.phone" v-model="company.phone"></span>
 				</div>
 				<div class="remarks">
 					<view class="remarks-title">公司地址</view>
@@ -26,7 +26,10 @@
 				</div>
 			</div>
 		</div>
-		<button class="weui-btn weui-btn_primary button" @click="update">保存并更新</button>
+		<div class="footer" @click="update">
+			<span>保存并更新</span>
+		</div>
+
 	</div>
 </template>
 
@@ -53,6 +56,22 @@
 					fail: function (res) {
 					}
 				})
+			},
+			panduan:function(val){
+				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if (val.target.value == "") {
+					wx.showToast({
+						title: '请输入手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} else if (!reg.test(val.target.value) || val.target.value.length < 11) {
+					wx.showToast({
+						title: '请输入正确的11位手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} 
 			},
 			prompt: function prompt(title) {
 				wx.showToast({
@@ -97,8 +116,9 @@
 	.content {
 		background: #e7e7e7;
 	}
-
-	.from {}
+	.input {
+		text-align: right
+	}
 
 	.input-list {
 		display: flex;
@@ -123,6 +143,7 @@
 
 	.remarks-title {
 		font-size: 14px;
+		margin-bottom: 10px
 	}
 
 	.remarks textarea {
@@ -139,5 +160,16 @@
 		bottom: 20px;
 		left: 5%;
 		width: 90%;
+	}
+	.footer {
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		position: fixed;
+		bottom: 0;
+		text-align: center;
+		color: #2E79FF;
+		background: #fff;
+		align-self: flex-end;
 	}
 </style>

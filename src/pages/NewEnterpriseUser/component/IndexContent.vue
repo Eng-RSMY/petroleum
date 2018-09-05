@@ -4,15 +4,15 @@
 			<div class="from">
 				<div class="input-list">
 					<span>用户名</span>
-					<span><input type="text" placeholder="请输入用户名" v-model="newUserName"></span>
+					<span><input type="text" placeholder="请输入用户名" maxlength="20" v-model="newUserName"></span>
 				</div>
 				<div class="input-list">
 					<span>绑定手机号</span>
-					<span><input type="number" maxlength="11" placeholder="请输入手机号" v-model="newUserPhone"></span>
+					<span><input type="number" maxlength="11" placeholder="请输入手机号"  @change="panduan"  v-model="newUserPhone"></span>
 				</div>
 				<div class="input-list">
 					<span>用户真实姓名</span>
-					<span><input type="text" placeholder="请输入用户真实姓名" v-model="newRealName"></span>
+					<span><input type="text" placeholder="请输入用户真实姓名" maxlength="8" v-model="newRealName"></span>
 				</div>
 				<div class="input-list-select input-list">
 					<span>设置用户角色</span>
@@ -28,11 +28,11 @@
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机身份证</span>
-					<span><input type="idcard" placeholder="请输入司机身份证号" v-model="idNumber"></span>
+					<span><input type="idcard" placeholder="请输入司机身份证号" @change="wancheng" v-model="idNumber"></span>
 				</div>
 				<div class="input-list"  v-if="isDriver">
 					<span>司机驾驶证号</span>
-					<span><input type="text" placeholder="请输入司机驾驶证号" v-model="driverNumber"></span>
+					<span><input type="idcard" placeholder="请输入司机驾驶证号"  @change="wancheng" v-model="driverNumber"></span>
 				</div>
 				<div class="input-list">
 					<span>用激活账户</span>
@@ -88,6 +88,33 @@
 				}else{
 					this.isDriver=false
 				}
+			},
+			wancheng:function(val){
+				console.log(val)
+				this.driverNumber=val.target.value
+				if(val.target.value.length !=18){
+					wx.showToast({
+						title: '请输入正确的18位证件号',
+						icon: 'none',
+						duration: 1000
+					})
+				}
+			},
+			panduan:function(val){
+				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if (val.target.value == "") {
+					wx.showToast({
+						title: '请输入手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} else if (!reg.test(val.target.value) || val.target.value.length < 11) {
+					wx.showToast({
+						title: '请输入正确的11位手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} 
 			},
 			history: function () {
 				wx.switchTab({

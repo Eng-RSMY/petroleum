@@ -13,9 +13,6 @@
 					<div class="time">
 						{{item.publishTime}}
 					</div>
-					<div class="words">
-						{{item.content}}
-					</div>
 				</div>
 			</div>
 			<div v-if="isshow">
@@ -53,18 +50,19 @@
 				})
 			},
 			getBulletin() {
-				this.$http.get(`/bulletin?page=${this.page}&size=5`).then(res => {
+				this.$http.get(`/bulletin?page=${this.page}&size=5&sort=id,desc`).then(res => {
 					// this.bulletin
 					console.log(res)
 					if (res.data.content.length > 0) {
 						this.ishave = true
 						for (var i = 0; i < res.data.content.length; i++) {
+							res.data.content[i].publishTime=res.data.content[i].publishTime.replace(/T/," ")
 							this.bulletin.push(res.data.content[i]);
 						}
 					}
 					if (res.data.content.length > 0 && res.data.content.length < 5) {
 						this.isshow = false
-					} else if (res.data.content.length = 5) {
+					} else if (res.data.content.length == 5) {
 						this.isshow = true
 						this.foot = true
 					}
@@ -109,9 +107,8 @@
 	}
 
 	.title {
-		font-size: 16px;
+		font-size: 24px;
 		color: #FF0000;
-		margin-bottom: 10px;
 	}
 
 	.title span {
@@ -119,8 +116,9 @@
 	}
 
 	.subtitle {
-		font-size: 12px;
+		font-size: 18px;
 		margin-bottom: 10px;
+		color: #898989
 	}
 
 	.time {
@@ -128,13 +126,6 @@
 		color: #565656;
 
 	}
-
-	.words {
-		margin: 2% 0 0 0;
-		font-size: 12px;
-		color: #4a4a4a;
-	}
-
 	.footer {
 		width: 375px;
 		height: 50px;

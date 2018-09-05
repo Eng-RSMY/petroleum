@@ -8,7 +8,7 @@
 				</div>
 				<div class="input-list">
 					<span>绑定手机号</span>
-					<span><input type="number" :placeholder="user.phone" maxlength="11" v-model="newUserPhone"></span>
+					<span><input type="number" :placeholder="user.phone" maxlength="11" @change="panduan" v-model="newUserPhone"></span>
 				</div>
 				<div class="input-list">
 					<span>用户真实姓名</span>
@@ -28,11 +28,11 @@
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机身份证</span>
-					<span><input type="idcard" :placeholder="user.idNumber" maxlength="18" minlength="18" v-model="idNumber"></span>
+					<span><input type="idcard" :placeholder="user.idNumber" maxlength="18" minlength="18" @change="wancheng" v-model="idNumber"></span>
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机驾驶证号</span>
-					<span><input type="text" :placeholder="user.driverNumber" maxlength="12" v-model="driverNumber"></span>
+					<span><input type="idcard" :placeholder="user.driverNumber" maxlength="12" @change="wancheng" v-model="driverNumber"></span>
 				</div>
 				<div class="input-list">
 					<span>用激活账户</span>
@@ -65,7 +65,7 @@
 <script>
 	export default {
 		name: "IndexTitle",
-		props: ['user', 'address'],
+		props: ['user', 'address', 'roles'],
 		data() {
 			return {
 				disabled: true,
@@ -77,11 +77,11 @@
 				newRealName: '',
 				newRemark: '',
 				checked: '',
-				idNumber:"",
-				driverNumber:"",
-				isDriver:false,
-				roleList:[],
-				
+				idNumber: "",
+				driverNumber: "",
+				isDriver: false,
+				roleList: [],
+
 			}
 		},
 		computed: {
@@ -89,10 +89,37 @@
 		methods: {
 			bindAccountChange: function (e) {
 				this.accountIndex = e.mp.detail.value;
-				if(this.roleList[e.mp.detail.value].name == "司机"){
-					this.isDriver=true;
-				}else{
-					this.isDriver=false
+				if (this.roleList[e.mp.detail.value].name == "司机") {
+					this.isDriver = true;
+				} else {
+					this.isDriver = false
+				}
+			},
+			wancheng: function (val) {
+				console.log(val)
+				this.driverNumber = val.target.value
+				if (val.target.value.length != 18) {
+					wx.showToast({
+						title: '请输入正确的18位证件号',
+						icon: 'none',
+						duration: 1000
+					})
+				}
+			},
+			panduan: function (val) {
+				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if (val == "") {
+					wx.showToast({
+						title: '请输入手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} else if (!reg.test(val) || val.length < 11) {
+					wx.showToast({
+						title: '请输入正确的11位手机号',
+						icon: 'none',
+						duration: 1000
+					})
 				}
 			},
 			history: function () {
@@ -135,13 +162,14 @@
 							title: "修改成功",
 							icon: 'none',
 							duration: 2000,
-						})
-						// pages/userManagement/main
-						wx.switchTab({
-							url: "../../pages/userManagement/main",
-							fail: function (res) {
+							success: function () {
+								wx.navigateBack({
+									delta: 1
+								})
 							}
 						})
+						// pages/userManagement/main
+
 					} else {
 						wx.showToast({
 							title: res.statusText,
@@ -159,34 +187,22 @@
 					})
 			}
 		},
-		mounted() {
+		onShow() {
 			if (this.user.enabled) {
 				this.checked = true
 			} else {
 				this.checked = false
 			}
 			// 获取角色
-			this.$http.get("/users/roles").then((res) => {
-				if (res.status == "200") {
-					this.roleList = res.data;
-					for (let item of res.data) {
-						this.accounts.push(item.name)
-					}
-					this.accounts1 = res.data;
-				} else {
-					wx.showToast({
-						title: res.statusText,
-						icon: 'none',
-						duration: 2000
-					})
-				}
-			})
-		},
-		onShow() {
+			for (let item of this.roles) {
+				this.accounts.push(item.name)
+			}
+			this.accounts1 = this.roles;
+			this.accountIndex = this.accounts.indexOf(this.user.roleName)
+			this.user.roleName == "司机" ? this.isDriver = true : this.isDriver = false
+
 			console.log(this.user)
-			this.accountIndex=this.accounts.indexOf(this.user.roleName)
-			this.user.roleName == "司机" ? this.isDriver=true : this.isDriver=false
-			console.log(this.accountIndex)
+
 		}
 	};
 </script>

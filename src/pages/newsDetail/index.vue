@@ -56,7 +56,7 @@
 <style scoped>
 	.bbody {
 		width: 100%;
-		height: 100%;
+		min-height: 100%;
 		position: absolute;
 		background: #fff;
 	}
@@ -99,15 +99,15 @@
 	}
 
 	.title {
-		padding-bottom: 10px;
-		font-size: 20px;
+		font-size: 24px;
 		font-weight: bold;
 		color: #000;
+		margin-bottom: 0px;
 	}
 	.title1{
 		padding-bottom: 10px;
-		font-size: 16px;
-		color: #000;
+		font-size: 18px;
+		color: #898989;
 		border-bottom: 2px solid #B5B5B5;
 	}
 
@@ -121,5 +121,8 @@
 		width: 96%;
 		margin-left: 2%;
 	
+	}
+	.weui-article ._section{
+		word-wrap:break-word;
 	}
 </style>

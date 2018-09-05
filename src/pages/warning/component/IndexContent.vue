@@ -46,7 +46,7 @@
         return this.userList.length
       }
     },
-     created () {
+     onShow () {
     }
   };
 </script>

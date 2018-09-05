@@ -48,15 +48,15 @@
 				</p>
 				<p>
 					<span>操作人：</span>
-					<span>{{orderInfo.operatorName}}</span>
+					<span>{{orderInfo.operatorName == null ? "暂无数据" : orderInfo.operatorName}}</span>
 				</p>
 				<p>
 					<span>操作帐号</span>
-					<span>{{orderInfo.operatorUsername}}</span>
+					<span>{{orderInfo.operatorUsername == null ? "暂无数据" : orderInfo.operatorUsername}}</span>
 				</p>
 				<p>
 					<span>操作人手机号：</span>
-					<span>{{orderInfo.operatorPhone}}</span>
+					<span>{{orderInfo.operatorPhone == null ? "暂无数据" : orderInfo.operatorPhone}}</span>
 				</p>
 			</div>
 			<div class="weui-cell" style="border-top: none">
@@ -70,45 +70,51 @@
 			<div class="weui-cell" style="border-top: none">
 				<div class="weui-cell__bd">
 					<p>订购金额</p>
+
 				</div>
 				<div class="weui-cell__ft">
 					<p style="color: #FF001F;font-size: 17px">¥ {{orderInfo.orderTotalPrice}}</p>
 				</div>
 			</div>
 			<div class="two-bar-codes" @click="showImg">
+				<!-- <div class="two-bar-codes"> -->
 				<p>二维码</p>
-				<canvas class="img" style="width: 200px; height: 200px;" canvas-id="myQrcode1"></canvas>
+
+				<qrcode :value="orderInfo.encryptOrderNumber" :options="{ size: 200 }"></qrcode>
+
 			</div>
 			<div class="mask" v-if="isShowImg" @click="hideImg">
-				<canvas class="img1" style="width: 250px; height: 250px;" canvas-id="myQrcode2"></canvas>
+				
 			</div>
 		</div>
 		<div v-else>
 			<img src="/static/images/none.png" alt="" class="img3">
 		</div>
+
 	</div>
+
+
 </template>
 
 <script>
-	import drawQrcode from 'weapp-qrcode'
 	export default {
 		data() {
 			return {
 				orderInfo: "",
 				ishave: false,
-				isShowImg:false
+				isShowImg: false
 			}
 		},
-
-		components: {
-		},
-
 		methods: {
-			showImg(){
-				this.isShowImg=true
+			test(url, id) {
+				console.log(url, id)
 			},
-			hideImg(){
-				this.isShowImg=false
+			showImg(e) {
+				var qrcode = e.currentTarget.dataset.qrcode
+				this.isShowImg = true
+			},
+			hideImg() {
+				this.isShowImg = false
 			}
 		},
 
@@ -120,18 +126,8 @@
 						this.orderInfo = res.data
 						this.ishave = true
 						// this.qrcode(res.data.encryptOrderNumber)
-						drawQrcode({
-							width: 200,
-							height: 200,
-							canvasId: 'myQrcode1',
-							text: res.data.encryptOrderNumber
-						})
-						drawQrcode({
-							width: 200,
-							height: 200,
-							canvasId: 'myQrcode2',
-							text: res.data.encryptOrderNumber
-						})
+
+
 					} else {
 						wx.showToast({
 							title: res.statusText,
@@ -169,6 +165,7 @@
 		width: 100%;
 		margin-top: 10px;
 		font-size: 14px;
+		padding: 20px 0px;
 	}
 
 	.weui-cell__ft {
@@ -183,21 +180,30 @@
 
 	.orderInfo p {
 		width: 100%;
-		height: 40px;
 		font-size: 14px;
-		line-height: 40px;
+		line-height: 30px;
 	}
 
 	.orderInfo p span:first-child {
 		display: inline-block;
-		width: 30%;
-		padding-left: 40px;
+		width: 35%;
+		padding-left: 20px;
+		vertical-align: top;
+		box-sizing: border-box
+	}
+
+	.orderInfo p span:last-child {
+		display: inline-block;
+		width: 65%;
+		padding-right: 20px;
+		box-sizing: border-box
 	}
 
 	.two-bar-codes {
 		width: 100%;
 		margin-top: 10px;
 		background-color: #fff;
+		padding-bottom: 40px
 	}
 
 	.two-bar-codes p {
@@ -211,17 +217,10 @@
 	}
 
 	.two-bar-codes .img {
-		width: 200px;
-		height: 200px;
 		margin: 20px auto;
-		padding-bottom:20px; 
 	}
 
-	.two-bar-codes .img img {
-		width: 100%;
-		height: 100%;
-	}
-	.img3 {
+	/* .img3 {
 		width: 200px;
 		height: 200px;
 		position: fixed;
@@ -229,23 +228,25 @@
 		top: 50%;
 		margin-left: -100px;
 		margin-top: -100px
-	}
-	.mask{
-		width:100%;
+	} */
+
+	/* .mask {
+		width: 100%;
 		height: 100%;
 		position: fixed;
 		left: 0px;
 		top: 0px;
-		background-color: rgba(0,0,0,0.8);
+		background-color: rgba(0, 0, 0, 0.8);
 		z-index: 99;
-	}
-	.img1 {
+	} */
+
+	/* .img1 {
 		width: 250px;
 		height: 250px;
-		position: fixed;
+		position: absolute;
 		left: 50%;
 		top: 50%;
 		margin-left: -125px;
 		margin-top: -125px;
-	}
+	} */
 </style>
