@@ -4,22 +4,22 @@
 			<div class="from">
 				<div class="input-list">
 					<span>公司名称</span>
-					<span><input type="text" class="input" readonly :placeholder="company.name" v-model="company.name"></span>
+					<span><input type="text" class="input" disabled="true" @change="name" :value="company.name"></span>
 				</div>
 				<div class="input-list">
 					<span>公司联系人</span>
-					<span><input type="text" class="input" :placeholder="company.contact" v-model="company.contact"></span>
+					<span><input type="text" class="input" maxlength="8" @change="contact" :value="company.contact"></span>
 				</div>
 				<div class="input-list">
 					<span>联系人电话</span>
-					<span><input type="number" class="input"  @change="panduan" :placeholder="company.phone" v-model="company.phone"></span>
+					<span><input type="number" class="input" @change="panduan" maxlength="11" :value="company.phone"></span>
 				</div>
 				<div class="remarks">
 					<view class="remarks-title">公司地址</view>
 					<view class="">
 						<view class="">
 							<view class="">
-								<textarea class="" :placeholder="company.address" v-model="address" />
+								<textarea class="" :placeholder="company.address" :value="address" @change="address" />
 							</view>
 						</view>
 					</view>
@@ -39,16 +39,27 @@
 		data() {
 			return {
 				accountIndex: 0,
-				company: '',
-				name: '',
-				contact: '',
-				phone: '',
-				address: ''
+				company: {
+					name: '',
+					contact: '',
+					phone: '',
+					address: ''
+				},
+
 			}
 		},
 		methods: {
 			bindAccountChange: function (e) {
 				this.accountIndex = e.mp.detail.value
+			},
+			name: function (val) {
+				this.company.name = val.target.value
+			},
+			contact: function (val) {
+				this.company.contact = val.target.value
+			},
+			address: function (val) {
+				this.company.address = val.target.value
 			},
 			history: function () {
 				wx.switchTab({
@@ -57,7 +68,7 @@
 					}
 				})
 			},
-			panduan:function(val){
+			panduan: function (val) {
 				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
 				if (val.target.value == "") {
 					wx.showToast({
@@ -71,7 +82,9 @@
 						icon: 'none',
 						duration: 1000
 					})
-				} 
+				} else {
+					this.company.phone = val.target.value
+				}
 			},
 			prompt: function prompt(title) {
 				wx.showToast({
@@ -81,30 +94,41 @@
 				});
 			},
 			update: function () {
-				this.$http.post(`/company`, {
-					name: this.name || this.company.name,
-					contact: this.contact || this.company.name,
-					phone: this.phone || this.company.phone,
-					address: this.address || this.company.address,
-				}).then(res => {
-					this.prompt('更新成功');
-					setTimeout(() => {
-						wx.switchTab({
-							url: "../../pages/workbench/main",
-							fail: function (res) {
-							}
-						})
-					}, 1000)
-				}).catch((res) => {
-					var str = res.response.data.message;
-					str = str.replace("[", "");
-					str = str.replace("]", "");
-					str = str.split(" ")
-					this.prompt(str[0])
-				})
+				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if (this.company.phone == "") {
+					wx.showToast({
+						title: '请输入手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} else if (!reg.test(this.company.phone) || this.company.phone.length < 11) {
+					wx.showToast({
+						title: '请输入正确的11位手机号',
+						icon: 'none',
+						duration: 1000
+					})
+				} else {
+					this.$http.post(`/company`, this.company).then(res => {
+						this.prompt('更新成功');
+						setTimeout(() => {
+							wx.switchTab({
+								url: "../../pages/workbench/main",
+								fail: function (res) {
+								}
+							})
+						}, 1000)
+					}).catch((res) => {
+						var str = res.response.data.message;
+						str = str.replace("[", "");
+						str = str.replace("]", "");
+						str = str.split(" ")
+						this.prompt(str[0])
+					})
+				}
+
 			}
 		},
-		beforeMount() {
+		mounted() {
 			this.$http.get('company').then((res) => {
 				this.company = res.data
 			})
@@ -116,6 +140,7 @@
 	.content {
 		background: #e7e7e7;
 	}
+
 	.input {
 		text-align: right
 	}
@@ -142,7 +167,7 @@
 	}
 
 	.remarks-title {
-		font-size: 14px;
+		font-size: 15px;
 		margin-bottom: 10px
 	}
 
@@ -161,6 +186,7 @@
 		left: 5%;
 		width: 90%;
 	}
+
 	.footer {
 		width: 100%;
 		height: 50px;

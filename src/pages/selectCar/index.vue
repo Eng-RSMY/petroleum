@@ -9,40 +9,39 @@
 				</div>
 			</div>
 			<div class="search-box-img" @click="addItem">
-				<image class="search-box-img-inner" :src="addIconUrl" alt="addIcon" />
+				添加
 			</div>
 		</div>
 		<!-- 单条信息 -->
 		<div style="width:100%" v-if="ishave">
 			<div v-for="(item,index) in carList" :data-key="item.id" :data-iswork="item.working" @click.stop="toSelfHelp">
 				<div class="single-msg-box" :style="item.sstyle">
-					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
+					<div class="single-box" :data-key="item.id">
 						<div class="s-m-b-inner">
 							<div class="single-msg-box-left">
-								<p>车辆名：</p>
 								<p>车牌号：</p>
 								<p>行驶证号：</p>
 								<p>危险品运输号：</p>
 							</div>
 							<div class="single-msg-box-center">
-								<p>{{ item.remark ==null ? "暂无信息" : item.remark }}</p>
 								<p>{{ item.carNumber ==null ? "暂无信息" : item.carNumber }}</p>
 								<p>{{ item.drivingNumber ==null ? "暂无信息" : item.drivingNumber}}</p>
 								<p>{{ item.transportNumber ==null ? "暂无信息" : item.transportNumber}}</p>
 							</div>
-							<div class="single-msg-box-status" v-if="item.working ">
+							<div class="single-msg-box-status" v-if="item.working">
 								工作中
 							</div>
 							<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
 								未工作
 							</div>
+							<div class="btnGroup">
+								<span class="edit disable" v-if="item.working" :data-key="item.id">编辑</span>
+								<span class="edit " v-else :data-key="item.id" @click.stop="editItem">编辑</span>
+							</div>
 						</div>
+
 					</div>
-					<div class="s-m-b-right">
-						<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
-						<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
-						<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
-					</div>
+
 				</div>
 			</div>
 		</div>
@@ -96,6 +95,7 @@
 				}
 				this.$http.get("/self_order/cars", params)
 					.then(res => {
+						;
 						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
@@ -119,6 +119,14 @@
 								duration: 2000
 							})
 						}
+					}).catch(res => {
+						console.log(res)
+						// .response.data.message
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
 					})
 			},
 			addItem() {
@@ -158,71 +166,58 @@
 			},
 			toSelfHelp: function (e) {
 				console.log(e)
-				var key = e.currentTarget.dataset.key
-				var iswork = e.currentTarget.dataset.iswork
-				if (iswork) {
-					wx.showModal({
-						title: '提示',
-						content: '该车辆正在工作中，请选择其他车辆',
-						showCancel: false,
-						success: function (res) {
-							if (res.confirm) {
-								console.log('用户点击确定')
+				if (this.router == "workbench") {
+
+				} else {
+					var key = e.currentTarget.dataset.key
+					var iswork = e.currentTarget.dataset.iswork
+					if (iswork) {
+						wx.showModal({
+							title: '提示',
+							content: '该车辆正在工作中，请选择其他车辆',
+							showCancel: false,
+							success: function (res) {
+								if (res.confirm) {
+									console.log('用户点击确定')
+								}
+							}
+						})
+					} else {
+						var list = this.carList
+						var index = null
+						for (let i = 0; i < list.length; i++) {
+							if (list[i].id == key) {
+								index = i
 							}
 						}
-					})
-				} else {
-					var list = this.carList
-					var index = null
-					for (let i = 0; i < list.length; i++) {
-						if (list[i].id == key) {
-							index = i
+						var remark = list[index].remark
+						var carNumber = list[index].carNumber
+						var drivingNumber = list[index].drivingNumber
+						var transportNumber = list[index].transportNumber
+						var selectCar = {
+							key: key,
+							remark,
+							carNumber,
+							drivingNumber,
+							transportNumber,
 						}
-					}
-					var remark = list[index].remark
-					var carNumber = list[index].carNumber
-					var drivingNumber = list[index].drivingNumber
-					var transportNumber = list[index].transportNumber
-					var url = "../selfHelp/main?from=selectCar&key=" + key + "&remark=" + remark + "&carNumber=" + carNumber +
-						"&drivingNumber=" + drivingNumber + "&transportNumber=" + transportNumber
-					if (this.router == "selfHelp") {
-						wx.navigateTo({ url })
+						wx.setStorage({
+							key: "selectCar",
+							data: selectCar,
+							success: function () {
+								wx.navigateBack({
+									delta: 1
+								})
+							}
+						})
+						// var url = "../selfHelp/main?from=selectCar&key=" + key + "&remark=" + remark + "&carNumber=" + carNumber +
+						// 	"&drivingNumber=" + drivingNumber + "&transportNumber=" + transportNumber
+						// if (this.router == "selfHelp") {
+						// 	wx.navigateTo({ url })
+						// }
 					}
 				}
 
-			},
-			touchS(e) {
-				if (e.touches.length === 1) {
-					this.startX = e.touches[0].clientX
-				}
-			},
-			touchM(e) {
-				if (e.touches.length === 1) {
-					var key = e.currentTarget.dataset.key
-					// console.log(key)
-					var list = this.carList
-					var moveX = e.touches[0].clientX
-					var disX = Math.floor((this.startX - moveX) / 3)
-					var singleBoxStyle = ""
-					let index = null
-					if (disX === 0 || disX < 0) {
-						singleBoxStyle = "left: 0px;"
-					} else if (disX > 0) {
-						singleBoxStyle = "left: " + disX + "%"
-						if (disX >= this.btnWidth) {
-							singleBoxStyle = "left: " + this.btnWidth + "%"
-						}
-					}
-					//查找index
-					for (let i = 0; i < list.length; i++) {
-						if (list[i].id == key) {
-							index = i
-						}
-					}
-					list[index].sstyle = singleBoxStyle
-				}
-			},
-			touchE() {
 
 			},
 			delItem(e) {
@@ -258,7 +253,6 @@
 		components: {
 		},
 		onShow() {
-			// 获取企业开票信息
 			var params = {
 				carNumber: this.carNumber,
 				page: 0,
@@ -315,6 +309,33 @@
 		background-color: #efeff4;
 	}
 
+	.btnGroup {
+		width: 100%;
+		height: 40px;
+		border-top: 1px solid #ddd;
+		border-bottom: 1px solid #ddd;
+		clear: both;
+		margin-top: 10px
+	}
+
+	.edit {
+		float: right;
+		margin-right: 20px;
+		width: 50px;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		font-size: 12px;
+		color: #fff;
+		background-color: #2E79FF;
+		border-radius: 5px;
+		margin-top: 5px;
+	}
+	.disable{
+		color: #fff;
+		background-color: #898989;
+
+	}
 	.searchBox {
 		width: 100%;
 		height: 50px;
@@ -348,11 +369,12 @@
 	}
 
 	.search-box-img {
-		width: 20px;
 		height: 20px;
 		margin: 4px 0 0 15.5px;
 		float: left;
 		left: 15.5px;
+		font-size: 12px;
+		color: #2E79FF
 	}
 
 	.search-box-img-inner {
@@ -362,8 +384,7 @@
 
 	.single-msg-box {
 		/* width: 375px; */
-		width: 125%;
-		height: 140px;
+		width: 100%;
 		margin: 6.5px 0 0 0;
 		position: relative;
 		background: #fff;
@@ -379,28 +400,24 @@
 
 	.single-box {
 		width: 100%;
-		height: 140px;
 		position: relative;
 		float: left;
 	}
 
 	.s-m-b-inner {
-		width: 375px;
-		height: 140px;
+		width: 100%;
 		position: relative;
 		float: left;
 	}
 
 	.single-msg-box-left {
 		width: 98px;
-		height: 108px;
 		margin: 12px 0 0 17px;
 		float: left;
 	}
 
 	.single-msg-box-center {
 		width: 160px;
-		height: 108px;
 		margin: 12px 0 0 0;
 		float: left;
 	}

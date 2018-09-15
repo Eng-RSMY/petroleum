@@ -2,18 +2,12 @@
 	<div class="bbody">
 		<div class="ccontent">
 			<div class="c-row">
-				<div>
-					<span>车辆名称</span>
-				</div>
-				<div><input class="c-row-input" type="text" placeholder="请输入" dir="rtl" v-model.lazy="carName" /></div>
-			</div>
-			<div class="c-row">
 				<span>车牌号</span>
 				<div class="c-row-input" contenteditable="true"  style="width: 100px" @click.stop="showInput">{{carNo}}</div>
 			</div>
 			<div class="c-row">
 				<span>行驶证号</span>
-				<input class="c-row-input" type="text" placeholder="请输入" maxlength="16" @change="wancheng" dir="rtl" v-model.lazy="driveNum" />
+				<input class="c-row-input" type="number" placeholder="请输入" maxlength="16" @change="wancheng" dir="rtl" v-model.lazy="driveNum" />
 			</div>
 			<div class="c-row c-row-last">
 				<span>危险品运输证号</span>
@@ -47,7 +41,6 @@
 				isFooterShow: true,
 				isInputData1Show: false,
 				isInputData2Show: false,
-				carName: '',
 				carNo: '请输入',
 				driveNum: '',
 				dangerNum: '',
@@ -137,14 +130,13 @@
 					carNumber: this.carNo,
 					drivingNumber: this.driveNum,
 					transportNumber: this.dangerNum,
-					remark: this.carName,
 				};
+				console.log(this.key)
 				if (this.key == "") {
 					this.$http.post(`/cars`, params)
 						.then(res => {
 							console.log(res)
 							if (res.status == "200") {
-								that.carName= ''
 								that.carNo= '请输入'
 								that.driveNum=''
 								that.dangerNum=''
@@ -170,8 +162,8 @@
 							})
 						})
 				} else {
-					params.id = this.key
-					this.$http.post(`/cars`, params)
+					
+					this.$http.post(`/cars/${this.key}`, params)
 						.then(res => {
 							console.log(res)
 							if (res.status == "200") {
@@ -194,6 +186,7 @@
 			}
 		},
 		mounted() {
+			Object.assign(this.$data, this.$options.data())
 			var data = this.$root.$mp.query;
 			console.log(data.key)
 			this.router = data.from
@@ -203,7 +196,6 @@
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
-							this.carName = res.data.remark
 							this.carNo = res.data.carNumber
 							this.driveNum = res.data.drivingNumber
 							this.dangerNum = res.data.transportNumber

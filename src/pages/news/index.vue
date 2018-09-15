@@ -1,7 +1,7 @@
 <template>
 	<div class="bbody">
 		<!-- 行消息 -->
-		<div v-if="ishave">
+		<div v-if="ishave" style="width:100%">
 			<div class="row" v-for="(item,index) in bulletin" :key="index" @click="toDetail(item.id)">
 				<div class="row-inner">
 					<div class="title">
@@ -83,6 +83,7 @@
 			}
 		},
 		mounted() {
+			this.bulletin=[];
 			this.getBulletin();
 		}
 	}

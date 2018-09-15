@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="width:100%;overflow-x:hidden">
 		<!-- <index-tab></index-tab> -->
 		<div class="top">
 			<div @click="toPermission">配置角色权限</div>
@@ -16,12 +16,21 @@
 		<!-- <index-content :userList="userList"></index-content> -->
 		<div class="content">
 			<div class="contentList" @click="edit(item.id)" v-if="showList" v-for="item in userList" :key="item.id">
-				<div>
-					<p><span>用户名</span> <span>{{item.username}}</span> </p>
-					<p><span>角色</span> <span>{{item.roleName}}</span> </p>
-					<p><span>绑定手机号</span><span>{{item.phone}}</span> </p>
+				<div style="width:70%;padding-left: 20px;box-sizing: border-box">
+					<p>
+						<span class="spanFirst">用户名</span> 
+						<span class="spanLast">{{item.username}}</span> 
+					</p>
+					<p>
+						<span class="spanFirst">角色</span> 
+						<span class="spanLast">{{item.roleName}}</span> 
+					</p>
+					<p>
+						<span class="spanFirst">绑定手机号</span>
+						<span class="spanLast">{{item.phone}}</span> 
+					</p>
 				</div>
-				<div>
+				<div style="width:30%;padding-right: 20px;box-sizing: border-box">
 					<button v-if="item.enabled">激活中</button>
 					<button class="not" v-else>未激活</button>
 				</div>
@@ -114,7 +123,8 @@
 				return this.userList.length
 			}
 		},
-		mounted() {
+		onShow() {
+			Object.assign(this.$data, this.$options.data())
 			this.$http.get("/users/").then(res => {
 				if (res.status == "200") {
 					this.userList = res.data.content;
@@ -136,9 +146,10 @@
 			this.$http.get("/users/roles").then((res) => {
 
 				this.roleList = res.data;
-				this.roleList.forEach(ele => {
-					this.accounts.push(ele.name)
-				});
+				for(var i=0;i<res.data.length;i++){
+					this.accounts.push(res.data[i].name)
+				}
+				
 
 			}).catch(res => {
 				console.log(res)
@@ -156,8 +167,22 @@
 		width: 100%;
 		display: flex;
 		background: #2E79FF;
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		z-index:99999;
 	}
-
+	.spanFirst{
+		display: inline-block;
+		width:30%;
+		line-height: 30px;
+		vertical-align: top;
+	}
+	.spanLast{
+		display: inline-block;
+		width:70%;
+		line-height: 30px;
+	}
 	.top div {
 		width: 50%;
 		text-align: center;
@@ -170,24 +195,20 @@
 	.content {
 		background: #e4e4e4;
 		padding-top: 1px;
+		width:100%;
+		overflow-x: hidden;
+		margin-top:40px;
 	}
 
 	.contentList {
 		margin-top: 10px;
 		width: 100%;
-		height: 70px;
 		background: #fff;
 		padding: 20px 0;
 		font-size: 14px;
 		display: flex;
 		justify-content: space-around;
 	}
-
-	.contentList p span:nth-child(1) {
-		width: 100px;
-		display: inline-block;
-	}
-
 	.contentList button {
 		border: 1px solid #33CCCC;
 		background: none;

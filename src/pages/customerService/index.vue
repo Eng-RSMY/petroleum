@@ -1,36 +1,12 @@
 <template>
 	<div class="bbody">
 		<div class="body-inner">
-			<div class="weui-cell" style="position: relative;">
+			<div class="weui-cell" style="position: relative;" @click="call">
 				<div class="weui-cell__bd">
 					<p>垦利1号客服电话</p>
 				</div>
 				<div class="weui-cell__ft">
-					<p>400-010-0302</p>
-				</div>
-			</div>
-			<div class="weui-cell" style="position: relative;">
-				<div class="weui-cell__bd">
-					<p>垦利1号客服电话</p>
-				</div>
-				<div class="weui-cell__ft">
-					<p>400-010-0302</p>
-				</div>
-			</div>
-			<div class="weui-cell" style="position: relative;">
-				<div class="weui-cell__bd">
-					<p>垦利1号客服电话</p>
-				</div>
-				<div class="weui-cell__ft">
-					<p>400-010-0302</p>
-				</div>
-			</div>
-			<div class="weui-cell" style="position: relative;">
-				<div class="weui-cell__bd">
-					<p>垦利1号客服电话</p>
-				</div>
-				<div class="weui-cell__ft">
-					<p>400-010-0302</p>
+					<p>15666440735</p>
 				</div>
 			</div>
 			<!-- <div class="row">
@@ -55,7 +31,11 @@
 			}
 		},
 		methods: {
-
+			call: function () {
+				wx.makePhoneCall({
+					phoneNumber: '15666440735' //仅为示例，并非真实的电话号码
+				})
+			}
 		},
 		mounted() {
 
@@ -67,13 +47,14 @@
 		width: 100%;
 		height: 100%;
 		position: absolute;
-		
+
 	}
-	.weui-cell{
+
+	.weui-cell {
 		background-color: #fff;
 		margin-top: 10px
 	}
-	
+
 
 	.row {
 		width: 100%;

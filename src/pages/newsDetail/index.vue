@@ -12,7 +12,7 @@
 			</div>
 			<section>
 				<img :src="bulletin.coverUri" mode="widthFix" alt="" class="img">
-				<section v-text="bulletin.content">
+				<section v-html="bulletin.content">
 
 				</section>
 			</section>
@@ -40,6 +40,7 @@
 			this.$http.get(`/bulletin/${id}`).then(res => {
 				console.log(res)
 				this.bulletin = res.data;
+				this.bulletin.publishTime=this.bulletin.publishTime.replace(/T/,"  ")
 				console.log(this.bulletin)
 			}).catch(res => {
 				console.log(res)

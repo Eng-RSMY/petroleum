@@ -16,7 +16,7 @@
 		<div style="width:100%" v-if="ishave">
 			<div v-for="(item,index) in driverList" @click.stop="toSelfHelp" :data-key="item.id" :data-iswork="item.working">
 				<div class="single-msg-box" :style="item.sstyle">
-					<div class="single-box" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-key="item.id">
+					<div class="single-box" :data-key="item.id">
 						<div class="s-m-b-inner">
 							<div class="single-msg-box-left">
 								<p>司机真实姓名：</p>
@@ -36,13 +36,13 @@
 							<div class="single-msg-box-status" style="border-color:#2E79FF ;color: #2E79FF" v-else>
 								未工作
 							</div>
+							<div class="btnGroup">
+								<span class="edit disable" v-if="item.working" :data-key="item.id">编辑</span>
+								<span class="edit " v-else :data-key="item.id" @click.stop="editItem">编辑</span>
+							</div>
 						</div>
 					</div>
-					<div class="s-m-b-right">
-						<div class="s-m-b-r-edit" @click.stop="editItem" :data-key="item.id">编辑 </div>
-						<!-- <div class="s-m-b-r-del" @click="delItem" :data-key="item.id">删除</div> -->
-						<!-- <div class="s-m-b-r-del" :data-key="item.id">删除</div> -->
-					</div>
+
 				</div>
 			</div>
 		</div>
@@ -182,44 +182,23 @@
 					var phone = list[index].phone
 					var idNumber = list[index].idNumber
 					var driverNumber = list[index].driverNumber
-					var url = "../selfHelp/main?from=selectDriver&key=" + key + "&realName=" + realName + "&phone=" + phone +
-						"&idNumber=" + idNumber + "&driverNumber=" + driverNumber
-					wx.navigateTo({ url })
-				}
-			},
-			touchS(e) {
-				if (e.touches.length === 1) {
-					this.startX = e.touches[0].clientX
-				}
-			},
-			touchM(e) {
-				if (e.touches.length === 1) {
-					var key = e.currentTarget.dataset.key
-					var list = this.driverList
-					var moveX = e.touches[0].clientX
-					// var disX = Math.floor((this.startX - moveX) / 3)
-					var disX = Math.floor((this.startX - moveX))
-					var singleBoxStyle = ""
-					let index = null
-					if (disX === 0 || disX < 0) {
-						singleBoxStyle = "left: 0px;"
-					} else if (disX > 0) {
-						singleBoxStyle = "left: " + disX + "%"
-						if (disX >= this.btnWidth) {
-							singleBoxStyle = "left: " + this.btnWidth + "%"
-						}
+					var selectDriver = {
+						key,
+						realName,
+						phone,
+						idNumber,
+						driverNumber
 					}
-					//查找index
-					for (let i = 0; i < list.length; i++) {
-						if (list[i].id == key) {
-							index = i
+					wx.setStorage({
+						key: "selectDriver",
+						data: selectDriver,
+						success: function () {
+							wx.navigateBack({
+								delta: 1
+							})
 						}
-					}
-					list[index].sstyle = singleBoxStyle
+					})
 				}
-			},
-			touchE() {
-
 			},
 			delItem(e) {
 				var key = e.currentTarget.dataset.key
@@ -284,6 +263,35 @@
 		overflow: hidden;
 	}
 
+	.btnGroup {
+		width: 100%;
+		height: 40px;
+		border-top: 1px solid #ddd;
+		border-bottom: 1px solid #ddd;
+		clear: both;
+		margin-top: 10px
+	}
+
+	.edit {
+		float: right;
+		margin-right: 20px;
+		width: 50px;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		font-size: 12px;
+		color: #fff;
+		background-color: #2E79FF;
+		border-radius: 5px;
+		margin-top: 5px;
+	}
+
+	.disable {
+		color: #fff;
+		background-color: #898989;
+
+	}
+
 	.searchBox {
 		width: 100%;
 		height: 50px;
@@ -293,7 +301,7 @@
 	}
 
 	.weui-search-bar {
-		width: 310px;
+		width: 100%;
 		height: 27.5px;
 		padding: 0px;
 		position: static;
@@ -302,7 +310,7 @@
 	}
 
 	.weui-search-bar__box {
-		width: 310px;
+		width: 100%;
 		height: 27.5px;
 		border-radius: 13.75px;
 		background: #efeff4;
@@ -330,8 +338,7 @@
 	}
 
 	.single-msg-box {
-		width: 125%;
-		height: 140px;
+		width: 100%;
 		margin: 6.5px 0 0 0;
 		position: relative;
 		background: #fff;
@@ -347,28 +354,24 @@
 
 	.single-box {
 		width: 100%;
-		height: 140px;
 		position: relative;
 		float: left;
 	}
 
 	.s-m-b-inner {
 		width: 375px;
-		height: 140px;
 		position: relative;
 		float: left;
 	}
 
 	.single-msg-box-left {
 		width: 98px;
-		height: 108px;
 		margin: 12px 0 0 17px;
 		float: left;
 	}
 
 	.single-msg-box-center {
 		width: 160px;
-		height: 108px;
 		margin: 12px 0 0 0;
 		float: left;
 	}

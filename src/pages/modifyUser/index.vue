@@ -3,27 +3,21 @@
 		<div class="content">
 			<div class="from">
 				<div class="input-list">
-					<span>用户名</span>
-					<span><input type="text" :placeholder="user.username" v-model="newUserName" :disabled="disabled"></span>
-				</div>
-				<div class="input-list">
 					<span>绑定手机号</span>
 					<span><input type="number" :placeholder="user.phone" maxlength="11" @change="panduan" v-model="newUserPhone"></span>
 				</div>
 				<div class="input-list">
 					<span>用户真实姓名</span>
-					<span><input type="text" :placeholder="user.realName" v-model="newRealName"></span>
+					<span><input type="text" :placeholder="user.realName" maxlength="8" v-model="newRealName"></span>
 				</div>
-				<div class="input-list-select input-list">
+				<div class="input-list">
 					<span>设置用户角色</span>
 					<span>
-						<view class="weui-cell weui-cell_select">
-							<view class="weui-cell__bd">
-								<picker @change="bindAccountChange($event)" :value="accountIndex" :range="accounts">
-									<view class="weui-select">{{accounts[accountIndex]}}</view>
-								</picker>
+						<picker @change="bindAccountChange($event)" :value="accountIndex" :range="accounts">
+							<view class="picker">
+								{{pickSelect}}
 							</view>
-						</view>
+						</picker>
 					</span>
 				</div>
 				<div class="input-list" v-if="isDriver">
@@ -32,15 +26,15 @@
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机驾驶证号</span>
-					<span><input type="idcard" :placeholder="user.driverNumber" maxlength="12" @change="wancheng" v-model="driverNumber"></span>
+					<span><input type="idcard" :placeholder="user.driverNumber" maxlength="18" @change="wancheng" v-model="driverNumber"></span>
 				</div>
 				<div class="input-list">
-					<span>用激活账户</span>
+					<span> 激活用户账户</span>
 					<span>
 						<view>
 							<view>
 								<view>
-									<switch :checked="checked" />
+									<switch :checked="checked" @change="switch1Change" />
 								</view>
 							</view>
 						</view>
@@ -58,15 +52,13 @@
 				</div>
 			</div>
 		</div>
-		<button class="weui-btn weui-btn_primary button" @click="save">保存并更新</button>
-		<!-- <index-content :user="user" :roles="roles" :address="address" v-if="flag"></index-content> -->
-		<!--<index-bottom></index-bottom>-->
+		<div class="footer" @click="save">
+			<span style="font-size:16px">保存并更新</span>
+		</div>
 	</div>
 </template>
 
 <script>
-	import IndexBottom from './component/IndexBottom'
-	import IndexContent from './component/IndexContent'
 	export default {
 		name: "index",
 		data() {
@@ -78,12 +70,12 @@
 				disabled: true,
 				accounts: [],
 				accounts1: [],
+				pickSelect: "请选择",
 				accountIndex: 0,
-				newUserName: '',
 				newUserPhone: '',
 				newRealName: '',
 				newRemark: '',
-				checked: '',
+				checked: true,
 				idNumber: "",
 				driverNumber: "",
 				isDriver: false,
@@ -93,11 +85,16 @@
 		methods: {
 			bindAccountChange: function (e) {
 				this.accountIndex = e.mp.detail.value;
-				if (this.roleList[e.mp.detail.value].name == "司机") {
+				this.pickSelect = this.accounts[e.mp.detail.value];
+				if (this.pickSelect == "司机") {
 					this.isDriver = true;
 				} else {
 					this.isDriver = false
 				}
+			},
+			switch1Change: function (e) {
+				console.log('switch1 发生 change 事件，携带值为', e.mp.detail.value)
+				this.checked = e.mp.detail.value
 			},
 			wancheng: function (val) {
 				console.log(val)
@@ -112,13 +109,13 @@
 			},
 			panduan: function (val) {
 				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-				if (val == "") {
+				if (val.target.value == "") {
 					wx.showToast({
 						title: '请输入手机号',
 						icon: 'none',
 						duration: 1000
 					})
-				} else if (!reg.test(val) || val.length < 11) {
+				} else if (!reg.test(val.target.value) || val.target.value.length < 11) {
 					wx.showToast({
 						title: '请输入正确的11位手机号',
 						icon: 'none',
@@ -152,12 +149,16 @@
 				}
 			},
 			save: function () {
+				console.log(this.accountIndex)
+				console.log(this.roles)
 				this.$http.post(`/users/${this.$root.$mp.query.id}`, {
-					username: this.newUserName || this.user.username,
 					phone: this.newUserPhone || this.user.phone,
 					realName: this.newRealName || this.user.realName,
 					remark: this.newRemark || this.user.remark,
-					roleId: this.accounts1[this.accountIndex].id || this.$root.$mp.query.id
+					enabled: this.checked,
+					driverNumber: this.driverNumber || this.user.driverNumber,
+					idNumber: this.idNumber || this.user.idNumber,
+					roleId: this.roles[this.accountIndex].id
 				}).then(res => {
 					if (res.status == "200") {
 						this.user = res.data;
@@ -191,17 +192,19 @@
 					})
 			}
 		},
-		components: {
-			IndexBottom,
-			IndexContent
-		},
 		onShow() {
+			wx.showLoading({
+				title: "加载中...",
+				mask: true
+			})
+			Object.assign(this.$data, this.$options.data())
 			var address = this.$root.$mp.query.address;
 			this.$http.get(`/users/${this.$root.$mp.query.id}`).then(res => {
 				if (res.status == "200") {
 					this.user = res.data;
 					this.address = address;
 					this.flag = true;
+					this.checked = res.data.enabled;
 				} else {
 					wx.showToast({
 						title: res.statusText,
@@ -213,7 +216,19 @@
 			this.$http.get("/users/roles").then((res) => {
 				if (res.status == "200") {
 					this.roles = res.data;
-					this.accounts=res.data				
+					this.accounts = []
+					res.data.forEach((element, key) => {
+						this.accounts.push(element.name)
+						console.log(element.name == this.user.roleName, element.name)
+						if (element.name == this.user.roleName) {
+							this.accountIndex = key
+						}
+					});
+					this.pickSelect = this.user.roleName
+					if (this.pickSelect == "司机" || this.pickSelect == "押运员") {
+						this.isDriver = true
+					}
+					console.log(this.pickSelect)
 				} else {
 					wx.showToast({
 						title: res.statusText,
@@ -222,12 +237,21 @@
 					})
 				}
 			})
+			wx.hideLoading();
 		}
 	};
 </script>
 <style scoped>
 	.content {
 		background: #e7e7e7;
+	}
+
+	input {
+		text-align: right;
+	}
+
+	.picker {
+		margin-right: 20px
 	}
 
 	.input-list {
@@ -268,5 +292,18 @@
 		bottom: 20px;
 		left: 5%;
 		width: 90%;
+	}
+
+	.footer {
+		width: 375px;
+		height: 50px;
+		line-height: 50px;
+		position: fixed;
+		bottom: 0;
+
+		text-align: center;
+		color: #2E79FF;
+		background: #fff;
+		align-self: flex-end;
 	}
 </style>

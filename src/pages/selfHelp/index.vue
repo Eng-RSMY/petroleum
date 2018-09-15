@@ -45,11 +45,14 @@
 					<p>物料名称</p>
 				</div>
 				<div class="weui-cell__ft">
-					<picker @change="bindPickerChange1" @click.stop="ishave" :value="index" :range="oils">
-						<view class="picker">
-							{{pickSelect1}}
-						</view>
-					</picker>
+					<div class="ishave" v-if="clickPick" @click.stop="ishave" style="color:#000">{{pickSelect1}}</div>
+					<div class="ishave" v-else>
+						<picker @change="bindPickerChange1" :value="index" :range="oils">
+							<view class="picker">
+								{{pickSelect1}}
+							</view>
+						</picker>
+					</div>
 				</div>
 			</div>
 			<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -57,19 +60,17 @@
 					<p>物料重量</p>
 				</div>
 				<div class="weui-cell__ft">
-					<span class="dw" style="color: #b5b5b5">(吨)</span>
-					<input class="input" style="color: #b5b5b5" type="number" @change="input" maxlength="2" v-model="num"
-					 placeholder="请输入">
+					<span class="dw" style="color: #000">(吨)</span>
+					<input class="input" style="color: #000" type="digit" @change="input" maxlength="5" v-model="num" placeholder="请输入">
 				</div>
 			</div>
 		</div>
 		<div class="choose">
-			<p>
+			<p class="t">
 				<span class="fontSize">选择司机</span>
 			</p>
 			<button class="weui-btn weui-btn_default" v-if="showDriver" @click="chooseDriver" style="background-color: #fff;border-color: #dedede">请选择</button>
 			<div class="driver" v-else>
-				<p class="close" @click="reset">x</p>
 				<p class="driver_name driverInfo">
 					<span>司机真实姓名：</span>
 					<span>{{driverInfo.realName == "null" ? "暂无数据" : driverInfo.realName }}</span>
@@ -86,19 +87,17 @@
 					<span>驾证号码：</span>
 					<span>{{driverInfo.driverNumber == "null" ? "暂无数据" : driverInfo.driverNumber}}</span>
 				</p>
+				<div class="btnGroup">
+					<span class="reset" @click="reset">重新选择</span>
+				</div>
 			</div>
 		</div>
 		<div class="choose">
-			<p>
+			<p class="t">
 				<span class="fontSize">选择车辆</span>
 			</p>
 			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar" style="background-color: #fff;border-color: #dedede">请选择</button>
 			<div class="driver" v-else>
-				<p class="close" @click="reset1">x</p>
-				<p class="driver_name driverInfo">
-					<span>车辆名：</span>
-					<span>{{carInfo.remark == "null" ? "暂无数据" : carInfo.remark}}</span>
-				</p>
 				<p class="driver_phone driverInfo">
 					<span>车牌号：</span>
 					<span>{{carInfo.carNumber == "null" ? "暂无数据" : carInfo.carNumber}}</span>
@@ -111,15 +110,18 @@
 					<span>危险品运输证号：</span>
 					<span>{{carInfo.transportNumber == "null" ? "暂无数据" : carInfo.transportNumber}}</span>
 				</p>
+				<div class="btnGroup">
+					<span class="reset" @click="reset1">重新选择</span>
+				</div>
 			</div>
+
 		</div>
 		<div class="choose" style="margin-bottom: 60px">
-			<p>
+			<p class="t">
 				<span class="fontSize">选择已有押车员下单(可不选)</span>
 			</p>
 			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle" style="background-color: #fff;border-color: #dedede">请选择</button>
 			<div class="driver" v-else>
-				<p class="close" @click="reset2">x</p>
 				<p class="driver_name driverInfo">
 					<span>用户名：</span>
 					<span>{{escortInfo.username == "null" ? "暂无数据" : escortInfo.username}}</span>
@@ -136,7 +138,9 @@
 					<span>身份证号：</span>
 					<span>{{escortInfo.idNumber == "null" ? "暂无数据" : escortInfo.idNumber}}</span>
 				</p>
-
+				<div class="btnGroup">
+					<span class="reset" @click="reset2">重新选择</span>
+				</div>
 			</div>
 		</div>
 		<div class="footer">
@@ -173,6 +177,7 @@
 				showCar: true,
 				showPeople: true,
 				showDialog: false,
+				clickPick: true,
 				categories: [],
 				num: "",
 				num1: "",
@@ -192,10 +197,6 @@
 		methods: {
 			bindPickerChange: function (e) {
 				console.log('picker发送选择改变，携带值为', e)
-				wx.showLoading({
-					title: "正在获取油品",
-					mask: true
-				})
 				this.pickSelect = this.categories[e.mp.detail.value];
 				var categoryName = this.categories[e.mp.detail.value];
 				this.$http.get("/self_order/oils", { "categoryName": categoryName })
@@ -204,7 +205,7 @@
 						if (res.status == "200") {
 							this.oils = [];
 							this.pickSelect1 = "请选择"
-							wx.hideLoading()
+
 							if (res) {
 								for (var i = 0; i < res.data.length; i++) {
 									this.oils.push(res.data[i].name)
@@ -224,19 +225,28 @@
 			ishave: function () {
 				if (this.pickSelect == "请选择") {
 					wx.showToast({
-						title: "请先选择提货品类",
+						title: "请先选择预提货品类",
 						icon: 'none',
 						duration: 2000
 					})
+				} else {
+					this.clickPick = false;
 				}
 			},
 			bindPickerChange1: function (e) {
 				if (this.pickSelect == "请选择") {
 					wx.showToast({
-						title: "请选择提货品类",
+						title: "请选择预提货品类",
 						icon: 'none',
 						duration: 2000
 					})
+				} else if (this.num && this.num > 50) {
+					wx.showToast({
+						title: "下单数量不能大于49吨",
+						icon: 'none',
+						duration: 2000
+					})
+					this.num = ""
 				} else {
 					console.log('picker发送选择改变，携带值为', e)
 					this.pickSelect1 = this.oils[e.mp.detail.value];
@@ -247,6 +257,7 @@
 							if (res.status == "200") {
 								this.oilPrice = res.data.price;
 								this.stock = res.data.stock;
+								this.sumPrice = "¥" + (res.data.price * this.num).toFixed(2)
 							}
 						})
 						.catch(res => {
@@ -256,43 +267,96 @@
 								duration: 2000
 							})
 						})
+
 				}
 
 			},
 			input: function (val) {
-				console.log(val)
+				console.log(typeof(val))
 				var num = val.mp.detail.value;
-				if (this.pickSelect == "请选择") {
+				console.log(isNaN(num))
+
+				if(isNaN(num)){
 					wx.showToast({
-						title: "请先选择提货品类",
+						title: "请输入正确的数值",
 						icon: 'none',
 						duration: 2000
 					})
-				}else if (this.pickSelect1 == "请选择") {
+					this.num = ""
+				}else if (this.pickSelect == "请选择") {
+					wx.showToast({
+						title: "请先选择预提货品类",
+						icon: 'none',
+						duration: 2000
+					})
+				} else if (this.pickSelect1 == "请选择") {
 					wx.showToast({
 						title: "请先选择物料品类",
 						icon: 'none',
 						duration: 2000
 					})
-				}else if (num >= 50) {
+				} else if (num >= 50) {
 					wx.showToast({
 						title: "下单数量不能大于49吨",
 						icon: 'none',
 						duration: 2000
 					})
-				} else {
+					this.num = ""
+				}else  {
 					this.sumPrice = "¥" + (this.oilPrice * num).toFixed(2)
 				}
 
 			},
 			reset: function () {
 				this.showDriver = true;
+				wx.removeStorage({
+					key: 'selectDriver',
+					success: function (res) {
+						console.log(res.data)
+
+					}
+				})
+				wx.navigateTo({
+					url: "../../pages/selectDriver/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+
 			},
 			reset1: function () {
 				this.showCar = true;
+				wx.removeStorage({
+					key: 'selectCar',
+					success: function (res) {
+						console.log(res.data)
+
+					}
+				})
+				wx.navigateTo({
+					url: "../../pages/selectCar/main?from=selfHelp",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+
 			},
 			reset2: function () {
 				this.showPeople = true;
+				wx.removeStorage({
+					key: 'selectescorts',
+					success: function (res) {
+						console.log(res.data)
+
+					}
+				})
+				wx.navigateTo({
+					url: "../../pages/selectEscort/main",
+					fail: function (res) {
+						console.log(res)
+					}
+				})
+
 			},
 			chooseDriver: function () {
 				// 跳转到司机页面
@@ -334,10 +398,6 @@
 					this.showDialog = true;
 				} else {
 					// 下单
-					wx.showLoading({
-						title: "正在下单",
-						mask: true
-					})
 					var params = {
 						categoryName: this.pickSelect,
 						oilName: this.pickSelect1,
@@ -352,7 +412,7 @@
 							if (res.status == "200") {
 								var orderInfo = res.data.id
 								console.log(orderInfo)
-								wx.hideLoading()
+
 								wx.navigateTo({
 									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo + "&from=selfHelp",
 									fail: function (res) {
@@ -369,7 +429,7 @@
 						})
 						.catch(res => {
 							console.log(res)
-							wx.hideLoading()
+
 							// .response.data.message
 							wx.showToast({
 								title: res.response.data.message,
@@ -385,10 +445,6 @@
 			},
 			sure: function () {
 				var that = this
-				wx.showLoading({
-					title: "正在下单",
-					mask: true
-				})
 				var params = {
 					categoryName: this.pickSelect,
 					oilName: this.pickSelect1,
@@ -400,34 +456,11 @@
 				this.$http.post("/self_order", params)
 					.then(res => {
 						console.log(res)
-						wx.hideLoading()
 						this.showDialog = false;
 						if (res.status == "200") {
 							var orderInfo = JSON.stringify(res.data)
 							console.log(orderInfo)
-							that.data = {
-								companyInfo: "",
-								pickSelect: "请选择",
-								pickSelect1: "请选择",
-								index: 0,
-								showDriver: true,
-								showCar: true,
-								showPeople: true,
-								showDialog: false,
-								categories: [],
-								num: "",
-								oils: [],
-								// 库存
-								stock: "",
-								// 油品单价
-								oilPrice: "",
-								// 总价
-								sumPrice: "¥0",
-								driverInfo: "",
-								carInfo: "",
-								escortInfo: ""
-							}
-							wx.navigateTo({
+							wx.redirectTo({
 								url: "../../pages/order/orderInfo/main?orderInfo=" + JSON.stringify(res.data),
 								fail: function (res) {
 									console.log(res)
@@ -457,10 +490,47 @@
 
 		onShow() {
 			// 获取企业信息
-			wx.showLoading({
-				title: "正在获取数据",
-				mask: true
+			console.log("我展示了a")
+			var selectCar = wx.getStorageSync('selectCar')
+			if (selectCar) {
+				this.carInfo = selectCar
+				this.showCar = false;
+			}
+			var selectDriver = wx.getStorageSync('selectDriver')
+			if (selectDriver) {
+				this.driverInfo = selectDriver
+				this.showDriver = false;
+			}
+			var selectescorts = wx.getStorageSync('selectescorts')
+			if (selectescorts) {
+				this.escortInfo = selectescorts;
+				this.showPeople = false;
+			}
+
+			// 获取物料列表
+		},
+		mounted(query) {
+			// 接收页面参数
+			wx.removeStorage({
+				key: 'selectCar',
+				success: function (res) {
+					console.log(res.data)
+				}
 			})
+			wx.removeStorage({
+				key: 'selectDriver',
+				success: function (res) {
+					console.log(res.data)
+				}
+			})
+			wx.removeStorage({
+				key: 'selectescorts',
+				success: function (res) {
+					console.log(res.data)
+				}
+			})
+			Object.assign(this.$data, this.$options.data())
+			console.log(this)
 			this.$http.get("/self_order/company_account")
 				.then(res => {
 					console.log(res)
@@ -479,7 +549,7 @@
 				.then(res => {
 					this.categories = []
 					console.log(res)
-					wx.hideLoading()
+
 					if (res.status == "200") {
 						for (var i = 0; i < res.data.length; i++) {
 							this.categories.push(res.data[i].name)
@@ -499,25 +569,6 @@
 						duration: 2000
 					})
 				})
-			// 获取物料列表
-		},
-		mounted(query) {
-			// 接收页面参数
-
-			console.log(this.$root.$mp.query)
-			var router = this.$root.$mp.query;
-			if (router.from == "selectDriver") {
-				this.driverInfo = router
-				this.showDriver = false
-			}
-			if (router.from == "selectCar") {
-				this.carInfo = router;
-				this.showCar = false;
-			}
-			if (router.from == "selectescorts") {
-				this.escortInfo = router;
-				this.showPeople = false;
-			}
 		}
 	}
 </script>
@@ -528,6 +579,28 @@
 		padding: 0px;
 		background-color: #efeff4;
 		overflow-x: hidden;
+	}
+
+	.btnGroup {
+		width: 100%;
+		height: 50px;
+		text-align: right;
+		border-top: 1px solid #ddd;
+
+	}
+
+	.reset {
+		float: right;
+		width: 60px;
+		height: 30px;
+		line-height: 30px;
+		font-size: 12px;
+		text-align: center;
+		margin-right: 20px;
+		background-color: #2E79FF;
+		color: #fff;
+		margin-top: 10px;
+		border-radius: 5px;
 	}
 
 	.line {
@@ -570,6 +643,8 @@
 
 	.weui-cell {
 		background-color: #fff;
+		position: initial;
+		border-top: 1px solid #efeff4;
 	}
 
 	.top {
@@ -584,7 +659,7 @@
 		text-align: center;
 		font-size: 20px;
 		font-weight: bold;
-		width:90%;
+		width: 90%;
 		margin-left: 5%;
 		margin-bottom: 40px;
 	}
@@ -618,7 +693,7 @@
 	}
 
 	.picker {
-		color: #b5b5b5
+		color: #000
 	}
 
 	.choose {
@@ -626,11 +701,17 @@
 		margin-top: 10px;
 		width: 100%;
 		box-sizing: border-box;
+
 	}
 
 	.choose p {
 		text-align: center;
 		padding: 10px 0px;
+
+	}
+
+	.t {
+		border-bottom: 1px solid #ddd
 	}
 
 	.weui-btn {
@@ -644,8 +725,7 @@
 	.driver {
 		margin: 20px 3%;
 		width: 94%;
-		border: 1px solid #ddd;
-
+		margin-top: 0px
 	}
 
 	.fontWight {
@@ -661,8 +741,7 @@
 
 	.driverInfo {
 
-		text-align: left !important;
-		margin-left: 70px;
+		text-align: center !important;
 		color: #4a4a4a;
 		font-size: 14px;
 		box-sizing: border-box
@@ -678,6 +757,7 @@
 		bottom: 0px;
 		left: 0px;
 		height: 50px;
+		z-index: 9999999;
 		border-top: 1px solid #ddd;
 		background-color: #fff;
 	}

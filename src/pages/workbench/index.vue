@@ -273,12 +273,8 @@
 			}
 		},
 
-		mounted() {
-			// 公司信息
-			wx.showLoading({
-				title: "加载中...",
-				mask: true
-			})
+		onShow() {
+			// 公司信
 			this.$http.get("/workbench/company_account")
 				.then(res => {
 					console.log(res)
@@ -360,7 +356,7 @@
 			})
 			// 根据用户获取权限
 			setTimeout(function () {
-				wx.hideLoading()
+				 
 			}, 2000)
 		},
 	}

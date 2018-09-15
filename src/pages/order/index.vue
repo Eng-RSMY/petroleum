@@ -17,7 +17,7 @@
 					</p>
 					<p>
 						<span>订购量：</span>
-						<span>{{item.orderWeight}}</span>
+						<span>{{item.orderWeight}} 吨</span>
 					</p>
 					<p>
 						<span>货车司机：</span>
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 		<div class="divTab" v-show="nowIndex===1">
-			<div style="width:100%" v-if="ishave">
+			<div style="width:100%" v-if="ishave1">
 				<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.id)">
 					<p>
 						<span>订单号：</span>
@@ -71,7 +71,7 @@
 					</p>
 					<p>
 						<span>订购量：</span>
-						<span>{{item.orderWeight}}</span>
+						<span>{{item.orderWeight}} 吨</span>
 					</p>
 					<p>
 						<span>货车司机：</span>
@@ -155,18 +155,14 @@
 					.then(res => {
 						console.log(res)
 						if (res.data.content.length > 0) {
-							this.ishave = true
 							for (var i = 0; i < res.data.content.length; i++) {
 								this.waiting.push(res.data.content[i]);
 							}
-							console.log(this.waiting)
+						} else {
+							this.foot = false;
 						}
-						if (res.data.content.length > 0 && res.data.content.length < 5) {
-							this.isshow = false
-						} else if (res.data.content.length == 5) {
-							this.isshow = true
-							this.foot = true
-						}
+
+						console.log(this.waiting)
 					})
 					.catch(res => {
 						console.log(res)
@@ -190,19 +186,11 @@
 					.then(res => {
 						console.log(res)
 						if (res.data.content.length > 0) {
-							if (res.data.content.length > 0) {
-								this.ishave = true
-								for (var i = 0; i < res.data.content.length; i++) {
-									this.orderList.push(res.data.content[i]);
-								}
-								console.log(this.waiting)
+							for (var i = 0; i < res.data.content.length; i++) {
+								this.orderList.push(res.data.content[i]);
 							}
-							if (res.data.content.length > 0 && res.data.content.length < 5) {
-								this.isshow = false
-							} else if (res.data.content.length == 5) {
-								this.isshow = true
-								this.foot = true
-							}
+						} else {
+							this.foot1 = false;
 						}
 					})
 					.catch(res => {
@@ -312,8 +300,18 @@
 			this.$http.get("/orders/waiting", params)
 				.then(res => {
 					console.log(res)
-					if (res.status == "200") {
+					if (res.data.content.length > 0) {
+						this.ishave = true
+
 						this.waiting = res.data.content
+
+						console.log(this.waiting)
+					}
+					if (res.data.content.length > 0 && res.data.content.length < 5) {
+						this.isshow = false
+					} else if (res.data.content.length == 5) {
+						this.isshow = true
+						this.foot = true
 					}
 				})
 				.catch(res => {
@@ -333,8 +331,15 @@
 			this.$http.get("/orders/complete", params1)
 				.then(res => {
 					console.log(res)
-					if (res.status == "200") {
+					if (res.data.content.length > 0) {
+						this.ishave1 = true
 						this.orderList = res.data.content
+					}
+					if (res.data.content.length > 0 && res.data.content.length < 5) {
+						this.isshow1 = false
+					} else if (res.data.content.length == 5) {
+						this.isshow1 = true
+						this.foot1 = true
 					}
 				})
 				.catch(res => {

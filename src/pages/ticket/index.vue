@@ -21,7 +21,7 @@
 				<p>电话号码</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="number" v-model.lazy="companyInfo.contactNumber" placeholder="请输入">
+				<input class="input" type="number" v-model.lazy="companyInfo.contactNumber" placeholder="请输入" maxlength="11">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -29,7 +29,7 @@
 				<p>开户行</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.bankName" placeholder="请输入">
+				<input class="input" type="text" v-model.lazy="companyInfo.bankName" placeholder="请输入" maxlength="40">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -115,7 +115,6 @@
 	}
 
 	.weui-cell__bd {
-		padding-left: 5%;
 		color: #000;
 		width: 40%;
 	}

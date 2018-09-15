@@ -1,8 +1,8 @@
 <template>
 	<div class="container">
 		<!-- <div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)"> -->
-		<div v-if="ishave">
-			<div class="orderInfo" v-for="(item,index) in orderList" :key="index">
+		<div v-if="ishave" style="width:100%">
+			<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)">
 				<p>
 					<span>时间：</span>
 					<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
@@ -111,9 +111,11 @@
 						if (res.data.content.length > 0) {
 							this.ishave = true
 							for (var i = 0; i < res.data.content.length; i++) {
+								res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
 								this.orderList = res.data.content
+
 							}
-							
+
 						}
 						if (res.data.content.length > 0 && res.data.content.length < 5) {
 							this.isshow = false

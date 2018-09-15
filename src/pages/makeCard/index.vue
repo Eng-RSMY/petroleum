@@ -12,11 +12,11 @@
 				</p>
 				<p>
 					<span>订购量：</span>
-					<span>{{orderInfo.orderWeight}}</span>
+					<span>{{orderInfo.orderWeight}} 吨</span>
 				</p>
 				<p>
 					<span>下单价格：</span>
-					<span>{{orderInfo.orderPrice}}</span>
+					<span>{{orderInfo.orderPrice}} 元/吨</span>
 				</p>
 				<p>
 					<span>货车司机：</span>
@@ -61,7 +61,7 @@
 			</div>
 			<div class="weui-cell" style="border-top: none">
 				<div class="weui-cell__bd">
-					<p>订购状态</p>
+					<p>订单状态</p>
 				</div>
 				<div class="weui-cell__ft">
 					<p style="color: #2E79FF;">{{orderInfo.statusName}}</p>
@@ -79,12 +79,10 @@
 			<div class="two-bar-codes" @click="showImg">
 				<!-- <div class="two-bar-codes"> -->
 				<p>二维码</p>
-
-				<qrcode :value="orderInfo.encryptOrderNumber" :options="{ size: 200 }"></qrcode>
-
+				<img :src="url" class="img" style="width:200px;height:200px;margin:0 auto;display:block;" alt="">
 			</div>
 			<div class="mask" v-if="isShowImg" @click="hideImg">
-				
+
 			</div>
 		</div>
 		<div v-else>
@@ -102,7 +100,8 @@
 			return {
 				orderInfo: "",
 				ishave: false,
-				isShowImg: false
+				isShowImg: false,
+				url: ""
 			}
 		},
 		methods: {
@@ -115,34 +114,40 @@
 			},
 			hideImg() {
 				this.isShowImg = false
+			},
+			getMakekCard() {
+				this.$http.get("/card")
+					.then(res => {
+						 
+						console.log(res)
+						if (res.status == "200") {
+							this.orderInfo = res.data
+							this.ishave = true
+							this.url = "https://sapi.k780.com/?app=qr.get&data=" + res.data.encryptOrderNumber + "&level=L&size=7"
+							console.log(url)
+						} else {
+							wx.showToast({
+								title: res.statusText,
+								icon: 'none',
+								duration: 2000
+							})
+						}
+						
+					})
+					.catch(res => {
+						 
+						wx.showToast({
+							title: res.response.data.message,
+							icon: 'none',
+							duration: 2000
+						})
+					})
 			}
 		},
 
 		mounted() {
-			this.$http.get("/card")
-				.then(res => {
-					console.log(res)
-					if (res.status == "200") {
-						this.orderInfo = res.data
-						this.ishave = true
-						// this.qrcode(res.data.encryptOrderNumber)
-
-
-					} else {
-						wx.showToast({
-							title: res.statusText,
-							icon: 'none',
-							duration: 2000
-						})
-					}
-				})
-				.catch(res => {
-					wx.showToast({
-						title: res.response.data.message,
-						icon: 'none',
-						duration: 2000
-					})
-				})
+			Object.assign(this.$data, this.$options.data())
+			this.getMakekCard()
 		}
 	}
 </script>
@@ -216,11 +221,7 @@
 		line-height: 50px;
 	}
 
-	.two-bar-codes .img {
-		margin: 20px auto;
-	}
-
-	/* .img3 {
+	.img3 {
 		width: 200px;
 		height: 200px;
 		position: fixed;
@@ -228,7 +229,7 @@
 		top: 50%;
 		margin-left: -100px;
 		margin-top: -100px
-	} */
+	}
 
 	/* .mask {
 		width: 100%;

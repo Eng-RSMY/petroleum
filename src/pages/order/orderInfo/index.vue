@@ -6,20 +6,27 @@
 				<span>订单号：</span>
 				<span>{{orderInfo.number == null ? "暂无数据" : orderInfo.number}}</span>
 			</p>
+			<!-- <p>
+				<span>卡号：</span>
+				<span>{{orderInfo.number == null ? "暂无数据" : orderInfo.number}}</span>
+			</p>
+			<p>
+				<span>卡面编号：</span>
+				<span>{{orderInfo.number == null ? "暂无数据" : orderInfo.number}}</span>
+			</p> -->
 			<p>
 				<span>订购货物:</span>
 				<span>
-					{{orderInfo.categoryName}} 
-					{{orderInfo.oilName}}
+					{{orderInfo.categoryName}} {{orderInfo.oilName}}
 				</span>
 			</p>
 			<p>
 				<span>订购量：</span>
-				<span>{{orderInfo.orderWeight == null ? "暂无数据" : orderInfo.orderWeight}}</span>
+				<span>{{orderInfo.orderWeight == null ? "暂无数据" : orderInfo.orderWeight + "吨"}}</span>
 			</p>
 			<p>
 				<span>下单价格：</span>
-				<span>{{orderInfo.orderPrice}}</span>
+				<span>{{orderInfo.orderPrice}} 元/吨</span>
 			</p>
 			<p>
 				<span>货车司机：</span>
@@ -35,7 +42,7 @@
 			</p>
 			<p>
 				<span>司机身份证号：</span>
-				<span>{{orderInfo.driverIdNumber  == null ? "暂无数据" : orderInfo.driverIdNumber}}</span>
+				<span>{{orderInfo.driverIdNumber == null ? "暂无数据" : orderInfo.driverIdNumber}}</span>
 			</p>
 			<p>
 				<span>押运员：</span>
@@ -64,7 +71,7 @@
 		</div>
 		<div class="weui-cell" style="border-top: none;padding: 20px 0px;">
 			<div class="weui-cell__bd">
-				<p>订购状态</p>
+				<p>订单状态</p>
 			</div>
 			<div class="weui-cell__ft">
 				<p style="color: #2E79FF;">{{orderInfo.statusName}}</p>
@@ -80,7 +87,7 @@
 		</div>
 		<div class="two-bar-codes">
 			<p>二维码</p>
-			<canvas class="img" style="width: 200px; height: 200px;" canvas-id="myQrcode"></canvas>
+			<img :src="url" class="img" style="width:200px;height:200px;margin:0 auto;display:block;" alt="">
 			<!-- <div class="img">
 					<img src="https://qr.api.cli.im/qr?data=www.baidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=f33aa9d4852b6c3e3439d4e50f311c26" alt="">
 			</div> -->
@@ -89,12 +96,12 @@
 </template>
 
 <script>
-	import drawQrcode from 'weapp-qrcode'
 	export default {
 		data() {
 			return {
 				orderInfo: "",
-				from:"",
+				from: "",
+				url: "",
 			}
 		},
 
@@ -102,38 +109,40 @@
 		},
 
 		methods: {
-			
+
 
 
 		},
 
-		onUnload(){
-			console.log("页面已卸载")
-			if(this.from == "selfHelp"){
-				wx.switchTab({
-					url:"/pages/workbench/main"
-				})
-			}
-			
-		},
+		// onUnload() {
+		// 	console.log("页面已卸载")
+		// 	console.log(this.$root)
+		// 	console.log(this.from === "selfHelp")
+		// 	if (this.from === "selfHelp") {
+
+		// 		wx.navigateBack({
+		// 			delta: 2
+		// 		})
+		// 	} else {
+		// 		wx.navigateBack({
+		// 			delta:1
+		// 		})
+		// 	}
+
+		// },
 		mounted() {
 			var orderId = this.$root.$mp.query.orderInfo;
-			var from=this.$root.$mp.query.from;
-			if(from){
-				this.from=from;
+			var from = this.$root.$mp.query.from;
+			if (from) {
+				this.from = from;
 			}
 			this.$http.get(`/orders/${orderId}`)
 				.then(res => {
 					console.log(res)
 					if (res.status == "200") {
 						this.orderInfo = res.data
-						// this.qrcode(res.data.encryptOrderNumber)
-						drawQrcode({
-							width: 200,
-							height: 200,
-							canvasId: 'myQrcode',
-							text: res.data.encryptOrderNumber
-						})
+						this.orderInfo.orderedTime=this.orderInfo.orderedTime.replace(/T/,"  ")
+						this.url = "https://sapi.k780.com/?app=qr.get&data=" + res.data.encryptOrderNumber + "&level=L&size=7"
 					} else {
 						wx.showToast({
 							title: res.statusText,
@@ -161,6 +170,7 @@
 		background-color: #efeff4;
 		overflow-x: hidden;
 	}
+
 	.title {
 		width: 100%;
 		background-color: #fff;
@@ -171,6 +181,7 @@
 		line-height: 50px;
 		padding-left: 5%;
 	}
+
 	.weui-cell__bd {
 		padding-left: 5%;
 		color: #000;

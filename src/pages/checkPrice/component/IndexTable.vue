@@ -20,13 +20,9 @@
 			}
 		},
 		mounted() {
-			wx.showLoading({
-				title: "正在获取数据",
-				mask: true
-			})
 			this.$http.get("/prices")
 				.then(res => {
-					wx.hideLoading()
+					 
 					console.log(res)
 					if (res.status == "200") {
 						this.tableList = res.data
@@ -34,7 +30,7 @@
 
 				})
 				.catch(res => {
-					wx.hideLoading()
+					 
 					console.log(res)
 				})
 		},
@@ -44,7 +40,8 @@
 <style scoped>
 	.table {
 		width: 100%;
-		height: 35px;
+		margin-top: 40px;
+		padding-bottom: 30px;
 	}
 
 	.table ul {
@@ -59,7 +56,6 @@
 
 	.table ul li {
 		width: 25%;
-		height: 35px;
 		line-height: 35px;
 		text-align: center;
 		color: black;

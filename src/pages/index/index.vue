@@ -142,10 +142,6 @@
 						duration: 1000
 					})
 				} else {
-					wx.showLoading({
-						title: "正在获取公司",
-						mask: true
-					})
 					console.log(val)
 					var phone = val.target.value
 					var params = {
@@ -153,7 +149,7 @@
 					}
 					this.$http.get(`/public/companies`, params).then(res => {
 						console.log(res)
-						wx.hideLoading()
+						 
 						this.array = []
 						this.pickSelect = "公司名称请选择"
 						if (res.data.length > 0) {
@@ -181,7 +177,7 @@
 
 					}).catch(res => {
 						console.log(res)
-						wx.hideLoading()
+						 
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,
@@ -372,6 +368,7 @@
 		},
 
 		mounted() {
+			Object.assign(this.$data, this.$options.data())
 			this.login = true;
 		}
 	}

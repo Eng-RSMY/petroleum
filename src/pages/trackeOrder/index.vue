@@ -12,7 +12,7 @@
 				</p>
 				<p>
 					<span>订购量：</span>
-					<span>{{item.orderWeight == null ? "暂无数据" : item.orderWeight}}</span>
+					<span>{{item.orderWeight == null ? "暂无数据" : item.orderWeight + "吨"}}</span>
 				</p>
 				<p>
 					<span>货车司机：</span>
@@ -30,7 +30,8 @@
 					<div class="weui-cell__bd">
 						<p style="display: inline-block;width:40%">订购金额</p>
 						<p style="color: #FF001F;font-size: 17px;display: inline-block;width:60%">{{item.orderTotalPrice == null ? "暂无数据" :
-							"¥"+item.orderTotalPrice}}</p>
+							"¥"+item.orderTotalPrice}}
+						</p>
 					</div>
 					<div class="weui-cell__ft">
 						<p style="color: #2E79FF;font-size: 17px">{{item.statusName}}</p>
@@ -59,8 +60,8 @@
 				orderList: "",
 				foot: true,
 				page: 0,
-				isshow:false,
-				ishave:false
+				isshow: false,
+				ishave: false
 			}
 		},
 
@@ -83,18 +84,13 @@
 					.then(res => {
 						console.log(res)
 						if (res.data.content.length > 0) {
-							this.ishave = true
-							this.orderList.push(res.data.content[i]);
+							res.data.content.forEach(element => {
+								this.orderList.push(element)
+							});
+						}else{
+							this.foot=false
 						}
-						if (res.data.content.length > 0 && res.data.content.length < 5) {
-							this.isshow = false;
-							this.foot = false;
-						} else if (res.data.content.length == 5) {
-							this.isshow = true;
-							this.foot = true;
-						} else {
-							this.ishave = false
-						}
+
 					})
 					.catch(res => {
 						console.log(res)
@@ -125,17 +121,21 @@
 			this.$http.get("/track_order", params)
 				.then(res => {
 					console.log(res)
-					if (res.status == "200") {
-						if(res.data.content.length>0){
-							this.orderList = res.data.content
-							this.ishave=true;
-						}else if(res.data.content.length<5){
-							this.isshow=false;
-						} else{
-							this.isshow=true;
-						}
-						
+
+					if (res.data.content.length > 0) {
+						this.ishave = true
+						this.orderList = res.data.content
 					}
+					if (res.data.content.length > 0 && res.data.content.length < 5) {
+						this.isshow = false;
+						this.foot = false;
+					} else if (res.data.content.length == 5) {
+						this.isshow = true;
+						this.foot = true;
+					} else {
+						this.ishave = false
+					}
+
 				})
 				.catch(res => {
 					console.log(res)
@@ -243,15 +243,17 @@
 	.footer p {
 		padding: 11px 0 0 0;
 	}
-	.img{
-		width:200px;
+
+	.img {
+		width: 200px;
 		height: 200px;
-		position:fixed;
+		position: fixed;
 		left: 50%;
 		top: 50%;
 		margin-left: -100px;
 		margin-top: -100px
 	}
+
 	.img {
 		width: 200px;
 		height: 200px;
