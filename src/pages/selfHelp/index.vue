@@ -11,8 +11,7 @@
 				</div>
 				<div class="weui-flex__item">
 					<div class="placeholder fontWight">{{companyInfo.orderedMoney}}</div>
-					<div class="placeholder1">已下单</div>
-
+					<div class="placeholder1">冻结金额</div>
 				</div>
 				<div class="weui-flex__item">
 					<div class="placeholder fontWight">{{companyInfo.availableBalance}}</div>
@@ -55,7 +54,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
+			<div class="weui-cell" style="position: relative;">
 				<div class="weui-cell__bd">
 					<p>物料重量</p>
 				</div>
@@ -64,6 +63,14 @@
 					<input class="input" style="color: #000" type="digit" @change="input" maxlength="5" v-model="num" placeholder="请输入">
 				</div>
 			</div>
+      <div class="weui-cell" style="border-bottom: 1px solid #ddd;color:#a6a6a6;position: relative;">
+        <div class="weui-cell__bd">
+          <p>物料单价</p>
+        </div>
+        <div class="weui-cell__ft">
+          <span class="dw">￥{{oilPrice||0}}元/吨</span>
+        </div>
+      </div>
 		</div>
 		<div class="choose">
 			<p class="t">
@@ -92,57 +99,27 @@
 				</div>
 			</div>
 		</div>
-		<div class="choose">
-			<p class="t">
-				<span class="fontSize">选择车辆</span>
-			</p>
-			<button class="weui-btn weui-btn_default" v-if="showCar" @click="chooseCar" style="background-color: #fff;border-color: #dedede">请选择</button>
-			<div class="driver" v-else>
-				<p class="driver_phone driverInfo">
-					<span>车牌号：</span>
-					<span>{{carInfo.carNumber == "null" ? "暂无数据" : carInfo.carNumber}}</span>
-				</p>
-				<p class="driver_name driverInfo">
-					<span>行驶证号：</span>
-					<span>{{carInfo.drivingNumber == "null" ? "暂无数据" : carInfo.drivingNumber}}</span>
-				</p>
-				<p class="driver_name driverInfo">
-					<span>危险品运输证号：</span>
-					<span>{{carInfo.transportNumber == "null" ? "暂无数据" : carInfo.transportNumber}}</span>
-				</p>
-				<div class="btnGroup">
-					<span class="reset" @click="reset1">重新选择</span>
-				</div>
-			</div>
 
-		</div>
-		<div class="choose" style="margin-bottom: 60px">
-			<p class="t">
-				<span class="fontSize">选择已有押车员下单(可不选)</span>
-			</p>
-			<button class="weui-btn weui-btn_default" v-if="showPeople" @click="choosePeoPle" style="background-color: #fff;border-color: #dedede">请选择</button>
-			<div class="driver" v-else>
-				<p class="driver_name driverInfo">
-					<span>用户名：</span>
-					<span>{{escortInfo.username == "null" ? "暂无数据" : escortInfo.username}}</span>
-				</p>
-				<p class="driver_name driverInfo">
-					<span>真实姓名：</span>
-					<span>{{escortInfo.realName == "null" ? "暂无数据" : escortInfo.realName}}</span>
-				</p>
-				<p class="driver_phone driverInfo">
-					<span>绑定手机号：</span>
-					<span>{{escortInfo.phone == "null" ? "暂无数据" : escortInfo.phone}}</span>
-				</p>
-				<p class="driver_name driverInfo">
-					<span>身份证号：</span>
-					<span>{{escortInfo.idNumber == "null" ? "暂无数据" : escortInfo.idNumber}}</span>
-				</p>
-				<div class="btnGroup">
-					<span class="reset" @click="reset2">重新选择</span>
-				</div>
-			</div>
-		</div>
+    <div class="choose" style="margin-bottom: 60px">
+      <p class="t">
+        <span class="fontSize">出入车牌号</span>
+      </p>
+      <div class="carno-input" contenteditable="true" @click.stop="showInput">{{carNo||"请输入车牌号"}}</div>
+    </div>
+
+    <div class="size-seat" v-show="isInputData1Show||isInputData2Show"></div>
+
+    <div class="input-box" v-if="isInputData1Show">
+      <div class="i-b-li lf" v-for="(item, index) of inputData1" :key="index" @click="getPro(item)" style="float: left;">{{ item }}</div>
+      <div class="i-b-del lf" @click="inputClear" style="float: left;">清空</div>
+      <div class="i-b-close lf" @click="inputClose" style="float: left;">关闭</div>
+    </div>
+    <div class="keyNums" v-if="isInputData2Show">
+      <div class="i-b-li lf" v-for="(keyItem, keyIndex) of inputData2" :key="keyIndex" @click="getNum(keyItem)" style="float: left;">{{ keyItem }}</div>
+      <div class="i-b-ok lf" @click="getOk" style="float: left;">确定</div>
+      <div class="i-b-d lf" @click="getDel" style="float: left;">删除</div>
+    </div>
+
 		<div class="footer">
 			<span style="font-size: 20px">{{sumPrice}}</span>
 			<button class="weui-btn weui-btn_primary" @click="creatOrder">提交订单</button>
@@ -188,10 +165,22 @@
 				oilPrice: "",
 				// 总价
 				sumPrice: "¥0",
-				driverInfo: "",
-				carInfo: "",
-				escortInfo: ""
-
+				driverInfo: {},
+//				carInfo: "",
+//				escortInfo: ""
+        carNo:"",
+        isInputData1Show: false,
+        isInputData2Show: false,
+        inputData1: ["京", "沪", "浙", "苏", "粤", "鲁",
+          "晋", "冀", "豫", "川", "渝", "辽", "吉", "黑", "皖",
+          "鄂", "津", "贵", "云", "桂", "琼", "青", "新", "藏", "蒙",
+          "宁", "甘", "陕", "闽", "赣", "湘"
+        ],
+        inputData2: ["0", "1", "2", "3", "4", "5", "6",
+          "7", "8", "9", "Q", "W", "E", "R", "T", "Y", "U",
+          "P", "A", "S", "D", "F", "G", "H", "J", "K", "L",
+          "Z", "X", "C", "V", "B", "N", "M"
+        ]
 			}
 		},
 		methods: {
@@ -398,13 +387,22 @@
 					this.showDialog = true;
 				} else {
 					// 下单
+          if(!this.driverInfo.key){
+            wx.showToast({
+              title: '请选择司机',
+              icon: 'none',
+              duration: 2000
+            })
+            return false
+          }
 					var params = {
 						categoryName: this.pickSelect,
 						oilName: this.pickSelect1,
 						orderWeight: this.num,
 						driverId: this.driverInfo.key,
-						escortId: this.escortInfo.length > 0 ? this.escortInfo.key : "",
-						carId: this.carInfo.key
+            carNumber:this.carNo
+//						escortId: this.escortInfo.length > 0 ? this.escortInfo.key : "",
+//						carId: this.carInfo.key
 					}
 					this.$http.post("/self_order", params)
 						.then(res => {
@@ -484,7 +482,65 @@
 						})
 					})
 
-			}
+			},
+      getPro(val) {
+        this.carNo = val
+        if (this.carNo != '') {
+          this.isInputData1Show = false
+          this.isInputData2Show = true
+        }
+      },
+      getNum(val) {
+        if (this.carNo.length < 6) {
+          this.carNo += val
+        }else if (this.carNo.length == 6){
+          this.carNo += val
+          this.isInputData1Show = false
+          this.isInputData2Show = false
+        }
+      },
+      getOk() {
+        this.isInputData1Show = false
+        this.isInputData2Show = false
+      },
+      getDel() {
+        if (this.carNo.length > 1) {
+          let cc = this.carNo.split("")
+          cc.splice(this.carNo.length - 1, 1)
+          this.carNo = cc.join("")
+        } else if (this.carNo.length === 1) {
+          this.isInputData2Show = false
+          this.isInputData1Show = true
+        } else {
+          console.log("别删除了，都没了")
+        }
+      },
+      inputClose() {
+        this.isInputData1Show = false
+      },
+      inputClear() {
+        this.carNo = ''
+      },
+      showInput(){
+        this.carNo= "";
+        var that = this
+        if (that.carNo == '') {
+          that.isInputData2Show = false
+          that.isInputData1Show = true
+        } else {
+          that.isInputData1Show = false
+          that.isInputData2Show = true
+        }
+        wx.createSelectorQuery().select('.container').boundingClientRect(function (rect) {
+          // 使页面滚动到底部
+          setTimeout(function () {
+            wx.pageScrollTo({
+              scrollTop: rect.height,
+              duration:15
+            })
+          },0)
+        }).exec()
+      }
 
 		},
 
@@ -507,7 +563,6 @@
 				this.showPeople = false;
 			}
 
-			// 获取物料列表
 		},
 		mounted(query) {
 			// 接收页面参数
@@ -575,6 +630,7 @@
 
 <style scoped>
 	.container {
+    position: relative;
 		width: 100%;
 		padding: 0px;
 		background-color: #efeff4;
@@ -757,7 +813,7 @@
 		bottom: 0px;
 		left: 0px;
 		height: 50px;
-		z-index: 9999999;
+		z-index: 10000;
 		border-top: 1px solid #ddd;
 		background-color: #fff;
 	}
@@ -827,4 +883,95 @@
 		line-height: 40px;
 		border-radius: 5px;
 	}
+
+  .carno-input {
+    margin:50rpx auto;
+    padding-left: 10rpx;
+    text-align:left;
+    width: 80%;
+    height: 100%;
+    min-height: 40px;
+    line-height: 40px;
+    border:1px solid #000;
+  }
+
+  .size-seat{
+    height: 300rpx;
+  }
+
+  .input-box {
+    overflow: hidden;
+    background-color: #CED3D9;
+    padding: 30rpx 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100000;
+  }
+
+  .keyNums {
+    overflow: hidden;
+    background-color: #CED3D9;
+    padding: 30rpx 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100000;
+  }
+
+  .i-b-li {
+    font-size: 36rpx;
+    height: 70rpx;
+    width: 70rpx;
+    line-height: 70rpx;
+    text-align: center;
+    border: 2rpx solid #ddd;
+    margin: 5rpx;
+    background-color: #fff;
+  }
+
+  .i-b-close {
+    width: 100rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    font-size: 32rpx;
+    text-align: center;
+    background-color: #fff;
+    border: 2rpx solid #ddd;
+    margin: 5rpx;
+  }
+
+  .i-b-del {
+    width: 100rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    font-size: 32rpx;
+    text-align: center;
+    background-color: #fff;
+    border: 2rpx solid #ddd;
+    margin: 5rpx;
+  }
+
+  .i-b-ok {
+    width: 100rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    font-size: 32rpx;
+    text-align: center;
+    background-color: #fff;
+    border: 2rpx solid #ddd;
+    margin: 5rpx;
+    /* margin-left: 35%; */
+  }
+
+  .i-b-d {
+    width: 100rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    font-size: 32rpx;
+    text-align: center;
+    background-color: #fff;
+    border: 2rpx solid #ddd;
+    margin: 5rpx;
+  }
 </style>

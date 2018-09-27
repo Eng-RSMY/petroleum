@@ -56,6 +56,7 @@
 		},
     components:{news},
 		methods: {
+      //todo 需要联调接口后继续
       async toLogin(){
         const access_token = wx.getStorageSync('access_token');
         const token_type = wx.getStorageSync('token_type');
