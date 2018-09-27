@@ -24,13 +24,14 @@
 				</div>
 			</div>
 		</div>
-		<div v-else>
+		<div v-else-if="!fromIndex">
 			<img src="/static/images/none.png" alt="" class="img">
 		</div>
 	</div>
 </template>
 <script>
 	export default {
+    props:["fromIndex"],
 		data() {
 			return {
 				bulletin: [],

@@ -94,7 +94,7 @@
 				index: 0,
 				array: [],
 				array1: null,
-				phone: "",
+				phone: wx.getStorageSync('phone'),
 				height: "",
 				login: true,
 				value: "",
@@ -152,50 +152,50 @@
 				} else {
 					console.log(val)
 					var phone = val.target.value
-					var params = {
-						phone,
-					}
-					this.$http.get(`/public/companies`, params).then(res => {
-						console.log(res)
-
-						this.array = []
-						this.pickSelect = "公司名称请选择"
-						if (res.data.length > 0) {
-							for (let item of res.data) {
-								this.array.push(item.name)
-							}
-
-							this.array1 = res.data;
-							this.pickSelect = res.data[0].name;
-							this.company = res.data[0];
-							this.isInputFinish = false;
-						} else {
-							wx.showModal({
-								title: '提示',
-								showCancel: false,
-								content: '您的手机号未注册垦利油好小程序，请联系管理员开通账号',
-								success: function (res) {
-									if (res.confirm) {
-										console.log('用户点击确定')
-									}
-								}
-							})
-						}
-
-
-					}).catch(res => {
-						console.log(res)
-
-						// .response.data.message
-						wx.showToast({
-							title: res.response.data.message,
-							icon: 'none',
-							duration: 2000
-						})
-					})
+					this.queryCompanies(phone)
 				}
 
 			},
+      queryCompanies(phone){
+        var params = {
+          phone,
+        }
+        this.$http.get(`/public/companies`, params).then(res => {
+          console.log(res)
+
+          this.array = []
+          this.pickSelect = "公司名称请选择"
+          if (res.data.length > 0) {
+            for (let item of res.data) {
+              this.array.push(item.name)
+            }
+
+            this.array1 = res.data;
+            this.pickSelect = res.data[0].name;
+            this.company = res.data[0];
+            this.isInputFinish = false;
+          } else {
+            wx.showModal({
+              title: '提示',
+              showCancel: false,
+              content: '您的手机号未注册垦利油好小程序，请联系管理员开通账号',
+              success: function (res) {
+                if (res.confirm) {
+                  console.log('用户点击确定')
+                }
+              }
+            })
+          }
+
+
+        }).catch(res => {
+          wx.showToast({
+            title: res.response.data.message,
+            icon: 'none',
+            duration: 2000
+          })
+        })
+      },
 			isselect1: function () {
 				this.select1 == true ? this.select1 = false : this.select1 = true;
 			},
@@ -253,6 +253,7 @@
 					})
 				} else {
 					this.login = false;
+          wx.setStorageSync('phone',this.phone)
 					this.showPhone = this.phone;
 					this.showPhone = this.showPhone.split("")
 					for (let i = 3; i < 7; i++) {
@@ -283,9 +284,7 @@
 							wx.setStorageSync('access_token', res.data.access_token)
 							wx.setStorageSync('token_type', res.data.token_type)
 							wx.setStorageSync('refresh_token', res.data.refresh_token)
-              cookies.set("access_token",res.data.access_token)
-							cookies.set("token_type",res.data.token_type)
-							wx.switchTab({
+              wx.switchTab({
 								url: "../../pages/workbench/main",
 								fail: function (res) {
 									console.log(res)
@@ -396,18 +395,14 @@
         this.pickSelect=compony.name?compony.name:this.pickSelect;
       },
 
-      /**
-       * 登录持久化
-       */
-      loginSave(){
-
-      }
-
     },
 
 		mounted() {
 			Object.assign(this.$data, this.$options.data());
 			this.login = true;
+      if(this.phone) {
+        this.queryCompanies(this.phone)
+      }
 		}
 	}
 </script>

@@ -25,7 +25,7 @@
 
       <button @click="toLogin" class="login_btn mb1" size="default">进入我的工作台</button>
 
-      <news></news>
+      <news :fromIndex="true"></news>
 
 		</transition>
 	</div>
@@ -56,13 +56,51 @@
 		},
     components:{news},
 		methods: {
-      toLogin(){
+      async toLogin(){
+        const access_token = wx.getStorageSync('access_token');
+        const token_type = wx.getStorageSync('token_type');
+        const refresh_token = wx.getStorageSync('refresh_token');
+        if(refresh_token){
+          let params={
+            grant_type:'refresh_token',
+            refresh_token:refresh_token
+          }
+          try {
+            let result = await this.$http.post("/oauth/token", params)
+            if(result.data&&result.data.access_token&&result.data.refresh_token){
+              wx.setStorageSync('access_token',result.data.access_token)
+              wx.setStorageSync('refresh_token',result.data.refresh_token)
+              wx.setStorageSync('token_type', result.data.token_type)
+              wx.switchTab({
+                url: "../../pages/workbench/main",
+                fail: function (result) {
+                  console.log(result)
+                }
+              })
+            }else {
+              wx.navigateTo({
+                url: "../login/main",
+                fail: function (res) {
+                  console.log(res)
+                }
+              })
+            }
+          }catch (e){
+            wx.navigateTo({
+              url: "../login/main",
+              fail: function (res) {
+                console.log(res)
+              }
+            })
+          }
+        }else{
         wx.navigateTo({
           url: "../login/main",
           fail: function (res) {
             console.log(res)
           }
         })
+        }
       },
       toDetail(id){
         wx.navigateTo({
