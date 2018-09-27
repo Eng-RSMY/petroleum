@@ -283,8 +283,8 @@
 							wx.setStorageSync('access_token', res.data.access_token)
 							wx.setStorageSync('token_type', res.data.token_type)
 							wx.setStorageSync('refresh_token', res.data.refresh_token)
-							// cookies.set("access_token",res.data.access_token)
-							// cookies.set("token_type",res.data.token_type)
+              cookies.set("access_token",res.data.access_token)
+							cookies.set("token_type",res.data.token_type)
 							wx.switchTab({
 								url: "../../pages/workbench/main",
 								fail: function (res) {
@@ -394,8 +394,16 @@
         this.showComponyFilter=status;
         this.company=compony;
         this.pickSelect=compony.name?compony.name:this.pickSelect;
+      },
+
+      /**
+       * 登录持久化
+       */
+      loginSave(){
+
       }
-		},
+
+    },
 
 		mounted() {
 			Object.assign(this.$data, this.$options.data());
