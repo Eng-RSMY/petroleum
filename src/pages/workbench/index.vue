@@ -110,12 +110,6 @@
 				<div class="placeholder1">预警管理</div>
 
 			</div>
-			<div class="weui-flex__item" @click="toCar" v-if="roleList.vehicleManagement">
-				<div class="placeholder">
-					<img src="/static/images/car.png" alt="" class="img">
-				</div>
-				<div class="placeholder1">车辆管理</div>
-			</div>
 			<div class="weui-flex__item" @click="toNews()">
 				<div class="placeholder">
 					<img src="/static/images/xtgg.png" alt="" class="img">
@@ -204,7 +198,7 @@
 			},
 			toTrackeOrder: function () {
 				wx.navigateTo({
-					url: "../../pages/trackeOrder/main",
+					url: "../../pages/order/main",
 					fail: function (res) {
 						console.log(res)
 					}
@@ -263,14 +257,14 @@
 					url: "../../pages/customerService/main",
 				})
 			},
-			toCar: function () {
-				wx.navigateTo({
-					url: "../../pages/selectCar/main?from=workbench",
-					fail: function (res) {
-						console.log(res)
-					}
-				})
-			}
+			// toCar: function () {
+			// 	wx.navigateTo({
+			// 		url: "../../pages/selectCar/main?from=workbench",
+			// 		fail: function (res) {
+			// 			console.log(res)
+			// 		}
+			// 	})
+			// }
 		},
 
 		onShow() {

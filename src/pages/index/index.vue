@@ -13,7 +13,7 @@
       <div class="page mb1">
         <div class="page__bd">
           <div class="weui-grids">
-            <div v-for="item in oilPriceGrids" :key="index">
+            <div v-for="(item,index) in oilPriceGrids" :key="index">
               <div class="weui-grid oil_grid">
                 <image class="oil_img" src="/static/images/oil.png" />
                 <div class="oil_label_name">{{item.oilName}}</div>

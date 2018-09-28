@@ -28,6 +28,8 @@
     props:["orderStatusFlow","status"],
     methods:{
       renderStatusFlow(){
+        console.log(this.orderStatusFlow)
+        console.log(this.status)
         if(this.orderStatusFlow){
           return false
         }
@@ -56,6 +58,7 @@
           arr.push(obj)
         }
         this.axis=arr
+        console.log(this.axis)
       }
     },
     mounted(){
@@ -72,9 +75,7 @@
     justify-content:space-between;
     padding:20rpx 20rpx;
     box-sizing:border-box;
-
   }
-
   .no-has-flow{
     width: 100%;
     height: 80rpx;

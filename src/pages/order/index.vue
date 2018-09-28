@@ -127,7 +127,7 @@
 				page1: 0,
 				orderList: "",
 				waiting: "",
-				tabsParam: ['待处理订单', '已完成订单'],//（这个也可以用对象key，value来实现）
+				tabsParam: ['未完结订单', '已完成订单'],//（这个也可以用对象key，value来实现）
 				nowIndex: 0,//默认第一个tab为激活状态
 				ishave: false,
 				ishave1: false,

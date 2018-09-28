@@ -14,11 +14,11 @@
 	"libVersion": "2.2.0",
 	"appid": "wx8f41a35d021844a6",
 	"projectname": "pert",
-	"svr": "",
-	"client": "",
-	"qcloudRoot": "",
-	"miniprogramRoot": "./dist/",
-	"pluginRoot": "",
+	"svr": "/",
+	"client": "/",
+	"qcloudRoot": "/",
+	"miniprogramRoot": "dist/",
+	"pluginRoot": "/",
 	"scripts": {},
 	"condition": {
 		"search": {
@@ -37,7 +37,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 5,
 			"list": [
 				{
 					"id": -1,
@@ -70,7 +70,7 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 5,
 					"name": "订单详情",
 					"pathName": "pages/order/orderInfo/main",
 					"query": "orderid=1"
