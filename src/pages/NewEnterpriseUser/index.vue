@@ -80,8 +80,10 @@
 		},
 		methods: {
 			bindAccountChange: function (e) {
-				this.accountIndex = e.mp.detail.value;
-				if (this.roleList[e.mp.detail.value].name == "司机" || this.roleList[e.mp.detail.value].name == "押运员") {
+        if(e){
+          this.accountIndex = e.mp.detail.value;
+        }
+				if (this.roleList[this.accountIndex].name == "司机" || this.roleList[this.accountIndex].name == "押运员") {
 					this.isDriver = true;
 				} else {
 					this.isDriver = false
@@ -146,6 +148,9 @@
 				}
 				this.$http.post(`/users`, params).then(res => {
 					this.prompt('新建成功');
+          if(this.$root.$mp.query.from==="selectDriver"){
+            wx.navigateBack()
+          }else{
 					setTimeout(() => {
 						wx.switchTab({
 							url: "../../pages/workbench/main",
@@ -153,6 +158,7 @@
 							}
 						})
 					}, 1000)
+          }
 				}).catch((res) => {
 					var str = res.response.data.message;
 					str = str.replace("[", "");
@@ -167,11 +173,18 @@
 			// 获取角色
 			console.log("我展示了")
 			this.$http.get("/users/roles").then((res) => {
-
+        let rolesMap={}
 				this.roleList = res.data;
-				for (let item of res.data) {
-					this.accounts.push(item.name);
-				};
+				if(res.data){
+          res.data.forEach((ele,index)=>{
+            this.accounts.push(ele.name)
+            rolesMap[ele.name]=index
+          })
+        }
+        if(this.$root.$mp.query.from==="selectDriver"){
+          this.accountIndex=rolesMap['司机'];
+          this.bindAccountChange()
+        }
 
 			}).catch(res => {
 				wx.showToast({
