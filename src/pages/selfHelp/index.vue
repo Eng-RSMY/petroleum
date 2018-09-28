@@ -44,7 +44,7 @@
 					<p>物料名称</p>
 				</div>
 				<div class="weui-cell__ft">
-					<div class="ishave" v-if="clickPick" @click.stop="ishave" style="color:#000">{{pickSelect1}}</div>
+					<div class="ishave" v-if="clickPick" @click.stop="ishave" style="color:#2E79FF">{{pickSelect1}}</div>
 					<div class="ishave" v-else>
 						<picker @change="bindPickerChange1" :value="index" :range="oils">
 							<view class="picker">
@@ -59,9 +59,9 @@
 					<p>物料重量</p>
 				</div>
 				<div class="weui-cell__ft">
-					<span class="dw" style="color: #000">(吨)</span>
-					<input class="input" style="color: #000" type="digit" @change="input" maxlength="5" v-model="num" placeholder="请输入">
-				</div>
+          <span class="dw" style="color: #2E79FF">(吨)</span>
+          <input class="input" style="color: #2E79FF;" type="digit" @change="input" maxlength="5" v-model="num" placeholder="请输入"/>
+        </div>
 			</div>
       <div class="weui-cell" style="border-bottom: 1px solid #ddd;color:#a6a6a6;position: relative;">
         <div class="weui-cell__bd">
@@ -749,7 +749,7 @@
 	}
 
 	.picker {
-		color: #000
+		color: #2E79FF
 	}
 
 	.choose {
