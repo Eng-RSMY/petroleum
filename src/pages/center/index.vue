@@ -53,8 +53,7 @@
 			}
 		},
 
-		components: {
-		},
+		components: {},
 
 		methods: {
 			logout() {
@@ -67,6 +66,7 @@
 							console.log('用户点击确定')
 							that.personList = {}
 							wx.clearStorageSync()
+              wx.setStroageSync('phone',that.personList.phone)
 							wx.reLaunch({
 								url: "../../pages/index/main",
 								fail: function (res) {

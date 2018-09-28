@@ -2,7 +2,7 @@
 	<div class="container">
 		<!-- <div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)"> -->
 		<div v-if="ishave" style="width:100%">
-			<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.number)">
+			<div class="orderInfo" v-for="(item,index) in orderList" :key="index" @click="toOrderInfo(item.id)">
 				<p>
 					<span>时间：</span>
 					<span>{{item.orderedTime == null ? "暂无数据" : item.orderedTime}}</span>
@@ -12,16 +12,16 @@
 					<span>{{item.categoryName == null ? "暂无数据" : item.categoryName}}</span>
 				</p>
 				<p>
-					<span>油品:</span>
+					<span>物料:</span>
 					<span>{{item.oilName == null ? "暂无数据" : item.oilName}}</span>
 				</p>
 				<p>
 					<span>数量：</span>
-					<span>{{item.weight == null ? "暂无数据" : item.weight}}</span>
+					<span>{{item.weight == null ? "暂无数据" : item.weight+"吨"}}</span>
 				</p>
 				<p>
 					<span>实际支付金额：</span>
-					<span>{{item.totalPrice == null ? "暂无数据" : item.totalPrice}}</span>
+					<span>{{item.totalPrice == null ? "暂无数据" : "￥"+ item.totalPrice +"元"}}</span>
 				</p>
 			</div>
 		</div>

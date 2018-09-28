@@ -77,6 +77,12 @@
 				<p style="color: #2E79FF;">{{orderInfo.statusName}}</p>
 			</div>
 		</div>
+    <div class="weui-cell" style="border-top: none;padding: 20px 0px;">
+      <div class="weui-cell__bd">
+        <p>订单流程时间</p>
+        <time-axis :orderStatusFlow="orderStatusFlow" :status='orderStatus'></time-axis>
+      </div>
+    </div>
 		<div class="weui-cell" style="border-top: none;padding: 20px 0px;">
 			<div class="weui-cell__bd">
 				<p>订购金额</p>
@@ -96,17 +102,19 @@
 </template>
 
 <script>
+  import timeAxis from "./timeAxis.vue"
 	export default {
 		data() {
 			return {
 				orderInfo: "",
 				from: "",
 				url: "",
+        orderStatusFlow:{},
+        orderStatus:''
 			}
 		},
 
-		components: {
-		},
+		components: {timeAxis},
 
 		methods: {
 

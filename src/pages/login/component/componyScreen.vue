@@ -3,8 +3,11 @@
     <modal :hidden="hidden" confirm-text="关闭" @confirm="confirm" no-cancel="nocancel">
       <div class="filterbox">
         <input class="componyinput" v-model="componyName" type="text" placeholder="请输入公司名称" @change="queryComponys">
-        <div class="compony_list">
+        <div v-show="hasCompony" class="compony_list">
           <div class="compony" v-for="(item,index) in componyList" :key="index" @click="chooseCompony(item)">{{item.name}}</div>
+        </div>
+        <div  v-show="!hasCompony" class="no_compony_list">
+          暂无数据
         </div>
       </div>
     </modal>
@@ -19,7 +22,8 @@
         nocancel:'nocancel',
         compony:{},
         componyName:'',
-        componyList:[]
+        componyList:[],
+        hasCompony:false
       }
     },
     methods:{
@@ -29,11 +33,14 @@
           phone:this.phoneNum,
         }
         if(this.componyName){
-          params['name']=this.companyName
+          params['companyName']=this.componyName
         }
         this.$http.get(`/public/companies`, params).then(res => {
-          if (res.data.length > 0) {
+          if (res.data.length>0) {
             that.componyList=res.data
+            that.hasCompony=true
+          }else {
+            that.hasCompony=false
           }
         }).catch(res => {
           console.log(res)
@@ -79,6 +86,11 @@
   .compony_list{
     overflow: scroll;
     height: 500rpx;
+  }
+  .no_compony_list{
+    text-align: center;
+    height: 500rpx;
+    line-height: 500rpx;
   }
   .compony{
     border: 1rpx solid #f0f0f0;

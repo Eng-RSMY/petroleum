@@ -5,12 +5,12 @@
 			<div class="weui-search-bar" :class="{'weui-search-bar_focusing': isSearchBarFocus}" id="searchBar">
 				<div class="weui-search-bar__box">
 					<i class="weui-icon-search"></i>
-					<input type="search" class="weui-search-bar__input" id="searchInput" @change="search" placeholder="搜索车牌号" required/>
-				</div>
+          <input type="search" class="weui-search-bar__input" id="searchInput" @change="search" placeholder="搜索车牌号" required/>
+        </div>
 			</div>
-			<!-- <div class="search-box-img" @click="addItem">
-				<image class="search-box-img-inner" :src="addIconUrl" alt="addIcon" />
-			</div> -->
+      <div class="search-box-img" @click="addItem">
+        <image class="search-box-img-inner" :src="addIconUrl" alt="addIcon" />
+      </div>
 		</div>
 		<!-- 单条信息 -->
 		<div style="width:100%" v-if="ishave">
@@ -152,7 +152,7 @@
 
 			},
 			addItem() {
-				var url = "../addDriver/main"
+				var url = "../NewEnterpriseUser/main?from=selectDriver"
 				wx.navigateTo({ url })
 			},
 			toSelfHelp: function (e) {
@@ -215,44 +215,47 @@
 				var key = e.currentTarget.dataset.key
 				var url = `../../pages/modifyUser/main?id=${key}&address=addDriver`
 				wx.navigateTo({ url })
-			}
-		},
-		mounted() {
-			// 获取企业开票信息
-			var params = {
-				nameOrPhone: this.nameOrPhone,
-				page: 0,
-				size: 5,
-				sort: "id,desc"
-			}
-			this.$http.get("/self_order/drivers", params)
-				.then(res => {
-					console.log(res)
-					if (res.status == "200") {
-						if (res.data.content.length > 0) {
-							this.ishave = true
-							this.driverList = res.data.content;
-						}
-						if (res.data.content.length > 0 && res.data.content.length < 5) {
-							this.isshow = false;
-							this.foot = false;
-						} else if (res.data.content.length == 5) {
-							this.isshow = true;
-							this.foot = true;
-						} else {
-							this.ishave = false
-							this.driverList = []
-						}
+			},
+      queryDrivers(){
+        // 获取企业开票信息
+        var params = {
+          nameOrPhone: this.nameOrPhone,
+          page: 0,
+          size: 5,
+          sort: "id,desc"
+        }
+        this.$http.get("/self_order/drivers", params)
+          .then(res => {
+            console.log(res)
+            if (res.status == "200") {
+              if (res.data.content.length > 0) {
+                this.ishave = true
+                this.driverList = res.data.content;
+              }
+              if (res.data.content.length > 0 && res.data.content.length < 5) {
+                this.isshow = false;
+                this.foot = false;
+              } else if (res.data.content.length == 5) {
+                this.isshow = true;
+                this.foot = true;
+              } else {
+                this.ishave = false
+                this.driverList = []
+              }
 
-					} else {
-						wx.showToast({
-							title: res.statusText,
-							icon: 'none',
-							duration: 2000
-						})
-					}
-				})
-		}
+            } else {
+              wx.showToast({
+                title: res.statusText,
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          })
+      }
+		},
+    onShow(){
+      this.queryDrivers()
+    }
 	}
 </script>
 <style scoped>
@@ -301,7 +304,7 @@
 	}
 
 	.weui-search-bar {
-		width: 100%;
+		width: 90%;
 		height: 27.5px;
 		padding: 0px;
 		position: static;
