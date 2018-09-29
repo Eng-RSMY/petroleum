@@ -2,7 +2,7 @@
 	<div style="height:100%;background-color: #fff">
 		<transition name="fade" mode="out-in" style="height:100%">
 
-      <swiper class="mb1" circular="true" autoplay="true" indicator-dots="true" indicator-color="rgba(0, 0, 0, .3)" indicator-active-color="#000000">
+      <swiper class="mb1 swiper_height" circular="true" autoplay="true" indicator-dots="true" indicator-color="rgba(0, 0, 0, .3)" indicator-active-color="#000000">
         <block v-for="(item,index) in banner" :index="index" :key="key">
           <swiper-item @click="toDetail(item.id)">
             <image :src="item.imageUrl" mode="scaleToFill" class="slide-image"/>
@@ -136,6 +136,10 @@
 </script>
 
 <style scoped>
+
+  .swiper_height{
+    height: 400rpx;
+  }
 
   .slide-image{
     width: 100%;

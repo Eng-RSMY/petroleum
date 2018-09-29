@@ -14,11 +14,11 @@
 	"libVersion": "2.2.0",
 	"appid": "wx8f41a35d021844a6",
 	"projectname": "pert",
-	"svr": "/",
-	"client": "/",
-	"qcloudRoot": "/",
-	"miniprogramRoot": "dist/",
-	"pluginRoot": "/",
+	"svr": "",
+	"client": "",
+	"qcloudRoot": "",
+	"miniprogramRoot": "./dist/",
+	"pluginRoot": "",
 	"scripts": {},
 	"condition": {
 		"search": {
