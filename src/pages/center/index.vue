@@ -65,8 +65,9 @@
 						if (res.confirm) {
 							console.log('用户点击确定')
 							that.personList = {}
+              const phone=wx.getStorageSync('phone')
 							wx.clearStorageSync()
-              wx.setStroageSync('phone',that.personList.phone)
+              wx.setStorageSync('phone',phone)
 							wx.reLaunch({
 								url: "../../pages/index/main",
 								fail: function (res) {
