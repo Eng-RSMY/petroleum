@@ -174,7 +174,7 @@
 			},
 			toMakeCard: function () {
 				wx.navigateTo({
-					url: "../../pages/makeCard/main",
+					url: "../../pages/order/orderInfo/main?from=makeCard",
 					fail: function (res) {
 						console.log(res)
 					}
