@@ -26,11 +26,19 @@
       }
     },
     props:["orderStatusFlow","status"],
+    watch:{
+      orderStatusFlow: {
+        handler: function () {
+          this.renderStatusFlow()
+        },
+        deep: true
+      }
+    },
     methods:{
       renderStatusFlow(){
         console.log(this.orderStatusFlow)
         console.log(this.status)
-        if(this.orderStatusFlow){
+        if(JSON.stringify(this.orderStatusFlow) === '{}'){
           return false
         }
         let arr=[]
