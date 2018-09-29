@@ -86,7 +86,7 @@
 						<div class="c-row-input" contenteditable="true"  @click.stop="showInput">{{carNo}}</div>
 					</div>
 				</div>
-				
+
 				<div class="weui-dialog__ft">
 					<button class="weui-dialog__btn weui-dialog__btn_default" @click="concel">取消</button>
 					<button class="weui-dialog__btn weui-dialog__btn_primary" @click="sure">保存</button>
@@ -367,11 +367,11 @@ export default {
         });
       });
   },
-  
+
 };
 </script>
 
-	
+
 <style scoped>
 .container {
   width: 100%;
