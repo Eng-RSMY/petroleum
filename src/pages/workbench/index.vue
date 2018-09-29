@@ -12,7 +12,7 @@
 				</div>
 				<div class="weui-flex__item">
 					<div class="placeholder fontWight">{{companyInfo.orderedMoney ? companyInfo.orderedMoney : "无"}}</div>
-					<div class="placeholder2">已下单</div>
+					<div class="placeholder2">冻结金额</div>
 				</div>
 				<div class="weui-flex__item">
 					<div class="placeholder fontWight">{{companyInfo.availableBalance ? companyInfo.availableBalance : "无"}}</div>
@@ -350,7 +350,7 @@
 			})
 			// 根据用户获取权限
 			setTimeout(function () {
-				 
+
 			}, 2000)
 		},
 	}
