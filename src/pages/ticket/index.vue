@@ -116,7 +116,6 @@
 
 	.weui-cell__bd {
 		color: #000;
-		width: 40%;
 	}
 
 	.weui-cell {

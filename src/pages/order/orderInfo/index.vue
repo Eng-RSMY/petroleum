@@ -411,9 +411,9 @@ export default {
   margin-top: 5%;
 }
 .weui-input {
-  border: 1px solid #4a4a4a;
+  border: 1px solid #898989;
   height: 40px;
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: left;
   box-sizing: border-box;
   padding-left: 20px;
@@ -434,10 +434,10 @@ export default {
 
 .c-row-input {
   width: 100%;
-  border: 1px solid #4a4a4a;
+  border: 1px solid #898989;
   height: 40px;
   line-height: 40px;
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: left;
   box-sizing: border-box;
   padding-left: 20px;
@@ -635,7 +635,7 @@ export default {
   background-color: #fff;
   padding: 0px;
   line-height: 50px;
-  border-bottom: 1px solid #4a4a4a;
+  border-bottom: 1px solid #ced3d9;
   margin-bottom: 20px;
 }
 .weui-dialog {

@@ -55,7 +55,7 @@
 			</div>
 		</div>
 		<div class="footer" @click="update">
-			<span style="font-size:16px">保存</span>
+			<span style="font-size:32rpx">保存</span>
 		</div>
 		<!-- <button class="weui-btn weui-btn_primary button" @click="update">保存并更新</button> -->
 	</div>
@@ -169,7 +169,7 @@
 			}
 		},
 		onShow() {
-			Object.assign(this.$data, this.$options.data())
+//			Object.assign(this.$data, this.$options.data())
 			// 获取角色
 			console.log("我展示了")
 			this.$http.get("/users/roles").then((res) => {
@@ -209,10 +209,9 @@
 
 	.input-list {
 		display: flex;
-		font-size: 15px;
+		font-size: 30rpx;
 		padding: 10px;
 		margin-top: 10px;
-		background: red;
 		background: #fff;
 		justify-content: space-between;
 	}
@@ -229,13 +228,13 @@
 	}
 
 	.remarks-title {
-		font-size: 15px;
+		font-size: 30rpx;
 	}
 
 	.remarks textarea {
 		background: #e7e7e7;
 		width: 100%;
-		font-size: 14px;
+		font-size: 28rpx;
 		padding: 20px 0;
 		height: 30px;
 		text-indent: .1rem;

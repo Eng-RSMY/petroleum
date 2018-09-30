@@ -73,7 +73,7 @@
   }
   .componyinput{
     width: 100%;
-    display: inline-block;
+    display: block;
     height: 100rpx;
     line-height: 45px;
     background-color: #fff;

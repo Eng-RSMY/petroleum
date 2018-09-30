@@ -12,13 +12,9 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.2.0",
-	"appid": "wx8f41a35d021844a6",
+	"appid": "wxa8914a4b8c1b6a3d",
 	"projectname": "pert",
-	"svr": "",
-	"client": "",
-	"qcloudRoot": "",
-	"miniprogramRoot": "./dist/",
-	"pluginRoot": "",
+	"miniprogramRoot": "dist/",
 	"scripts": {},
 	"condition": {
 		"search": {

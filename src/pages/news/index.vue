@@ -7,11 +7,11 @@
 					<div class="title">
 						<span>{{item.title}}</span>
 					</div>
+          <div class="time">
+            {{item.publishTime}}
+          </div>
 					<div class="subtitle">
 						<span>{{item.subtitle}}</span>
-					</div>
-					<div class="time">
-						{{item.publishTime}}
 					</div>
 				</div>
 			</div>
@@ -109,18 +109,24 @@
 	}
 
 	.title {
-		font-size: 24px;
+		font-size: 36rpx;
 		color: #FF0000;
 	}
 
 	.title span {
+    font-size: 36rpx;
 		color: #000;
 	}
 
 	.subtitle {
-		font-size: 18px;
+		font-size: 24rpx;
 		margin-bottom: 10px;
-		color: #898989
+		color: #898989;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 	}
 
 	.time {

@@ -4,15 +4,13 @@
 			<h1 class="title">
 				{{bulletin.title}}
 			</h1>
-			<h2 class="title1">
-				{{bulletin.subtitle}}
-			</h2>
-			<div class="toptop">
-				发表于{{bulletin.publishTime}}
-			</div>
+      <div class="toptop">
+        发表于{{bulletin.publishTime}}
+      </div>
+
 			<section>
-				<img :src="bulletin.coverUri" mode="widthFix" alt="" class="img">
-				<section v-html="bulletin.content">
+				<img v-show="bulletin.coverUri" :src="bulletin.coverUri" mode="widthFix" alt="" class="img">
+				<section class="content" v-html="bulletin.content">
 
 				</section>
 			</section>
@@ -40,7 +38,8 @@
 			this.$http.get(`/bulletin/${id}`).then(res => {
 				console.log(res)
 				this.bulletin = res.data;
-				this.bulletin.publishTime=this.bulletin.publishTime.replace(/T/,"  ")
+        this.bulletin.content=this.bulletin.content.replace(/\<img/gi,   '<img style="max-width:100%;height:auto" ' );
+        this.bulletin.publishTime=this.bulletin.publishTime.replace(/T/,"  ")
 				console.log(this.bulletin)
 			}).catch(res => {
 				console.log(res)
@@ -72,11 +71,21 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: right;
-		font-size: 14px;
-		color: #B5B5B5;
+		font-size: 32rpx;
+		color: #898989;
+    border-bottom: 1rpx solid #898989;
 		text-align: right;
 		margin-bottom:20px;
+		padding:16rpx 0;
 	}
+  .content{
+    font-size: 28rpx;
+  }
+
+  .rich-img{
+    width: 100%;
+    height: auto;
+  }
 
 	.t-left {
 		width: 50%;
@@ -100,7 +109,7 @@
 	}
 
 	.title {
-		font-size: 24px;
+		font-size: 34rpx;
 		font-weight: bold;
 		color: #000;
 		margin-bottom: 0px;
@@ -121,7 +130,7 @@
 	.img{
 		width: 96%;
 		margin-left: 2%;
-	
+
 	}
 	.weui-article ._section{
 		word-wrap:break-word;

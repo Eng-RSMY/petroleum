@@ -24,7 +24,7 @@
 		<div v-if="isdisplay">
 			<div class="weui-cell">
 				<div class="weui-cell__bd">
-					<p style="font-size: 18px;font-weight: bold;">常用功能</p>
+					<p style="font-size: 40rpx;font-weight: bold;">常用功能</p>
 				</div>
 			</div>
 			<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px;margin-top:-15px;">
@@ -51,7 +51,7 @@
 		<!-- 全部功能 -->
 		<div class="weui-cell" style="margin-top: 10px;display:block;">
 			<div class="weui-cell__bd">
-				<p style="font-size: 18px;font-weight: bold">全部功能</p>
+				<p style="font-size: 40rpx;font-weight: bold">全部功能</p>
 			</div>
 		</div>
 		<div class="weui-flex top_maddle" style="background-color: #fff;padding-bottom: 20px;margin-top:-15px;">

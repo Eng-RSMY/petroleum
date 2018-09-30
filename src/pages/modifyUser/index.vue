@@ -197,7 +197,7 @@
 				title: "加载中...",
 				mask: true
 			})
-			Object.assign(this.$data, this.$options.data())
+      //Object.assign(this.$data, this.$options.data())
 			var address = this.$root.$mp.query.address;
 			this.$http.get(`/users/${this.$root.$mp.query.id}`).then(res => {
 				if (res.status == "200") {
