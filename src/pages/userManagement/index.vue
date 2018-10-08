@@ -18,16 +18,16 @@
 			<div class="contentList" @click="edit(item.id)" v-if="showList" v-for="item in userList" :key="item.id">
 				<div style="width:70%;padding-left: 20px;box-sizing: border-box">
 					<p>
-						<span class="spanFirst">用户名</span> 
-						<span class="spanLast">{{item.username}}</span> 
+						<span class="spanFirst">用户名</span>
+						<span class="spanLast">{{item.username}}</span>
 					</p>
 					<p>
-						<span class="spanFirst">角色</span> 
-						<span class="spanLast">{{item.roleName}}</span> 
+						<span class="spanFirst">角色</span>
+						<span class="spanLast">{{item.roleName}}</span>
 					</p>
 					<p>
 						<span class="spanFirst">绑定手机号</span>
-						<span class="spanLast">{{item.phone}}</span> 
+						<span class="spanLast">{{item.phone}}</span>
 					</p>
 				</div>
 				<div style="width:30%;padding-right: 20px;box-sizing: border-box">
@@ -124,7 +124,7 @@
 			}
 		},
 		onShow() {
-			Object.assign(this.$data, this.$options.data())
+//			Object.assign(this.$data, this.$options.data())
 			this.$http.get("/users/").then(res => {
 				if (res.status == "200") {
 					this.userList = res.data.content;
@@ -149,7 +149,7 @@
 				for(var i=0;i<res.data.length;i++){
 					this.accounts.push(res.data[i].name)
 				}
-				
+
 
 			}).catch(res => {
 				console.log(res)

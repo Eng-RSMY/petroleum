@@ -118,7 +118,7 @@
 			getMakekCard() {
 				this.$http.get("/card")
 					.then(res => {
-						 
+
 						console.log(res)
 						if (res.status == "200") {
 							this.orderInfo = res.data
@@ -132,10 +132,10 @@
 								duration: 2000
 							})
 						}
-						
+
 					})
 					.catch(res => {
-						 
+
 						wx.showToast({
 							title: res.response.data.message,
 							icon: 'none',
@@ -146,7 +146,7 @@
 		},
 
 		mounted() {
-			Object.assign(this.$data, this.$options.data())
+//			Object.assign(this.$data, this.$options.data())
 			this.getMakekCard()
 		}
 	}

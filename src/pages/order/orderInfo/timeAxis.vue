@@ -100,16 +100,16 @@
   }
   .weui-cell-line{
     width: 100%;
-    margin-left: 5px;
+    margin-left: 6px;
     border-left: 1px solid #ddd;
     height: 100rpx;
     background: #fff
   }
   .weui-cell-circle{
     border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 10px;
-    height: 10px;
+    border-radius: 10px;
+    width: 11px;
+    height: 11px;
     border-color: #ddd;
   }
   .weui-cell-name{

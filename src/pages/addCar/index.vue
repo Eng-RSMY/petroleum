@@ -162,7 +162,7 @@
 							})
 						})
 				} else {
-					
+
 					this.$http.post(`/cars/${this.key}`, params)
 						.then(res => {
 							console.log(res)
@@ -186,7 +186,7 @@
 			}
 		},
 		mounted() {
-			Object.assign(this.$data, this.$options.data())
+//			Object.assign(this.$data, this.$options.data())
 			var data = this.$root.$mp.query;
 			console.log(data.key)
 			this.router = data.from

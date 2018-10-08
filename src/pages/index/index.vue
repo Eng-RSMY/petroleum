@@ -4,7 +4,7 @@
 
       <swiper class="mb1 swiper_height" circular="true" autoplay="true" indicator-dots="true" indicator-color="rgba(0, 0, 0, .3)" indicator-active-color="#000000">
         <block v-for="(item,index) in banner" :index="index" :key="key">
-          <swiper-item @click="toDetail(item.id)">
+          <swiper-item @click="toDetail(item)">
             <image :src="item.imageUrl" mode="scaleToFill" class="slide-image"/>
           </swiper-item>
         </block>
@@ -12,14 +12,15 @@
 
       <div class="page mb1">
         <div class="page__bd">
-          <div class="weui-grids">
+          <div class="grids">
             <div v-for="(item,index) in oilPriceGrids" :key="index">
-              <div class="weui-grid oil_grid">
+              <div class="oil_grid">
                 <image class="oil_img" src="/static/images/oil.png" />
                 <div class="oil_label_name">{{item.oilName}}</div>
                 <div class="oil_label_price">￥{{item.price}}元/吨</div>
               </div>
             </div>
+            <div class='clear_grid'></div>
           </div>
         </div>
       </div>
@@ -118,9 +119,12 @@
         })
         }
       },
-      toDetail(id){
+      toDetail(item){
+        if(item.simpleBulletin===null){
+          return false;
+        }
         wx.navigateTo({
-          url: `../newsDetail/main?id=${id}`,
+          url: `../newsDetail/main?id=${item.id}`,
           fail: function (res) {
             console.log(res)
           }
@@ -165,7 +169,22 @@
     width: 50rpx;
   }
 
+  .grids {
+    height: auto;
+    border-left: 1rpx solid #ddd;
+    border-top: 1rpx solid #ddd;
+  }
+
+  .clear_grid{
+    clear:both;
+  }
+
   .oil_grid {
+    width: 27%;
+    padding: 3%;
+    border-right: 1rpx solid #ddd;
+    border-bottom: 1rpx solid #ddd;
+    float: left;
     text-align: center;
   }
 

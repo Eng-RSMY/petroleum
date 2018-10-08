@@ -584,7 +584,7 @@
 					console.log(res.data)
 				}
 			})
-			Object.assign(this.$data, this.$options.data())
+//			Object.assign(this.$data, this.$options.data())
 			console.log(this)
 			this.$http.get("/self_order/company_account")
 				.then(res => {

@@ -392,7 +392,7 @@
       componyFilter(status,compony){
         this.showComponyFilter=status;
         this.company=compony;
-        this.pickSelect=compony.name?compony.name:this.pickSelect;
+        this.pickSelect=compony?compony.name:this.pickSelect;
       },
 
     },
@@ -562,8 +562,9 @@
 	}
 
   .search_img {
-    height: 30rpx;
-    width: 30rpx;
+    height: 26rpx;
+    width: 26rpx;
+    margin-right: 5rpx;
   }
   .search_lable {
     color: #9b9b9b;

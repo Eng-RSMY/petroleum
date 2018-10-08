@@ -1,7 +1,6 @@
 <template>
 	<div class="container">
 		<div class="orderInfo">
-			<p class="title">订单详情</p>
 			<p>
 				<span>订单号：</span>
 				<span>{{orderInfo.number == null ? "暂无数据" : orderInfo.number}}</span>
@@ -328,11 +327,20 @@ export default {
   mounted() {
     var orderId = this.$root.$mp.query.orderInfo;
     var from = this.$root.$mp.query.from;
-    if (from) {
-      this.from = from;
+    var url=`/orders/${orderId}`
+    if (from==="makeCard") {
+      wx.setNavigationBarTitle({
+          title:"入场制卡"
+        })
+      url='/card'
+    }else{
+      wx.setNavigationBarTitle({
+        title:"订单详情"
+      })
+      url = `/orders/${orderId}`
     }
     this.$http
-      .get(`/orders/${orderId}`)
+      .get(url)
       .then(res => {
         console.log(res);
         if (res.status == "200") {
@@ -391,18 +399,21 @@ export default {
 .imgMask{
   position:absolute;
   width:80%;
+  height: 50%;
   background-color: #fff;
   left: 10%;
   top:25%;
 }
 .imgBig{
   width:90%;
+  height: 90%;
   margin-left: 5%;
+  margin-top: 5%;
 }
 .weui-input {
-  border: 1px solid #4a4a4a;
+  border: 1px solid #898989;
   height: 40px;
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: left;
   box-sizing: border-box;
   padding-left: 20px;
@@ -423,10 +434,10 @@ export default {
 
 .c-row-input {
   width: 100%;
-  border: 1px solid #4a4a4a;
+  border: 1px solid #898989;
   height: 40px;
   line-height: 40px;
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: left;
   box-sizing: border-box;
   padding-left: 20px;
@@ -624,7 +635,7 @@ export default {
   background-color: #fff;
   padding: 0px;
   line-height: 50px;
-  border-bottom: 1px solid #4a4a4a;
+  border-bottom: 1px solid #ced3d9;
   margin-bottom: 20px;
 }
 .weui-dialog {

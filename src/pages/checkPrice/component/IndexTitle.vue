@@ -15,9 +15,7 @@
 		name: "IndexTitle",
 		data() {
 			return {
-				titleList: [{
-					title: '序号'
-				},
+				titleList: [
 				{
 					title: '品类'
 				},
@@ -49,7 +47,7 @@
 	}
 
 	.title ul li {
-		width: 25%;
+		width: 33.333%;
 		height: 35px;
 		line-height: 35px;
 		text-align: center;

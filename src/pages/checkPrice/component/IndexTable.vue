@@ -2,7 +2,6 @@
 	<div>
 		<div class="table">
 			<ul v-for="(item,index) in tableList" :key="index">
-				<li>{{(index+1)}}</li>
 				<li>{{item.categoryName==null ? "暂无数据" : item.categoryName }}</li>
 				<li>{{item.oilName ==null ? "暂无数据" : item.oilName}}</li>
 				<li>{{item.price ==null ? "暂无数据" : item.price}}</li>
@@ -22,7 +21,7 @@
 		mounted() {
 			this.$http.get("/prices")
 				.then(res => {
-					 
+
 					console.log(res)
 					if (res.status == "200") {
 						this.tableList = res.data
@@ -30,7 +29,7 @@
 
 				})
 				.catch(res => {
-					 
+
 					console.log(res)
 				})
 		},
@@ -55,7 +54,7 @@
 	}
 
 	.table ul li {
-		width: 25%;
+		width: 33.333%;
 		line-height: 35px;
 		text-align: center;
 		color: black;
