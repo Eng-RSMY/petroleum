@@ -34,6 +34,7 @@
 		},
 		beforeMount() {
 			console.log(this.$root.$mp.query)
+      Object.assign(this.$data, this.$options.data());
 			var id = this.$root.$mp.query.id
 			this.$http.get(`/bulletin/${id}`).then(res => {
 				console.log(res)
