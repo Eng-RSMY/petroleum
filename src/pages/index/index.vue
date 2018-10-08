@@ -124,7 +124,7 @@
           return false;
         }
         wx.navigateTo({
-          url: `../newsDetail/main?id=${item.id}`,
+          url: `../newsDetail/main?id=${item.simpleBulletin.id}`,
           fail: function (res) {
             console.log(res)
           }
@@ -161,7 +161,7 @@
   }
 
   .oil_label_name {
-    font-size: 28rpx;
+    font-size: 26rpx;
   }
 
   .oil_img {
