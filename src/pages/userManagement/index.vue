@@ -19,7 +19,7 @@
 				<div style="width:70%;padding-left: 20px;box-sizing: border-box">
 					<p>
 						<span class="spanFirst">用户名</span>
-						<span class="spanLast">{{item.username}}</span>
+						<span class="spanLast">{{item.realName}}</span>
 					</p>
 					<p>
 						<span class="spanFirst">角色</span>
@@ -87,7 +87,7 @@
 						})
 					})
 				} else {
-					this.$http.get("/users/").then(res => {
+					this.$http.get("/users").then(res => {
 						if (res.status == "200") {
 							this.userList = res.data.content;
 						} else {
@@ -124,8 +124,7 @@
 			}
 		},
 		onShow() {
-//			Object.assign(this.$data, this.$options.data())
-			this.$http.get("/users/").then(res => {
+			this.$http.get("/users").then(res => {
 				if (res.status == "200") {
 					this.userList = res.data.content;
 				} else {

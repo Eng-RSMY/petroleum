@@ -14,7 +14,7 @@
 				<span>{{orderInfo.cardNumber == null ? "暂无数据" : orderInfo.cardNumber}}</span>
 			</p>
 			<p>
-				<span>订购货物:</span>
+				<span>订购物料:</span>
 				<span>
 					{{orderInfo.categoryName}} {{orderInfo.oilName}}
 				</span>
@@ -23,11 +23,19 @@
 				<span>订购量：</span>
 				<span>{{orderInfo.orderWeight == null ? "暂无数据" : orderInfo.orderWeight + "吨"}}</span>
 			</p>
-			<!-- <p>
-				<span>下单价格：</span>
+			 <p v-show="fromOrder">
+				<span>物料单价：</span>
 				<span>{{orderInfo.orderPrice}} 元/吨</span>
-			</p> -->
-			<p>
+			</p>
+      <p v-show="fromOrder">
+        <span>订单价格：</span>
+        <span>{{orderInfo.orderTotalPrice}} 元</span>
+      </p>
+      <p v-show="fromOrder">
+        <span>订单结算价格：</span>
+        <span>{{orderInfo.totalPrice?orderInfo.totalPrice+'元':'无'}}</span>
+      </p>
+      <p>
 				<span>货车司机：</span>
 				<span>{{orderInfo.driverName == null ? "暂无数据" : orderInfo.driverName}}</span>
 			</p>
@@ -55,6 +63,10 @@
 				<span>下单帐号</span>
 				<span>{{orderInfo.operatorUsername == null ? "暂无数据" : orderInfo.operatorUsername}}</span>
 			</p>
+      <p>
+        <span>制卡排队</span>
+        <span>{{orderInfo.queueInfo == null ? "暂无数据" : orderInfo.queueInfo}}</span>
+      </p>
 		</div>
 		<div class="weui-cell" style="border-top: none;padding: 20px 0px;">
 			<div class="weui-cell__bd">
@@ -70,19 +82,27 @@
 		<div class="js_dialog" id="iosDialog1" v-if="showDialog">
 			<div class="weui-mask"></div>
 			<div class="weui-dialog" @click="cancel1">
-				<div class="weui-dialog__hd"><strong class="weui-dialog__title">修改司机及车辆信息</strong></div>
+				<div class="weui-dialog__hd"><strong class="weui-dialog__title">修改订单信息</strong></div>
 				<div class="weui-dialog__bd">
-					<p>
-						<input class="weui-input" type="text" v-model='driverName' max="8" :placeholder="orderInfo.driverName"/>
+          <p style="overflow: hidden">
+            <span class="dialog_label">物料数量</span>
+            <span class="dialog_input"><input class="weui-input" type="number" v-model='orderWeight' placeholder="（吨）请输入" maxlength="2"/></span>
+          </p>
+					<p style="overflow: hidden">
+            <span class="dialog_label">司机姓名</span>
+						<span dialog_input><input class="weui-input" type="text" v-model='driverName' placeholder="司机姓名" max="8"/></span>
 					</p>
-					<p>
-						<input class="weui-input" type="idcard"  v-model='driverIdNumber' maxlength="18" :placeholder="orderInfo.driverIdNumber"/>
+					<p style="overflow: hidden">
+            <span class="dialog_label">身份证号</span>
+						<span dialog_input><input class="weui-input" type="idcard"  v-model='driverIdNumber' placeholder="司机身份证号" maxlength="18"/></span>
 					</p>
-					<p>
-						<input class="weui-input" type="number" pattern="[0-9]*" maxlength="11"  v-model='driverIdNumber' :placeholder="orderInfo.driverPhone"/>
+					<p style="overflow: hidden">
+            <span class="dialog_label">手机号</span>
+						<span dialog_input><input class="weui-input" type="number" pattern="[0-9]*" maxlength="11" placeholder="司机手机号" v-model='driverPhone'/></span>
 					</p>
-					<div>
-						<div class="c-row-input" contenteditable="true"  @click.stop="showInput">{{carNo}}</div>
+					<div style="overflow: hidden">
+            <span class="dialog_label">车牌号</span>
+						<span dialog_input><div class="c-row-input" contenteditable="true"  @click.stop="showInput">{{carNo}}</div></span>
 					</div>
 				</div>
 
@@ -137,10 +157,11 @@ export default {
       orderInfo: "",
       orderStatusFlow:{},
       orderStatus:'',
-      from: "",
+      fromOrder: false,
       url: "",
       showDialog: false,
       isshow:false,
+      orderWeight:"",
       driverName: "",
       driverIdNumber: "",
       driverPhone:"",
@@ -289,6 +310,7 @@ export default {
 	  var orderNumber = this.orderInfo.number;
 	  var params = {
 		  orderNumber:orderNumber,
+      orderWeight:this.orderWeight,
 		  driverRealName:this.driverName,
 		  driverIdNumber:this.driverIdNumber,
 		  driverPhone:this.driverPhone,
@@ -329,11 +351,13 @@ export default {
     var from = this.$root.$mp.query.from;
     var url=`/orders/${orderId}`
     if (from==="makeCard") {
+      this.fromOrder=true
       wx.setNavigationBarTitle({
           title:"入场制卡"
         })
       url='/card'
     }else{
+      this.fromOrder=true
       wx.setNavigationBarTitle({
         title:"订单详情"
       })
@@ -347,6 +371,7 @@ export default {
           this.orderInfo = res.data;
           this.carNo = res.data.carNumber;
           this.driverPhone=res.data.driverPhone;
+          this.orderWeight=res.data.orderWeight;
           this.driverName=res.data.driverName;
           this.driverIdNumber=res.data.driverIdNumber
           this.orderStatusFlow=res.data.orderStatusFlow
@@ -409,6 +434,17 @@ export default {
   height: 90%;
   margin-left: 5%;
   margin-top: 5%;
+}
+.dialog_label{
+  width: 25%;
+  height: 84rpx;
+  line-height: 84rpx;
+  text-align: left;
+  float: left;
+}
+.dialog_input{
+  width: 75%;
+  float: left;
 }
 .weui-input {
   border: 1px solid #898989;

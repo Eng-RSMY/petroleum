@@ -10,9 +10,7 @@
 
 			<section>
 				<img v-show="bulletin.coverUri" :src="bulletin.coverUri" mode="widthFix" alt="" class="img">
-				<section class="content" v-html="bulletin.content">
-
-				</section>
+				<section class="content" v-html="bulletin.content"></section>
 			</section>
 		</article>
 	</div>

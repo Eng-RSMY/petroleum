@@ -86,7 +86,7 @@
 			bindAccountChange: function (e) {
 				this.accountIndex = e.mp.detail.value;
 				this.pickSelect = this.accounts[e.mp.detail.value];
-				if (this.pickSelect == "司机") {
+				if (this.pickSelect == "司机"||this.pickSelect == "押运员") {
 					this.isDriver = true;
 				} else {
 					this.isDriver = false
@@ -192,51 +192,45 @@
 					})
 			}
 		},
-		onShow() {
+		async onShow() {
 			wx.showLoading({
 				title: "加载中...",
 				mask: true
 			})
-      //Object.assign(this.$data, this.$options.data())
+      Object.assign(this.$data, this.$options.data())
 			var address = this.$root.$mp.query.address;
-			this.$http.get(`/users/${this.$root.$mp.query.id}`).then(res => {
-				if (res.status == "200") {
-					this.user = res.data;
-					this.address = address;
-					this.flag = true;
-					this.checked = res.data.enabled;
-				} else {
-					wx.showToast({
-						title: res.statusText,
-						icon: 'none',
-						duration: 2000
-					})
-				}
-			})
-			this.$http.get("/users/roles").then((res) => {
-				if (res.status == "200") {
-					this.roles = res.data;
-					this.accounts = []
-					res.data.forEach((element, key) => {
-						this.accounts.push(element.name)
-						console.log(element.name == this.user.roleName, element.name)
-						if (element.name == this.user.roleName) {
-							this.accountIndex = key
-						}
-					});
-					this.pickSelect = this.user.roleName
-					if (this.pickSelect == "司机" || this.pickSelect == "押运员") {
-						this.isDriver = true
-					}
-					console.log(this.pickSelect)
-				} else {
-					wx.showToast({
-						title: res.statusText,
-						icon: 'none',
-						duration: 2000
-					})
-				}
-			})
+			try{
+			  let userInfo=await this.$http.get(`/users/${this.$root.$mp.query.id}`)
+			  let roles=await this.$http.get(`/users/roles`)
+        if(roles.status == "200"&&userInfo.status=="200") {
+          this.user = userInfo.data;
+          this.address = address;
+          this.flag = true;
+          this.checked = userInfo.data.enabled;
+
+          this.roles = roles.data;
+          this.accounts = []
+          roles.data.forEach((element, key) => {
+            this.accounts.push(element.name)
+            console.log(element.name == this.user.roleName, element.name)
+            if (element.name == this.user.roleName) {
+              this.accountIndex = key
+            }
+          });
+          this.pickSelect = this.user.roleName
+          if (this.pickSelect == "司机" || this.pickSelect == "押运员") {
+            this.isDriver = true
+          }
+          console.log(this.pickSelect)
+        }
+      }catch (e) {
+			  console.log(e)
+        wx.showToast({
+          title: "获取用户信息失败",
+          icon: 'none',
+          duration: 2000
+        })
+      }
 			wx.hideLoading();
 		}
 	};

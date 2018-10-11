@@ -178,7 +178,7 @@
             wx.showModal({
               title: '提示',
               showCancel: false,
-              content: '您的手机号未注册垦利油好小程序，请联系管理员开通账号',
+              content: '您的手机号未注册垦利石化油好小程序，请联系管理员开通账号',
               success: function (res) {
                 if (res.confirm) {
                   console.log('用户点击确定')

@@ -142,12 +142,14 @@
 					roleId: roleid,
 					enabled: this.checked,
 				}
-				if (this.roleList[this.accountIndex].name == "司机") {
+				if (this.roleList[this.accountIndex].name == "司机" ||
+          this.roleList[this.accountIndex].name == "押运员") {
 					params.idNumber = this.idNumber;
 					params.driverNumber = this.driverNumber
 				}
 				this.$http.post(`/users`, params).then(res => {
 					this.prompt('新建成功');
+					Object.assign(this.$data, this.$options.data())
           if(this.$root.$mp.query.from==="selectDriver"){
             wx.navigateBack()
           }else{

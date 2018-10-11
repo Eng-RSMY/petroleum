@@ -42,7 +42,7 @@
           return false
         }
         let arr=[]
-        let map=['ordered','madecard','infield','outfield','settlement','invoice','print']
+        let map=['ordered','carArrive','madecard','infield','outfield','settlement','invoice','print']
         for(let index in map){
           let obj={
             name:this.orderStatusFlow[map[index]+'Name'],
@@ -116,7 +116,8 @@
     /* width: 50px; */
     font-size:14px;
     padding-left: 15px;
-    width: 72px;
+    width: 200rpx;
+    white-space:nowrap;
   }
   .weui-cell-time{
     width: 100%;

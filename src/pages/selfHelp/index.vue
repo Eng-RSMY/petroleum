@@ -410,7 +410,14 @@
 							if (res.status == "200") {
 								var orderInfo = res.data.id
 								console.log(orderInfo)
-
+                Object.assign(this.$data, this.$options.data())
+                this.showDriver = true;
+                wx.removeStorage({
+                  key: 'selectDriver',
+                  success: function (res) {
+                    console.log(res.data)
+                  }
+                })
 								wx.navigateTo({
 									url: "../../pages/order/orderInfo/main?orderInfo=" + orderInfo + "&from=selfHelp",
 									fail: function (res) {
@@ -903,7 +910,7 @@
     overflow: hidden;
     background-color: #CED3D9;
     padding: 30rpx 0;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     z-index: 100000;
@@ -913,7 +920,7 @@
     overflow: hidden;
     background-color: #CED3D9;
     padding: 30rpx 0;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     z-index: 100000;
