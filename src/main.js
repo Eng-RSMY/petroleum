@@ -28,15 +28,19 @@ if (process.env.NODE_ENV === 'development') {
 fly.interceptors.request.use((request) => {
 	//给所有请求添加自定义header
 	console.log(request)
-	if (!access_token) {
-		request.headers["Content-Type"] = "application/json"
-	} else if (request.url == "/public/login_code") {
+	if (request.url == "/public/login_code") {
 		request.headers["Content-Type"] = "application/x-www-form-urlencoded"
 	} else if (request.url == "/oauth/token") {
 
 		request.headers["Authorization"] = "Basic " + Authorization;
 		request.headers["Content-Type"] = "application/x-www-form-urlencoded"
-	} else {
+	}else if(request.url == "/public/companies" ||
+    request.url == "/public/banner"||
+    request.url == "/public/price"||
+    request.url == "/bulletin?page=0&size=5&sort=id,desc"){
+	  // todo 暂时这么改，回头需要统一一下headers设置规则
+    request.headers["Content-Type"] = "application/json"
+  } else {
 		var token_type = wx.getStorageSync("token_type")
 		var access_token = wx.getStorageSync("access_token")
 		request.headers["Content-Type"] = "application/json"

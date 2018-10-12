@@ -63,9 +63,9 @@
 				<span>下单帐号</span>
 				<span>{{orderInfo.operatorUsername == null ? "暂无数据" : orderInfo.operatorUsername}}</span>
 			</p>
-      <p>
+      <p style="height: auto;overflow: hidden">
         <span>制卡排队</span>
-        <span>{{orderInfo.queueInfo == null ? "暂无数据" : orderInfo.queueInfo}}</span>
+        <span style="width:59%;height: auto;word-break: break-all;float: right;display: block;">{{orderInfo.queueInfo == null ? "暂无数据" : orderInfo.queueInfo}}</span>
       </p>
 		</div>
 		<div class="weui-cell" style="border-top: none;padding: 20px 0px;">
