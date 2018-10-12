@@ -102,7 +102,7 @@
 
     <div class="choose" style="margin-bottom: 60px">
       <p class="t">
-        <span class="fontSize">出入车牌号</span>
+        <span class="fontSize">输入车牌号</span>
       </p>
       <div class="carno-input" contenteditable="true" @click.stop="showInput">{{carNo||"请输入车牌号"}}</div>
     </div>
