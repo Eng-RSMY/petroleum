@@ -142,6 +142,11 @@
 		methods: {
 			toggleTabs: function (index) {
 				this.nowIndex = index;
+				if(index===0){
+          this.queryWaiting()
+        }else {
+				  this.queryComplete()
+        }
 			},
 			loadingMore: function () {
 				var page = this.page + 1;
@@ -289,68 +294,74 @@
 						console.log(res)
 					}
 				})
-			}
+			},
+      queryWaiting(){
+        var params = {
+          page: this.page,
+          size: 5,
+          sort: "orderedTime,desc"
+        }
+        this.$http.get("/orders/waiting", params)
+          .then(res => {
+            console.log(res)
+            if (res.data.content.length > 0) {
+              this.ishave = true
+
+              this.waiting = res.data.content
+
+              console.log(this.waiting)
+            }
+            if (res.data.content.length > 0 && res.data.content.length < 5) {
+              this.isshow = false
+            } else if (res.data.content.length == 5) {
+              this.isshow = true
+              this.foot = true
+            }
+          })
+          .catch(res => {
+            console.log(res)
+            // .response.data.message
+            wx.showToast({
+              title: res.response.data.message,
+              icon: 'none',
+              duration: 2000
+            })
+          })
+      },
+      queryComplete(){
+        var params1 = {
+          page: this.page1,
+          size: 5,
+          sort: "orderedTime,desc"
+        }
+        this.$http.get("/orders/complete", params1)
+          .then(res => {
+            console.log(res)
+            if (res.data.content.length > 0) {
+              this.ishave1 = true
+              this.orderList = res.data.content
+            }
+            if (res.data.content.length > 0 && res.data.content.length < 5) {
+              this.isshow1 = false
+            } else if (res.data.content.length == 5) {
+              this.isshow1 = true
+              this.foot1 = true
+            }
+          })
+          .catch(res => {
+            console.log(res)
+            // .response.data.message
+            wx.showToast({
+              title: res.response.data.message,
+              icon: 'none',
+              duration: 2000
+            })
+          })
+      }
 		},
 		onShow() {
-			var params = {
-				page: this.page,
-				size: 5,
-				sort: "orderedTime,desc"
-			}
-			this.$http.get("/orders/waiting", params)
-				.then(res => {
-					console.log(res)
-					if (res.data.content.length > 0) {
-						this.ishave = true
-
-						this.waiting = res.data.content
-
-						console.log(this.waiting)
-					}
-					if (res.data.content.length > 0 && res.data.content.length < 5) {
-						this.isshow = false
-					} else if (res.data.content.length == 5) {
-						this.isshow = true
-						this.foot = true
-					}
-				})
-				.catch(res => {
-					console.log(res)
-					// .response.data.message
-					wx.showToast({
-						title: res.response.data.message,
-						icon: 'none',
-						duration: 2000
-					})
-				})
-			var params1 = {
-				page: this.page1,
-				size: 5,
-				sort: "orderedTime,desc"
-			}
-			this.$http.get("/orders/complete", params1)
-				.then(res => {
-					console.log(res)
-					if (res.data.content.length > 0) {
-						this.ishave1 = true
-						this.orderList = res.data.content
-					}
-					if (res.data.content.length > 0 && res.data.content.length < 5) {
-						this.isshow1 = false
-					} else if (res.data.content.length == 5) {
-						this.isshow1 = true
-						this.foot1 = true
-					}
-				})
-				.catch(res => {
-					console.log(res)
-					// .response.data.message
-					wx.showToast({
-						title: res.response.data.message,
-						icon: 'none',
-						duration: 2000
-					})
-				})
+			this.queryWaiting()
+      this.queryComplete()
 		}
 	}
 </script>

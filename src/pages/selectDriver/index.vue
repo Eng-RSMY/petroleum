@@ -5,7 +5,7 @@
 			<div class="weui-search-bar" :class="{'weui-search-bar_focusing': isSearchBarFocus}" id="searchBar">
 				<div class="weui-search-bar__box">
 					<i class="weui-icon-search"></i>
-          <input type="search" class="weui-search-bar__input" id="searchInput" @change="search" placeholder="搜索车牌号" required/>
+          <input type="search" class="weui-search-bar__input" id="searchInput" @change="search" placeholder="搜索用户姓名或手机号" required/>
         </div>
 			</div>
       <div class="search-box-img" @click="addItem">

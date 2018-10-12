@@ -87,28 +87,10 @@ fly.interceptors.response.use(
 				showCancel:false,
 				success: function (res) {
 					if (res.confirm) {
-						console.log('用户点击确定')
-						var baseURL = err.request.baseURL
-						var refresh_token = wx.getStorageSync("refresh_token");
-						var params = {
-							refresh_token,
-							grantType: "refresh_token"
-						}
+            console.log('用户点击确定')
 						wx.reLaunch({
-							url: '/pages/index/main'
+							url: '/pages/login/main'
 						  })
-						// wx.request({
-						// 	url: `${baseURL}/oauth/token`, //仅为示例，并非真实的接口地址
-						// 	method:"POST",
-						// 	header: {
-						// 		'Authorization': "Basic " + Authorization, // 默认值
-						// 		'Content-Type':'application/x-www-form-urlencoded'
-						// 	},
-						// 	data: params,
-						// 	success: function (res) {
-						// 		console.log(res.data)
-						// 	}
-						// })
 					} else if (res.cancel) {
 						console.log('用户点击取消')
 					}
