@@ -86,7 +86,7 @@
 				<div class="weui-dialog__bd">
           <p style="overflow: hidden">
             <span class="dialog_label">物料数量</span>
-            <span class="dialog_input"><input class="weui-input" type="number" v-model='orderWeight' placeholder="（吨）请输入"/></span>
+            <span class="dialog_input"><input class="weui-input" type="digit" v-model='orderWeight' maxlength="5" placeholder="（吨）请输入"/></span>
           </p>
 					<p style="overflow: hidden">
             <span class="dialog_label">司机姓名</span>
