@@ -125,8 +125,8 @@
 				foot1: true,
 				page: 0,
 				page1: 0,
-				orderList: "",
-				waiting: "",
+				orderList: [],
+				waiting: [],
 				tabsParam: ['未完结订单', '已完成订单'],//（这个也可以用对象key，value来实现）
 				nowIndex: 0,//默认第一个tab为激活状态
 				ishave: false,
@@ -153,7 +153,7 @@
 				this.page = page
 				var params = {
 					page: page,
-					size: 5,
+					size: 20,
 					sort: "orderedTime,desc"
 				}
 				this.$http.get("/orders/waiting", params)
@@ -161,7 +161,8 @@
 						console.log(res)
 						if (res.data.content.length > 0) {
 							for (var i = 0; i < res.data.content.length; i++) {
-								this.waiting.push(res.data.content[i]);
+                res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
+                this.waiting.push(res.data.content[i]);
 							}
 						} else {
 							this.foot = false;
@@ -184,7 +185,7 @@
 				this.page1 = page
 				var params = {
 					page: page,
-					size: 5,
+					size: 20,
 					sort: "orderedTime,desc"
 				}
 				this.$http.get("/orders/complete", params)
@@ -192,7 +193,8 @@
 						console.log(res)
 						if (res.data.content.length > 0) {
 							for (var i = 0; i < res.data.content.length; i++) {
-								this.orderList.push(res.data.content[i]);
+                res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
+                this.orderList.push(res.data.content[i]);
 							}
 						} else {
 							this.foot1 = false;
@@ -227,7 +229,7 @@
 											success: function () {
 												var params = {
 													page: 0,
-													size: 5,
+													size: 20,
 													sort: "orderedTime,desc"
 												}
 												that.$http.get("/orders/waiting", params)
@@ -248,7 +250,7 @@
 													})
 												var params1 = {
 													page: 0,
-													size: 5,
+													size: 20,
 													sort: "orderedTime,desc"
 												}
 												that.$http.get("/orders/complete", params1)
@@ -298,7 +300,7 @@
       queryWaiting(){
         var params = {
           page: this.page,
-          size: 5,
+          size: 20,
           sort: "orderedTime,desc"
         }
         this.$http.get("/orders/waiting", params)
@@ -307,18 +309,21 @@
             if (res.data.content.length > 0) {
               this.ishave = true
 
-              this.waiting = res.data.content
-
+              for (let item in res.data.content) {
+                res.data.content[item].orderedTime=res.data.content[item].orderedTime.replace(/T/," ")
+              }
+              this.waiting=res.data.content
               console.log(this.waiting)
             }
-            if (res.data.content.length > 0 && res.data.content.length < 5) {
+            if (res.data.content.length > 0 && res.data.content.length < 20) {
               this.isshow = false
-            } else if (res.data.content.length == 5) {
+            } else if (res.data.content.length == 20) {
               this.isshow = true
               this.foot = true
             }
           })
           .catch(res => {
+            console.error(res)
             console.log(res)
             // .response.data.message
             wx.showToast({
@@ -331,7 +336,7 @@
       queryComplete(){
         var params1 = {
           page: this.page1,
-          size: 5,
+          size: 20,
           sort: "orderedTime,desc"
         }
         this.$http.get("/orders/complete", params1)
@@ -339,11 +344,14 @@
             console.log(res)
             if (res.data.content.length > 0) {
               this.ishave1 = true
-              this.orderList = res.data.content
+              for (let item in res.data.content) {
+                res.data.content[item].orderedTime=res.data.content[item].orderedTime.replace(/T/," ")
+              }
+              this.orderList=res.data.content
             }
-            if (res.data.content.length > 0 && res.data.content.length < 5) {
+            if (res.data.content.length > 0 && res.data.content.length < 20) {
               this.isshow1 = false
-            } else if (res.data.content.length == 5) {
+            } else if (res.data.content.length == 20) {
               this.isshow1 = true
               this.foot1 = true
             }

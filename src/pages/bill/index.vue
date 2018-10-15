@@ -43,7 +43,7 @@
 	export default {
 		data() {
 			return {
-				orderList: "",
+				orderList: [],
 				foot: true,
 				page: 0,
 				isshow: false,
@@ -63,7 +63,7 @@
 				this.page = page
 				var params = {
 					page: page,
-					size: 5,
+					size: 20,
 					sort: "orderedTime,desc"
 				}
 				this.$http.get("/bill", params)
@@ -71,6 +71,7 @@
 						console.log(res)
 						if (res.data.content.length > 0) {
 							for (var i = 0; i < res.data.content.length; i++) {
+							  res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
 								this.orderList.push(res.data.content[i]);
 							}
 							console.log(this.orderList)
@@ -99,9 +100,10 @@
 		},
 
 		mounted() {
+      Object.assign(this.$data, this.$options.data())
 			var params = {
 				page: this.page,
-				size: 5,
+				size: 20,
 				sort: "orderedTime,desc"
 			}
 			this.$http.get("/bill", params)
@@ -113,13 +115,12 @@
 							for (var i = 0; i < res.data.content.length; i++) {
 								res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
 								this.orderList = res.data.content
-
 							}
 
 						}
-						if (res.data.content.length > 0 && res.data.content.length < 5) {
+						if (res.data.content.length > 0 && res.data.content.length < 20) {
 							this.isshow = false
-						} else if (res.data.content.length == 5) {
+						} else if (res.data.content.length == 20) {
 							this.isshow = true
 							this.foot = true
 						}
