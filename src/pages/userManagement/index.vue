@@ -18,6 +18,9 @@
         <div class="weui-search-bar__box">
           <i class="weui-icon-search"></i>
           <input type="search" class="weui-search-bar__input" id="searchInput" v-model="nameOrPhone" @change="search" placeholder="搜索用户姓名或手机号" required/>
+          <div class="search-box-cancel" v-show="nameOrPhone" @click="cancelSearch">
+            重置
+          </div>
         </div>
       </div>
     </div>
@@ -67,14 +70,15 @@
 					}
 				})
 			},
-      search(event){
+      cancelSearch(){
+			  this.nameOrPhone=''
+        this.search()
+      },
+      search(){
 			  let nameOrPhone=this.nameOrPhone
-			  if(!nameOrPhone&&parseInt(nameOrPhone)===NaN){
-          return false
-        }
         this.accountIndex=0
         let params={
-			    nameOrPhone:event.mp.detail.value,
+			    nameOrPhone
         }
         this.$http.get("/users",params).then(res => {
           if (res.status == "200") {
@@ -289,4 +293,16 @@
   .weui-search-bar__input {
     padding: 2.25px 9px !important;
   }
+
+  .search-box-cancel {
+    font-size: 28rpx;
+    color: #2E79FF;
+    float: left;
+    position:absolute;
+    right:20rpx;
+    top:0;
+    line-height:27.5px;
+
+  }
+
 </style>
