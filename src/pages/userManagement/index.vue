@@ -13,6 +13,14 @@
 				</view>
 			</div>
 		</div>
+    <div class="searchBox">
+      <div class="weui-search-bar weui-search-bar_focusing" id="searchBar">
+        <div class="weui-search-bar__box">
+          <i class="weui-icon-search"></i>
+          <input type="search" class="weui-search-bar__input" id="searchInput" v-model="nameOrPhone" @change="search" placeholder="搜索用户姓名或手机号" required/>
+        </div>
+      </div>
+    </div>
 		<!-- <index-content :userList="userList"></index-content> -->
 		<div class="content">
 			<div class="contentList" @click="edit(item.id)" v-if="showList" v-for="item in userList" :key="item.id">
@@ -47,6 +55,7 @@
 				userList: '',
 				accounts: ["全部用户"],
 				accountIndex: 0,
+        nameOrPhone:''
 			}
 		},
 		methods: {
@@ -58,7 +67,36 @@
 					}
 				})
 			},
+      search(event){
+			  let nameOrPhone=this.nameOrPhone
+			  if(!nameOrPhone&&parseInt(nameOrPhone)===NaN){
+          return false
+        }
+        this.accountIndex=0
+        let params={
+			    nameOrPhone:event.mp.detail.value,
+        }
+        this.$http.get("/users",params).then(res => {
+          if (res.status == "200") {
+            this.userList = res.data.content;
+          } else {
+            wx.showToast({
+              title: res.statusText,
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        }).catch(res => {
+          console.log(res)
+          wx.showToast({
+            title: res.response.data.message,
+            icon: 'none',
+            duration: 2000
+          })
+        })
+      },
 			bindAccountChange: function (e) {
+        this.nameOrPhone=""
 				this.accountIndex = e.mp.detail.value
 				if (this.accountIndex > 0) {
 					var params = {
@@ -196,7 +234,6 @@
 		padding-top: 1px;
 		width:100%;
 		overflow-x: hidden;
-		margin-top:40px;
 	}
 
 	.contentList {
@@ -219,4 +256,37 @@
 		border: 1px solid #FF6633;
 		color: #FF6633;
 	}
+
+  .searchBox {
+    width: 100%;
+    height: 50px;
+    padding: 12px;
+    box-sizing: border-box;
+    background: #fff;
+    margin-top: 40px;
+  }
+
+  .weui-search-bar {
+    width: 100%;
+    height: 27.5px;
+    padding: 0px;
+    position: static;
+    float: left;
+    border-radius: 27.5px;
+  }
+
+  .weui-search-bar__box {
+    width: 100%;
+    height: 27.5px;
+    border-radius: 13.75px;
+    background: #efeff4;
+  }
+
+  .weui-icon-search {
+    left: 16.5px;
+  }
+
+  .weui-search-bar__input {
+    padding: 2.25px 9px !important;
+  }
 </style>
