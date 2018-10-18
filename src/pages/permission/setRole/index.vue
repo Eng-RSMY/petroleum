@@ -63,41 +63,34 @@
 				})
 			}
 		},
-		mounted() {
-			this.$http.get("/users/permissions").then(res => {
-				console.log(res)
-				this.permission = res.data
-				for (var i = 0; i < this.permission; i++) {
-					this.$set(this.permission, "checked", "false")
-				}
-			}).catch(res => {
-				console.log(res)
-				wx.showToast({
-					title: res.response.data.message,
-					icon: 'none',
-					duration: 2000
-				})
-			})
-			var roleId = this.$root.$mp.query.id;
-			var that = this;
-			this.$http.get(`/users/roles/${roleId}/permissions`).then(res => {
-				console.log(res)
-				res.data.forEach(have => {
-					that.permission.forEach(all => {
-						if (have.name == all.name) {
-							// all.checked=true
-							this.$set(all, "checked", "true")
-						}
-					});
-				});
-			}).catch(res => {
-				console.log(res)
-				wx.showToast({
-					title: res.response.data.message,
-					icon: 'none',
-					duration: 2000
-				})
-			})
+		async mounted() {
+		  const roleId = this.$root.$mp.query.id;
+      const that=this
+		  try {
+        let list = await this.$http.get("/users/permissions")
+        let key = await this.$http.get(`/users/roles/${roleId}/permissions`)
+
+        if (list.status===200 && key.status===200) {
+          this.permission = list.data
+          for (var i = 0; i < this.permission; i++) {
+            this.$set(this.permission, "checked", "false")
+          }
+          key.data.forEach(have => {
+            that.permission.forEach(all => {
+              if (have.name == all.name) {
+                this.$set(all, "checked", "true")
+              }
+            });
+          });
+        }
+      }catch (e) {
+        wx.showToast({
+          title: "获取信息失败",
+          icon: 'none',
+          duration: 2000
+        })
+      }
+
 		},
 	}
 </script>

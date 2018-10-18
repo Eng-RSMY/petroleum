@@ -16,9 +16,13 @@
 					<span>{{item.oilName == null ? "暂无数据" : item.oilName}}</span>
 				</p>
 				<p>
-					<span>数量：</span>
+					<span>实装量：</span>
 					<span>{{item.weight == null ? "暂无数据" : item.weight+"吨"}}</span>
 				</p>
+        <p>
+          <span>车牌号：</span>
+          <span>{{item.carNumber == null ? "暂无数据" : item.carNumber}}</span>
+        </p>
 				<p>
 					<span>实际支付金额：</span>
 					<span>{{item.totalPrice == null ? "暂无数据" : "￥"+ item.totalPrice +"元"}}</span>

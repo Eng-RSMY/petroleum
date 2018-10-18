@@ -22,7 +22,7 @@
   export default{
     data(){
       return{
-        axis:[]
+        axis:[],
       }
     },
     props:["orderStatusFlow","status"],
@@ -42,17 +42,16 @@
           return false
         }
         let arr=[]
+        let isDone=true
         let map=['ordered','carArrive','madecard','infield','outfield','settlement','invoice','print']
         for(let index in map){
           let obj={
             name:this.orderStatusFlow[map[index]+'Name'],
             time:this.orderStatusFlow[map[index]+'Time']?this.orderStatusFlow[map[index]+'Time'].replace(/T/," "):"无",
           }
+          obj['running']=isDone
           if(this.status===obj.name) {
-            obj['running']=true
-          }
-          else {
-            obj['running'] = false
+            isDone=false
           }
           if(this.orderStatusFlow[map[index]+'Time']===null && this.status==='已取消'){
             obj={
@@ -123,7 +122,7 @@
     width: 100%;
     height: 30rpx;
     font-size: 26rpx;
-    color: #ddd;
+    color: #000;
     padding-top: 15rpx;
     padding-left: 30rpx;
   }

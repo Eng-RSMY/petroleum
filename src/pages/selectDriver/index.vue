@@ -91,7 +91,7 @@
 					nameOrPhone: nameOrPhone,
 					page: 0,
 					size: 5,
-					sort: "id,desc"
+					sort: "working"
 				}
 				this.$http.get("/self_order/drivers", params)
 					.then(res => {
@@ -127,7 +127,7 @@
 					nameOrPhone: this.nameOrPhone,
 					page: page,
 					size: 5,
-					sort: "id,desc"
+					sort: "working"
 				}
 				this.$http.get("/self_order/drivers", params)
 					.then(res => {
@@ -222,7 +222,7 @@
           nameOrPhone: this.nameOrPhone,
           page: 0,
           size: 5,
-          sort: "id,desc"
+          sort: "working"
         }
         this.$http.get("/self_order/drivers", params)
           .then(res => {

@@ -23,6 +23,10 @@
 				<span>订购量：</span>
 				<span>{{orderInfo.orderWeight == null ? "暂无数据" : orderInfo.orderWeight + "吨"}}</span>
 			</p>
+      <p>
+        <span>实装量：</span>
+        <span>{{orderInfo.weight == null ? "暂无数据" : orderInfo.weight + "吨"}}</span>
+      </p>
 			 <p v-show="fromOrder">
 				<span>物料单价：</span>
 				<span>{{orderInfo.orderPrice}} 元/吨</span>
