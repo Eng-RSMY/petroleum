@@ -91,9 +91,8 @@
 					nameOrPhone: nameOrPhone,
 					page: 0,
 					size: 5,
-					sort: "working&id,desc"
 				}
-				this.$http.get("/self_order/drivers", params)
+				this.$http.get("/self_order/drivers?sort=working&sort=id,desc", params)
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
@@ -127,9 +126,8 @@
 					nameOrPhone: this.nameOrPhone,
 					page: page,
 					size: 5,
-					sort: "working&id,desc"
 				}
-				this.$http.get("/self_order/drivers", params)
+				this.$http.get("/self_order/drivers?sort=working&sort=id,desc", params)
 					.then(res => {
 						console.log(res)
 						if (res.status == "200") {
@@ -222,9 +220,8 @@
           nameOrPhone: this.nameOrPhone,
           page: 0,
           size: 5,
-          sort: "working&id,desc"
         }
-        this.$http.get("/self_order/drivers", params)
+        this.$http.get("/self_order/drivers?sort=working&sort=id,desc", params)
           .then(res => {
             console.log(res)
             if (res.status == "200") {

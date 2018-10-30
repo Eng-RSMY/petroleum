@@ -135,9 +135,14 @@
 		mounted() {
       this.queryBanner()
       this.queryOilPrice()
-		}
-	}
-</script>
+		},
+    onShareAppMessage(){
+      return {
+        imageUrl:"/static/images/share.png"
+      }
+    }
+
+  }</script>
 
 <style scoped>
 

@@ -13,7 +13,7 @@
 				<p>纳税人识别号</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.taxpayerNumber" maxlength="20" placeholder="请输入">
+        <div class="input" type="text" contenteditable v-model.lazy="companyInfo.taxpayerNumber" maxlength="20" placeholder="请输入">{{companyInfo.taxpayerNumber}}</div>
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
