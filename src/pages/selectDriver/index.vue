@@ -251,6 +251,7 @@
       }
 		},
     onShow(){
+      this.nameOrPhone=''
       this.queryDrivers()
     }
 	}

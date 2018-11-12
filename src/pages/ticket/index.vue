@@ -4,8 +4,10 @@
 			<div class="weui-cell__bd">
 				<p>公司名称</p>
 			</div>
-			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.fullName" placeholder="请输入" :disabled="disabled">
+			<div class="weui-cell__ft input-div">
+        <div class="input-div" :disabled="disabled">
+          {{companyInfo.fullName}}
+        </div>
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -13,7 +15,7 @@
 				<p>纳税人识别号</p>
 			</div>
 			<div class="weui-cell__ft">
-        <div class="input" type="text" contenteditable v-model.lazy="companyInfo.taxpayerNumber" maxlength="20" placeholder="请输入">{{companyInfo.taxpayerNumber}}</div>
+        <input class="input" type="text" v-model.lazy="companyInfo.taxpayerNumber" placeholder="请输入" maxlength="20">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -21,7 +23,7 @@
 				<p>电话号码</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="number" v-model.lazy="companyInfo.contactNumber" placeholder="请输入" maxlength="11">
+				<input class="input" type="number" v-model.lazy="companyInfo.contactNumber" placeholder="请输入">
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -130,6 +132,18 @@
 	.weui-cell__ft {
 		padding-right: 27px
 	}
+
+  .input-div{
+    line-height: 40rpx;
+    float:left;
+    flex:initial;
+    width:400rpx;
+    color:#000
+  }
+
+  .input{
+    color:#000
+  }
 
 	.button {
 		position: fixed;

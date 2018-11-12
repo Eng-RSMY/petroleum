@@ -6,7 +6,7 @@
 					<p>垦利1号客服电话</p>
 				</div>
 				<div class="weui-cell__ft">
-					<p>15666440735</p>
+					<p>0546-2567423</p>
 				</div>
 			</div>
 			<!-- <div class="row">
@@ -33,7 +33,7 @@
 		methods: {
 			call: function () {
 				wx.makePhoneCall({
-					phoneNumber: '15666440735' //仅为示例，并非真实的电话号码
+					phoneNumber: '0546-2567423' //仅为示例，并非真实的电话号码
 				})
 			}
 		},
