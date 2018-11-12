@@ -93,7 +93,7 @@
 			},
 			wancheng: function (val) {
 				console.log(val)
-				this.driverNumber = val.target.value
+				this.user.driverNumber = val.target.value
 				if (val.target.value.length != 18) {
 					wx.showToast({
 						title: '请输入正确的18位证件号',
