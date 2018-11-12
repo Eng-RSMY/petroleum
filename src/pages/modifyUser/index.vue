@@ -4,11 +4,11 @@
 			<div class="from">
 				<div class="input-list">
 					<span>绑定手机号</span>
-					<span><input type="number" :placeholder="user.phone" maxlength="11" @change="panduan" v-model="newUserPhone"></span>
+					<span><input type="number" maxlength="11" @change="panduan" v-model="user.phone"></span>
 				</div>
 				<div class="input-list">
 					<span>用户真实姓名</span>
-					<span><input type="text" :placeholder="user.realName" maxlength="8" v-model="newRealName"></span>
+					<span><input type="text" maxlength="8" v-model="user.realName"></span>
 				</div>
 				<div class="input-list">
 					<span>设置用户角色</span>
@@ -22,11 +22,11 @@
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机身份证</span>
-					<span><input type="idcard" :placeholder="user.idNumber" maxlength="18" minlength="18" @change="wancheng" v-model="idNumber"></span>
+					<span><input type="idcard" maxlength="18" minlength="18" @change="wancheng" v-model="user.idNumber"></span>
 				</div>
 				<div class="input-list" v-if="isDriver">
 					<span>司机驾驶证号</span>
-					<span><input type="idcard" :placeholder="user.driverNumber" maxlength="18" @change="wancheng" v-model="driverNumber"></span>
+					<span><input type="idcard" maxlength="18" @change="wancheng" v-model="user.driverNumber"></span>
 				</div>
 				<div class="input-list">
 					<span> 激活用户账户</span>
@@ -45,7 +45,7 @@
 					<view class="">
 						<view class="">
 							<view class="">
-								<textarea class="" :placeholder="user.remark ? user.remark : '请输入备注信息'" v-model="newRemark" />
+								<textarea class="" v-model="user.remark" />
 							</view>
 						</view>
 					</view>
@@ -72,12 +72,7 @@
 				accounts1: [],
 				pickSelect: "请选择",
 				accountIndex: 0,
-				newUserPhone: '',
-				newRealName: '',
-				newRemark: '',
 				checked: true,
-				idNumber: "",
-				driverNumber: "",
 				isDriver: false,
 				roleList: [],
 			}
@@ -152,12 +147,12 @@
 				console.log(this.accountIndex)
 				console.log(this.roles)
 				this.$http.post(`/users/${this.$root.$mp.query.id}`, {
-					phone: this.newUserPhone || this.user.phone,
-					realName: this.newRealName || this.user.realName,
-					remark: this.newRemark || this.user.remark,
+					phone: this.user.phone,
+					realName: this.user.realName,
+					remark: this.user.remark,
 					enabled: this.checked,
-					driverNumber: this.driverNumber || this.user.driverNumber,
-					idNumber: this.idNumber || this.user.idNumber,
+					driverNumber: this.user.driverNumber,
+					idNumber: this.user.idNumber,
 					roleId: this.roles[this.accountIndex].id
 				}).then(res => {
 					if (res.status == "200") {

@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 	Authorization = Base64.encode("custom:password")
 	// 伪正式环境下配置
 } else {
-	fly.config.baseURL = "https://youhao.mojodata.cn";
+	fly.config.baseURL = "https://youhao.klsh.com";
 	Authorization = Base64.encode("custom:2VbHalTP5%#PdhaP")
 }
 fly.interceptors.request.use((request) => {

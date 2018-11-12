@@ -15,7 +15,7 @@
 				<p>纳税人识别号</p>
 			</div>
 			<div class="weui-cell__ft">
-        <input class="input" type="text" v-model.lazy="companyInfo.taxpayerNumber" placeholder="请输入" maxlength="20">
+        <textarea class="input-textarea" auto-height :value="companyInfo.taxpayerNumber" maxlength='40'/>
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -139,6 +139,12 @@
     flex:initial;
     width:400rpx;
     color:#000
+  }
+
+  .input-textarea{
+    color:#000;
+    line-height: 40rpx;
+    width:400rpx;
   }
 
   .input{

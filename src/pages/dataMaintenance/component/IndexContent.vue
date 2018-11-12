@@ -19,7 +19,7 @@
 					<view class="">
 						<view class="">
 							<view class="">
-								<textarea class="" :placeholder="company.address" :value="address" @change="address" />
+								<textarea class="" :value="address" @change="address" />
 							</view>
 						</view>
 					</view>
