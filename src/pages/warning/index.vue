@@ -52,7 +52,6 @@
 			getAlarms() {
 				var iv =
 					this.$http.get(`/alarms?lv=${this.accountIndex}`).then(res => {
-						console.log(res)
 						userList = res.data
 					})
 					.catch(res => {
@@ -70,9 +69,7 @@
 					confirmText: "发起预警",
 					success: function (res) {
 						if (res.confirm) {
-							console.log('用户点击确定')
 							this.$http.post(`/alarms/${id}/sound`).then(res => {
-								console.log(res)
 							})
 							.catch(res => {
 								wx.showToast({
@@ -82,7 +79,6 @@
 								})
 							})
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -93,7 +89,6 @@
 		},
 		computed: {
 			showList() {
-				console.log(this.userList)
 				return this.userList.length
 			}
 		},

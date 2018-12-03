@@ -84,7 +84,6 @@
 				isSearchBarFocus = !isSearchBarFocus
 			},
 			search: function (val) {
-				console.log(val)
 				this.carNumber = val.mp.detail.value
 				var carNumber = val.mp.detail.value;
 				var params = {
@@ -95,8 +94,6 @@
 				}
 				this.$http.get("/self_order/cars", params)
 					.then(res => {
-						;
-						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
 								this.ishave = true
@@ -120,7 +117,6 @@
 							})
 						}
 					}).catch(res => {
-						console.log(res)
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,
@@ -144,13 +140,11 @@
 				}
 				this.$http.get("/self_order/cars", params)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
 								for (var i = 0; i < res.data.content.length; i++) {
 									this.driverList.push(res.data.content[i]);
 								}
-								console.log(this.driverList)
 							} else {
 								this.foot = false
 							}
@@ -165,7 +159,6 @@
 
 			},
 			toSelfHelp: function (e) {
-				console.log(e)
 				if (this.router == "workbench") {
 
 				} else {
@@ -178,7 +171,6 @@
 							showCancel: false,
 							success: function (res) {
 								if (res.confirm) {
-									console.log('用户点击确定')
 								}
 							}
 						})
@@ -261,7 +253,6 @@
 			}
 			this.$http.get("/self_order/cars", params)
 				.then(res => {
-					console.log(res)
 					if (res.status == "200") {
 						if (res.data.content.length > 0) {
 							this.ishave = true
@@ -288,14 +279,12 @@
 				wx.setNavigationBarTitle({
 					title: '车辆管理',
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			} else {
 				wx.setNavigationBarTitle({
 					title: '选择车辆',
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			}

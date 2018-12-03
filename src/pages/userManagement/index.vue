@@ -88,13 +88,11 @@
         }
         this.$http.get("/users", params)
           .then(res => {
-            console.log(res)
             if (res.status == "200") {
               if (res.data.content.length > 0) {
                 for (var i = 0; i < res.data.content.length; i++) {
                   this.userList.push(res.data.content[i]);
                 }
-                console.log(this.userList)
               } else {
                 this.foot = false
               }
@@ -112,7 +110,6 @@
         wx.navigateTo({
           url: `../../pages/modifyUser/main?id=${id}`,
           fail: function (res) {
-            console.log(res)
           }
         })
       },
@@ -155,7 +152,6 @@
             })
           }
         }).catch(res => {
-          console.log(res)
           wx.showToast({
             title: res.response.data.message,
             icon: 'none',
@@ -171,7 +167,6 @@
             roleId: this.roleList[(e.mp.detail.value - 1)].id
           }
           this.$http.get("/users/searchByRoleId", params).then(res => {
-            console.log(res)
             if (res.data.content.length > 0) {
               this.userList = res.data.content
             } else {
@@ -185,7 +180,6 @@
 
 
           }).catch(res => {
-            console.log(res)
             wx.showToast({
               title: res.response.data.message,
               icon: 'none',
@@ -222,7 +216,6 @@
               })
             }
           }).catch(res => {
-            console.log(res)
             wx.showToast({
               title: res.response.data.message,
               icon: 'none',
@@ -236,14 +229,12 @@
         wx.navigateTo({
           url: "../../pages/permission/main",
           fail: function (res) {
-            console.log(res)
           }
         })
       }
     },
     computed: {
       showList() {
-        console.log(this.userList)
         return this.userList.length
       }
     },
@@ -278,7 +269,6 @@
           })
         }
       }).catch(res => {
-        console.log(res)
         wx.showToast({
           title: res.response.data.message,
           icon: 'none',
@@ -294,7 +284,6 @@
 
 
       }).catch(res => {
-        console.log(res)
         wx.showToast({
           title: res.response.data.message,
           icon: 'none',

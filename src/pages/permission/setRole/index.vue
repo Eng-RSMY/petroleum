@@ -29,24 +29,20 @@
 		},
 		methods: {
 			select(val) {
-				console.log(val)
 				this.permission[val.currentTarget.dataset.id].checked = !this.permission[val.currentTarget.dataset.id].checked
 			},
 			primary() {
 				var select = [];
-				console.log(this.permission)
 				this.permission.forEach(sel => {
 					if (sel.checked) {
 						select.push(sel.id);
 					}
 				});
-				console.log(select, "选中的id")
 				var roleId = this.$root.$mp.query.id;
 				var params = {
 					permissionIdList: select
 				}
 				this.$http.post(`/users/roles/${roleId}/permissions`, params).then(res => {
-					console.log(res)
 					wx.showToast({
 						title: "修改成功",
 						icon: 'none',
@@ -54,7 +50,6 @@
 					})
 
 				}).catch(res => {
-					console.log(res)
 					wx.showToast({
 						title: res.response.data.message,
 						icon: 'none',

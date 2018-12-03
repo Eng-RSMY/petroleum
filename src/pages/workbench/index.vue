@@ -152,7 +152,6 @@
 				wx.navigateTo({
 					url: "../../pages/selfHelp/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -160,7 +159,6 @@
 				wx.navigateTo({
 					url: "../../pages/dataMaintenance/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -168,7 +166,6 @@
 				wx.navigateTo({
 					url: "../../pages/moneyInquiry/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -176,7 +173,6 @@
 				wx.navigateTo({
 					url: "../../pages/order/orderInfo/main?from=makeCard",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -184,7 +180,6 @@
 				wx.navigateTo({
 					url: "../../pages/NewEnterpriseUser/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -192,7 +187,6 @@
 				wx.navigateTo({
 					url: "../../pages/userManagement/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -200,7 +194,6 @@
 				wx.navigateTo({
 					url: "../../pages/order/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -208,7 +201,6 @@
 				wx.navigateTo({
 					url: "../../pages/checkPrice/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -216,7 +208,6 @@
 				wx.navigateTo({
 					url: "../../pages/moneyInquiry/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -224,7 +215,6 @@
 				wx.navigateTo({
 					url: "../../pages/bill/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -232,7 +222,6 @@
 				wx.navigateTo({
 					url: "../../pages/warning/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -240,7 +229,6 @@
 				wx.navigateTo({
 					url: "../../pages/ticket/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -248,7 +236,6 @@
 				wx.navigateTo({
 					url: "../../pages/news/main",
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -261,7 +248,6 @@
 			// 	wx.navigateTo({
 			// 		url: "../../pages/selectCar/main?from=workbench",
 			// 		fail: function (res) {
-			// 			console.log(res)
 			// 		}
 			// 	})
 			// }
@@ -271,7 +257,6 @@
 			// 公司信
 			this.$http.get("/workbench/company_account")
 				.then(res => {
-					console.log(res)
 					if (res.status == "200") {
 						this.companyInfo = res.data;
 					} else {
@@ -292,10 +277,8 @@
 			var that = this;
 			// 获取当前用户的登录信息
 			this.$http.get("/mine").then(res => {
-				console.log(res.data.role.permissions)
 				// that.$http.get("")
 				for (var i = 0; i < res.data.role.permissions.length; i++) {
-					console.log(res.data.role.permissions[i].name == "入场制卡")
 					if (res.data.role.permissions[i].name == "自助下单") {
 						this.roleList.selfOrder = true;
 					}
@@ -338,7 +321,6 @@
 
 				}
 				if (res.data.role.permissions.length > 3) {
-					console.log(1111111)
 					this.isdisplay = true
 				}
 			}).catch(res => {

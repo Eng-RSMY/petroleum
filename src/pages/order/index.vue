@@ -158,7 +158,6 @@
 				}
 				this.$http.get("/orders/waiting", params)
 					.then(res => {
-						console.log(res)
 						if (res.data.content.length > 0) {
 							for (var i = 0; i < res.data.content.length; i++) {
                 res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
@@ -168,10 +167,8 @@
 							this.foot = false;
 						}
 
-						console.log(this.waiting)
 					})
 					.catch(res => {
-						console.log(res)
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,
@@ -190,7 +187,6 @@
 				}
 				this.$http.get("/orders/complete", params)
 					.then(res => {
-						console.log(res)
 						if (res.data.content.length > 0) {
 							for (var i = 0; i < res.data.content.length; i++) {
                 res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
@@ -201,7 +197,6 @@
 						}
 					})
 					.catch(res => {
-						console.log(res)
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,
@@ -217,10 +212,8 @@
 					content: '是否取消该订单',
 					success: function (res) {
 						if (res.confirm) {
-							console.log('用户点击确定')
 							that.$http.post(`/orders/${id}/cancel?number=${number}`)
 								.then(res => {
-									console.log(res)
 									if (res.status == "200") {
 										wx.showToast({
 											title: "订单取消成功",
@@ -234,13 +227,11 @@
 												}
 												that.$http.get("/orders/waiting", params)
 													.then(re => {
-														console.log(re)
 														if (re.status == "200") {
 															that.waiting = re.data.content
 														}
 													})
 													.catch(re => {
-														console.log(re)
 														// .response.data.message
 														wx.showToast({
 															title: re.response.data.message,
@@ -255,13 +246,11 @@
 												}
 												that.$http.get("/orders/complete", params1)
 													.then(re => {
-														console.log(re)
 														if (re.status == "200") {
 															that.orderList = re.data.content
 														}
 													})
 													.catch(re => {
-														console.log(re)
 														// .response.data.message
 														wx.showToast({
 															title: re.response.data.message,
@@ -274,7 +263,6 @@
 									}
 								})
 								.catch(res => {
-									console.log(res)
 									// .response.data.message
 									wx.showToast({
 										title: res.response.data.message,
@@ -283,7 +271,6 @@
 									})
 								})
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -293,7 +280,6 @@
 				wx.navigateTo({
 					url: "../../pages/order/orderInfo/main?orderInfo=" + orderCode,
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
@@ -305,7 +291,6 @@
         }
         this.$http.get("/orders/waiting", params)
           .then(res => {
-            console.log(res)
             if (res.data.content.length > 0) {
               this.ishave = true
 
@@ -313,7 +298,6 @@
                 res.data.content[item].orderedTime=res.data.content[item].orderedTime.replace(/T/," ")
               }
               this.waiting=res.data.content
-              console.log(this.waiting)
             }
             if (res.data.content.length > 0 && res.data.content.length < 20) {
               this.isshow = false
@@ -324,7 +308,6 @@
           })
           .catch(res => {
             console.error(res)
-            console.log(res)
             // .response.data.message
             wx.showToast({
               title: res.response.data.message,
@@ -341,7 +324,6 @@
         }
         this.$http.get("/orders/complete", params1)
           .then(res => {
-            console.log(res)
             if (res.data.content.length > 0) {
               this.ishave1 = true
               for (let item in res.data.content) {
@@ -357,7 +339,6 @@
             }
           })
           .catch(res => {
-            console.log(res)
             // .response.data.message
             wx.showToast({
               title: res.response.data.message,

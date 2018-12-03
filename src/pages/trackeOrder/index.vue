@@ -82,7 +82,6 @@
 				}
 				this.$http.get("/track_order", params)
 					.then(res => {
-						console.log(res)
 						if (res.data.content.length > 0) {
 							res.data.content.forEach(element => {
 								this.orderList.push(element)
@@ -93,7 +92,6 @@
 
 					})
 					.catch(res => {
-						console.log(res)
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,
@@ -106,7 +104,6 @@
 				wx.navigateTo({
 					url: "../../pages/order/orderInfo/main?orderInfo=" + orderCode,
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			}
@@ -120,8 +117,6 @@
 			}
 			this.$http.get("/track_order", params)
 				.then(res => {
-					console.log(res)
-
 					if (res.data.content.length > 0) {
 						this.ishave = true
 						this.orderList = res.data.content
@@ -138,7 +133,6 @@
 
 				})
 				.catch(res => {
-					console.log(res)
 					// .response.data.message
 					wx.showToast({
 						title: res.response.data.message,

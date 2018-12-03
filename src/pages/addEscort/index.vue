@@ -11,7 +11,7 @@
             </div>
             <div class="c-row">
                 <span>身份证号</span>
-                <input class="c-row-input" type="idcard" placeholder="请输入" dir="rtl" :value="idNumber"/>
+                <input class="c-row-input" type="idcard" placeholder="请输入" dir="rtl" @blur="changfe" :value="idNumber"/>
             </div>
             <div class="c-row c-row-last">
                 <span>驾驶证号码</span>
@@ -45,6 +45,14 @@ export default {
         }
     },
     methods: {
+        changfe(){
+            if(this.idNumber.length !=18){
+            wx.showToast({
+                title:"请输入正确的身份证号",
+                con
+            })
+            }
+        },
     }
 }
 </script>

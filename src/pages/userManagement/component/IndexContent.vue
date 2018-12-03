@@ -27,14 +27,12 @@
         wx.navigateTo({
           url: `../../pages/modifyUser/main?id=${id}`,
           fail: function (res) {
-            console.log(res)
           }
         })
       }
     },
     computed: {
       showList () {
-        console.log(this.userList)
         return this.userList.length
       }
     },

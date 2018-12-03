@@ -6,7 +6,6 @@
 			logs.unshift(Date.now())
 			wx.setStorageSync('logs', logs)
       wx.showShareMenu()
-			console.log('app onShow and cache logs by setStorageSync')
 		}
   }
 </script>

@@ -43,7 +43,6 @@
             that.hasCompony=false
           }
         }).catch(res => {
-          console.log(res)
           wx.showToast({
             title: res.response.data.message,
             icon: 'none',

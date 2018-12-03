@@ -32,7 +32,6 @@
         wx.navigateTo({
           url: "../../pages/permission/main",
           fail: function (res) {
-            console.log(res)
           }
         })
       }

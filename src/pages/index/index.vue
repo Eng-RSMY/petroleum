@@ -91,14 +91,12 @@
               wx.switchTab({
                 url: "../../pages/workbench/main",
                 fail: function (result) {
-                  console.log(result)
                 }
               })
             }else {
               wx.navigateTo({
                 url: "../login/main",
                 fail: function (res) {
-                  console.log(res)
                 }
               })
             }
@@ -106,7 +104,6 @@
             wx.navigateTo({
               url: "../login/main",
               fail: function (res) {
-                console.log(res)
               }
             })
           }
@@ -114,7 +111,6 @@
         wx.navigateTo({
           url: "../login/main",
           fail: function (res) {
-            console.log(res)
           }
         })
         }
@@ -126,7 +122,6 @@
         wx.navigateTo({
           url: `../newsDetail/main?id=${item.simpleBulletin.id}`,
           fail: function (res) {
-            console.log(res)
           }
         })
       }

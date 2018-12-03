@@ -36,8 +36,6 @@
     },
     methods:{
       renderStatusFlow(){
-        console.log(this.orderStatusFlow)
-        console.log(this.status)
         if(JSON.stringify(this.orderStatusFlow) === '{}'){
           return false
         }
@@ -65,7 +63,6 @@
           arr.push(obj)
         }
         this.axis=arr
-        console.log(this.axis)
       }
     },
     mounted(){

@@ -81,7 +81,7 @@
 		methods: {
 			bindAccountChange: function (e) {
         if(e){
-          this.accountIndex = e.mp.detail.value;
+        	this.accountIndex = e.mp.detail.value;
         }
 				if (this.roleList[this.accountIndex].name == "司机" || this.roleList[this.accountIndex].name == "押运员") {
 					this.isDriver = true;
@@ -90,7 +90,6 @@
 				}
 			},
 			wancheng: function (val) {
-				console.log(val)
 				this.driverNumber = val.target.value
 				if (val.target.value.length != 18) {
 					wx.showToast({
@@ -160,7 +159,7 @@
 							}
 						})
 					}, 1000)
-          }
+    		}
 				}).catch((res) => {
 					var str = res.response.data.message;
 					str = str.replace("[", "");
@@ -173,20 +172,19 @@
 		onShow() {
 //			Object.assign(this.$data, this.$options.data())
 			// 获取角色
-			console.log("我展示了")
 			this.$http.get("/users/roles").then((res) => {
-        let rolesMap={}
-				this.roleList = res.data;
-				if(res.data){
-          res.data.forEach((ele,index)=>{
-            this.accounts.push(ele.name)
-            rolesMap[ele.name]=index
-          })
-        }
-        if(this.$root.$mp.query.from==="selectDriver"){
-          this.accountIndex=rolesMap['司机'];
-          this.bindAccountChange()
-        }
+				let rolesMap={}
+						this.roleList = res.data;
+						if(res.data){
+				res.data.forEach((ele,index)=>{
+					this.accounts.push(ele.name)
+					rolesMap[ele.name]=index
+				})
+				}
+				if(this.$root.$mp.query.from==="selectDriver"){
+				this.accountIndex=rolesMap['司机'];
+				this.bindAccountChange()
+				}
 
 			}).catch(res => {
 				wx.showToast({

@@ -5,6 +5,8 @@
 				<li>{{item.categoryName==null ? "暂无数据" : item.categoryName }}</li>
 				<li>{{item.oilName ==null ? "暂无数据" : item.oilName}}</li>
 				<li>{{item.price ==null ? "暂无数据" : item.price}}</li>
+				<li>{{item.fixed ==null ? "暂无数据" : item.fixed+"吨"}}</li>
+				<li>{{item.stock ==null ? "暂无数据" : item.stock+"吨"}}</li>
 			</ul>
 		</div>
 	</div>
@@ -21,16 +23,12 @@
 		mounted() {
 			this.$http.get("/prices")
 				.then(res => {
-
-					console.log(res)
 					if (res.status == "200") {
 						this.tableList = res.data
 					}
 
 				})
 				.catch(res => {
-
-					console.log(res)
 				})
 		},
 	};
@@ -54,14 +52,14 @@
 	}
 
 	.table ul li {
-		width: 33.333%;
+		width: 20%;
 		line-height: 35px;
 		text-align: center;
 		color: black;
 		font-size: 12px;
 	}
 
-	.table ul li:nth-child(-n+3) {
+	.table ul li:nth-child(-n+4) {
 		border-right: 1px solid #ccc;
 	}
 </style>

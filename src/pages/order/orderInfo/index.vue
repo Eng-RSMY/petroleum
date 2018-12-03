@@ -95,28 +95,33 @@
         <div class="weui-dialog__bd">
           <p style="overflow: hidden">
             <span class="dialog_label">物料数量</span>
-            <span class="dialog_input"><input class="weui-input" type="digit" v-model='orderWeight' maxlength="5"
-                                              placeholder="（吨）请输入"/></span>
+            <span class="dialog_input">
+              <input class="weui-input" type="digit" v-model='orderWeight' maxlength="5" placeholder="（吨）请输入"/>
+            </span>
           </p>
           <p style="overflow: hidden">
             <span class="dialog_label">司机姓名</span>
-            <span class="dialog_input"><input class="weui-input" type="text" v-model='driverName' placeholder="司机姓名"
-                                              max="8"/></span>
+            <span class="dialog_input">
+              <input class="weui-input" type="text" v-model='driverName' placeholder="司机姓名" max="8"/>
+            </span>
           </p>
           <p style="overflow: hidden">
             <span class="dialog_label">身份证号</span>
-            <span class="dialog_input"><input class="weui-input" type="idcard" v-model='driverIdNumber'
-                                              placeholder="司机身份证号" maxlength="18"/></span>
+            <span class="dialog_input">
+              <input class="weui-input" type="idcard" v-model='driverIdNumber' @blur ="changfe" placeholder="司机身份证号" minlength="18" maxlength="18"/>
+            </span>
           </p>
           <p style="overflow: hidden">
             <span class="dialog_label">手机号</span>
-            <span class="dialog_input"><input class="weui-input" type="number" pattern="[0-9]*" maxlength="11"
-                                              placeholder="司机手机号" v-model='driverPhone'/></span>
+            <span class="dialog_input">
+              <input class="weui-input" type="number" pattern="[0-9]*" maxlength="11" placeholder="司机手机号" v-model='driverPhone'/>
+            </span>
           </p>
           <div style="overflow: hidden">
             <span class="dialog_label">车牌号</span>
-            <span class="dialog_input"><div class="c-row-input" contenteditable="true"
-                                            @click.stop="showInput">{{carNo}}</div></span>
+            <span class="dialog_input">
+              <div class="c-row-input" contenteditable="true" @click.stop="showInput">{{carNo}}</div>
+            </span>
           </div>
         </div>
 
@@ -264,6 +269,14 @@
       showBig() {
         this.isshow = true
       },
+      changfe(){
+        if(this.driverIdNumber.length !=18){
+          wx.showToast({
+            title:"请输入正确的身份证号",
+            con
+          })
+        }
+      },
       hideBig() {
         this.isshow = false
       },
@@ -323,7 +336,6 @@
         this.showDialog = false;
         this.inputClose
         var id = this.orderInfo.id;
-        console.log(this.orderInfo)
         var orderNumber = this.orderInfo.number;
         var params = {
           orderNumber: orderNumber,
@@ -335,7 +347,6 @@
         }
         this.$http.post(`/track_order/${id}`, params)
           .then(res => {
-            console.log(res);
             if (res.status == "200") {
               this.orderInfo = res.data;
               this.orderInfo.orderedTime = this.orderInfo.orderedTime.replace(
@@ -383,7 +394,6 @@
       this.$http
         .get(url)
         .then(res => {
-          console.log(res);
           if (res.status == "200") {
             this.orderInfo = res.data;
             this.carNo = res.data.carNumber;

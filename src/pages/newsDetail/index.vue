@@ -31,17 +31,13 @@
 
 		},
 		beforeMount() {
-			console.log(this.$root.$mp.query)
       Object.assign(this.$data, this.$options.data());
 			var id = this.$root.$mp.query.id
 			this.$http.get(`/bulletin/${id}`).then(res => {
-				console.log(res)
 				this.bulletin = res.data;
         this.bulletin.content=this.bulletin.content.replace(/\<img/gi,   '<img style="max-width:100%;height:auto" ' );
         this.bulletin.publishTime=this.bulletin.publishTime.replace(/T/,"  ")
-				console.log(this.bulletin)
 			}).catch(res => {
-				console.log(res)
 				// .response.data.message
 				wx.showToast({
 					title: res.response.data.message,

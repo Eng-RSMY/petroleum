@@ -106,7 +106,6 @@
 		},
 		methods: {
 			test(url, id) {
-				console.log(url, id)
 			},
 			showImg(e) {
 				var qrcode = e.currentTarget.dataset.qrcode
@@ -118,13 +117,10 @@
 			getMakekCard() {
 				this.$http.get("/card")
 					.then(res => {
-
-						console.log(res)
 						if (res.status == "200") {
 							this.orderInfo = res.data
 							this.ishave = true
 							this.url = "https://sapi.k780.com/?app=qr.get&data=" + res.data.encryptOrderNumber + "&level=L&size=7"
-							console.log(url)
 						} else {
 							wx.showToast({
 								title: res.statusText,

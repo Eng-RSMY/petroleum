@@ -90,7 +90,6 @@
 				wx.navigateTo({ url })
 			},
 			search: function (val) {
-				console.log(val)
 				this.nameOrPhone = val.mp.detail.value
 				var nameOrPhone = val.mp.detail.value;
 				var params = {
@@ -101,7 +100,6 @@
 				}
 				this.$http.get("/self_order/escorts", params)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
 								this.escortList = res.data.content;
@@ -129,13 +127,11 @@
 				}
 				this.$http.get("/self_order/escorts", params)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
 								for (var i = 0; i < res.data.content.length; i++) {
 									this.escortList.push(res.data.content[i]);
 								}
-								console.log(this.escortList)
 							} else {
 								this.foot = false
 							}
@@ -150,7 +146,6 @@
 
 			},
 			toSelfHelp: function (e) {
-				console.log(e)
 				var key = e.currentTarget.dataset.key
 				var list = this.escortList
 				var index = null
@@ -212,7 +207,6 @@
 			}
 			this.$http.get("/self_order/escorts", params)
 				.then(res => {
-					console.log(res)
 					if (res.status == "200") {
 						if (res.data.content.length > 0) {
 							this.ishave = true

@@ -15,7 +15,7 @@
 				<p>纳税人识别号</p>
 			</div>
 			<div class="weui-cell__ft">
-        <textarea class="input-textarea" auto-height :value="companyInfo.taxpayerNumber" maxlength='40'/>
+        		<textarea class="input-textarea" auto-height :value="companyInfo.taxpayerNumber" maxlength='40'/>
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -31,7 +31,7 @@
 				<p>开户行</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.bankName" placeholder="请输入" maxlength="40">
+				<textarea class="input-textarea" auto-height maxlength="40"  v-model.lazy="companyInfo.bankName" placeholder="请输入" />
 			</div>
 		</div>
 		<div class="weui-cell" style="border-bottom: 1px solid #ddd;position: relative;">
@@ -47,7 +47,7 @@
 				<p>公司地址</p>
 			</div>
 			<div class="weui-cell__ft">
-				<input class="input" type="text" v-model.lazy="companyInfo.companyAddress" placeholder="请输入">
+				<textarea class="input-textarea" auto-height maxlength="40"  v-model.lazy="companyInfo.companyAddress" style="padding:5px" placeholder="请输入"/>
 			</div>
 		</div>
 		<!-- <button class="weui-btn weui-btn_primary button" @click="save">保存并更新</button> -->
@@ -74,7 +74,6 @@
 			save: function (orderCode) {
 				this.$http.post("/invoice", this.companyInfo)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							this.companyInfo = res.data;
 						} else {
@@ -92,7 +91,6 @@
 			// 获取企业开票信息
 			this.$http.get("/invoice")
 				.then(res => {
-					console.log(res)
 					if (res.status == "200") {
 						this.companyInfo = res.data;
 					} else {
@@ -130,7 +128,8 @@
 	}
 
 	.weui-cell__ft {
-		padding-right: 27px
+		padding-right: 27px;
+		height: 50px;
 	}
 
   .input-div{
@@ -145,6 +144,7 @@
     color:#000;
     line-height: 40rpx;
     width:400rpx;
+	height: 50px !important
   }
 
   .input{

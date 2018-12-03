@@ -90,7 +90,6 @@
 
 			},
 			wancheng:function(val){
-				console.log(val)
 				this.driverNumber=val.target.value
 				if(val.target.value.length !=16){
 					wx.showToast({
@@ -121,7 +120,6 @@
 					this.isInputData2Show = false
 					this.isInputData1Show = true
 				} else {
-					console.log("别删除了，都没了")
 				}
 			},
 			save: function () {
@@ -131,11 +129,9 @@
 					drivingNumber: this.driveNum,
 					transportNumber: this.dangerNum,
 				};
-				console.log(this.key)
 				if (this.key == "") {
 					this.$http.post(`/cars`, params)
 						.then(res => {
-							console.log(res)
 							if (res.status == "200") {
 								that.carNo= '请输入'
 								that.driveNum=''
@@ -153,7 +149,6 @@
 							}
 						})
 						.catch(res => {
-							console.log(res)
 							// .response.data.message
 							wx.showToast({
 								title: res.response.data.message,
@@ -165,7 +160,6 @@
 
 					this.$http.post(`/cars/${this.key}`, params)
 						.then(res => {
-							console.log(res)
 							if (res.status == "200") {
 								wx.showToast({
 									title: "车辆修改成功",
@@ -174,7 +168,6 @@
 							}
 						})
 						.catch(res => {
-							console.log(res)
 							// .response.data.message
 							wx.showToast({
 								title: res.response.data.message,
@@ -188,13 +181,11 @@
 		mounted() {
 //			Object.assign(this.$data, this.$options.data())
 			var data = this.$root.$mp.query;
-			console.log(data.key)
 			this.router = data.from
 			if (data.key) {
 				this.key = data.key;
 				this.$http.get(`/cars/${data.key}`)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							this.carNo = res.data.carNumber
 							this.driveNum = res.data.drivingNumber
@@ -202,7 +193,6 @@
 						}
 					})
 					.catch(res => {
-						console.log(res)
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,

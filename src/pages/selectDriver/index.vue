@@ -84,7 +84,6 @@
 				isSearchBarFocus = !isSearchBarFocus
 			},
 			search: function (val) {
-				console.log(val)
 				this.nameOrPhone = val.mp.detail.value
 				var nameOrPhone = val.mp.detail.value;
 				var params = {
@@ -94,7 +93,6 @@
 				}
 				this.$http.get("/self_order/drivers?sort=working&sort=id,desc", params)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
 								this.ishave = true
@@ -129,13 +127,11 @@
 				}
 				this.$http.get("/self_order/drivers?sort=working&sort=id,desc", params)
 					.then(res => {
-						console.log(res)
 						if (res.status == "200") {
 							if (res.data.content.length > 0) {
 								for (var i = 0; i < res.data.content.length; i++) {
 									this.driverList.push(res.data.content[i]);
 								}
-								console.log(this.driverList)
 							} else {
 								this.foot = false
 							}
@@ -154,7 +150,6 @@
 				wx.navigateTo({ url })
 			},
 			toSelfHelp: function (e) {
-				console.log(e)
 				var key = e.currentTarget.dataset.key
 				var iswork = e.currentTarget.dataset.iswork
 				if (iswork) {
@@ -164,7 +159,6 @@
 						showCancel: false,
 						success: function (res) {
 							if (res.confirm) {
-								console.log('用户点击确定')
 							}
 						}
 					})
@@ -223,7 +217,6 @@
         }
         this.$http.get("/self_order/drivers?sort=working&sort=id,desc", params)
           .then(res => {
-            console.log(res)
             if (res.status == "200") {
               if (res.data.content.length > 0) {
                 this.ishave = true

@@ -24,6 +24,12 @@
 				},
 				{
 					title: '单价(元/吨)'
+				},
+				{
+					title: '定量值'
+				},
+				{
+					title: '余量值'
 				}]
 			}
 		},
@@ -36,24 +42,24 @@
 		height: 35px;
 		position: fixed;
 		left: 0px;
-		top: 0px;
+		top: 35px;
 		background: #0099FF;
 	}
 
 	.title ul {
 		display: flex;
-		font-size: 16px;
+		font-size: 12px;
 		color: #fff;
 	}
 
 	.title ul li {
-		width: 33.333%;
+		width: 20%;
 		height: 35px;
 		line-height: 35px;
 		text-align: center;
 	}
 
-	.title ul li:nth-child(-n+3) {
+	.title ul li:nth-child(-n+4) {
 		border-right: 1px solid #fff;
 	}
 </style>

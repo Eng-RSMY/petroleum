@@ -88,11 +88,9 @@
 				}
 			},
 			switch1Change: function (e) {
-				console.log('switch1 发生 change 事件，携带值为', e.mp.detail.value)
 				this.checked = e.mp.detail.value
 			},
 			wancheng: function (val) {
-				console.log(val)
 				this.user.driverNumber = val.target.value
 				if (val.target.value.length != 18) {
 					wx.showToast({
@@ -119,33 +117,27 @@
 				}
 			},
 			history: function () {
-				console.log(this.address)
 				if (this.address == "addDriver") {
 					wx.navigateTo({
 						url: "../../pages/selectDriver/main",
 						fail: function (res) {
-							console.log(res)
 						}
 					})
 				} else if (this.address == "addEscort") {
 					wx.navigateTo({
 						url: "../../pages/selectEscort/main",
 						fail: function (res) {
-							console.log(res)
 						}
 					})
 				} else {
 					wx.navigateTo({
 						url: "../../pages/userManagement/main",
 						fail: function (res) {
-							console.log(res)
 						}
 					})
 				}
 			},
 			save: function () {
-				console.log(this.accountIndex)
-				console.log(this.roles)
 				this.$http.post(`/users/${this.$root.$mp.query.id}`, {
 					phone: this.user.phone,
 					realName: this.user.realName,
@@ -207,7 +199,6 @@
           this.accounts = []
           roles.data.forEach((element, key) => {
             this.accounts.push(element.name)
-            console.log(element.name == this.user.roleName, element.name)
             if (element.name == this.user.roleName) {
               this.accountIndex = key
             }
@@ -216,10 +207,8 @@
           if (this.pickSelect == "司机" || this.pickSelect == "押运员") {
             this.isDriver = true
           }
-          console.log(this.pickSelect)
         }
       }catch (e) {
-			  console.log(e)
         wx.showToast({
           title: "获取用户信息失败",
           icon: 'none',

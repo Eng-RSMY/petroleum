@@ -46,14 +46,12 @@
 				wx.navigateTo({
 					url: `../../pages/newsDetail/main?id=${id}`,
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			},
 			getBulletin() {
 				this.$http.get(`/bulletin?page=${this.page}&size=5&sort=id,desc`).then(res => {
 					// this.bulletin
-					console.log(res)
 					if (res.data.content.length > 0) {
 						this.ishave = true
 						for (var i = 0; i < res.data.content.length; i++) {
@@ -68,7 +66,6 @@
 						this.foot = true
 					}
 				}).catch(res => {
-					console.log(res)
 					// .response.data.message
 					wx.showToast({
 						title: res.response.data.message,

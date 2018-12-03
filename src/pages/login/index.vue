@@ -120,7 +120,6 @@
 		},
 		watch: {
 			isEnty: function (val) {
-				console.log(val)
 				if (this.phone != "" && this.pickSelect != "公司名称请选择" && this.select == true && this.select1 == true) {
 					this.isEnty = false
 				}
@@ -129,7 +128,6 @@
 		methods: {
 			inputFinish: function (val) {
 				var that = this
-				console.log(val)
 				let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
 				if (val.target.value == "") {
 					that.isInputFinish = true;
@@ -150,7 +148,6 @@
 						duration: 1000
 					})
 				} else {
-					console.log(val)
 					var phone = val.target.value
 					this.queryCompanies(phone)
 				}
@@ -161,8 +158,6 @@
           phone,
         }
         this.$http.get(`/public/companies`, params).then(res => {
-          console.log(res)
-
           this.array = []
           this.pickSelect = "公司名称请选择"
           if (res.data.length > 0) {
@@ -181,7 +176,6 @@
               content: '您的手机号未注册垦利石化油好小程序，请联系管理员开通账号',
               success: function (res) {
                 if (res.confirm) {
-                  console.log('用户点击确定')
                 }
               }
             })
@@ -200,7 +194,6 @@
 				this.select1 == true ? this.select1 = false : this.select1 = true;
 			},
 			bindPickerChange: function (e) {
-				console.log(e)
 				this.company = this.array1[e.mp.detail.value]
 				this.pickSelect = this.array[e.mp.detail.value];
 			},
@@ -209,14 +202,12 @@
 					mobile: this.phone,
 				}
 				this.$http.post("/public/login_code", params).then(res => {
-					console.log(res)
 					wx.showToast({
 						title: "验证码发送成功",
 						icon: 'none',
 						duration: 2000
 					})
 				}).catch(res => {
-					console.log(res)
 					// .response.data.message
 					wx.showToast({
 						title: res.response.data.message,
@@ -253,7 +244,7 @@
 					})
 				} else {
 					this.login = false;
-          wx.setStorageSync('phone',this.phone)
+        			wx.setStorageSync('phone',this.phone)
 					this.showPhone = this.phone;
 					this.showPhone = this.showPhone.split("")
 					for (let i = 3; i < 7; i++) {
@@ -280,19 +271,16 @@
 					}
 					this.$http.post("/oauth/token", params)
 						.then(res => {
-							console.log(res)
 							wx.setStorageSync('access_token', res.data.access_token)
 							wx.setStorageSync('token_type', res.data.token_type)
 							wx.setStorageSync('refresh_token', res.data.refresh_token)
-              wx.switchTab({
+            				wx.switchTab({
 								url: "../../pages/workbench/main",
 								fail: function (res) {
-									console.log(res)
 								}
 							})
 						})
 						.catch(res => {
-							console.log(res)
 							// .response.data.message.response.data.error_description
 							wx.showToast({
 								title: res.response.data.error_description || res.response.data.message ,
@@ -330,7 +318,6 @@
 				}
 			},
 			get_code: function (e) {
-				console.log(e)
 				var that = this;
 				that.code = e.mp.detail.value
 				if (that.code.length == 0) {
@@ -361,7 +348,6 @@
 				}
 				if (that.code.length == 6) {
 					that.length = e.mp.detail.value.length,
-						console.log(that.code)
 						this.code_isFocus = !this.code_isFocus
 
 

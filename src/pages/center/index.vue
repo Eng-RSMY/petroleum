@@ -63,19 +63,16 @@
 					content: '是否退出登录',
 					success: function (res) {
 						if (res.confirm) {
-							console.log('用户点击确定')
 							that.personList = {}
-              const phone=wx.getStorageSync('phone')
+        					const phone=wx.getStorageSync('phone')
 							wx.clearStorageSync()
-              wx.setStorageSync('phone',phone)
+            				wx.setStorageSync('phone',phone)
 							wx.reLaunch({
 								url: "../../pages/index/main",
 								fail: function (res) {
-									console.log(res)
 								}
 							})
 						} else if (res.cancel) {
-							console.log('用户点击取消')
 						}
 					}
 				})
@@ -96,7 +93,6 @@
 						p = p.join("")
 						this.personList.phone = p
 					} else {
-						console.log("获取个人信息失败")
 					}
 				})
 		}

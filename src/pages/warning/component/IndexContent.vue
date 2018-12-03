@@ -32,9 +32,7 @@
 		confirmText:"发起预警",
 		success: function(res) {
 			if (res.confirm) {
-			console.log('用户点击确定')
 			} else if (res.cancel) {
-			console.log('用户点击取消')
 			}
 		}
 		})
@@ -42,7 +40,6 @@
     },
     computed: {
       showList () {
-        console.log(this.userList)
         return this.userList.length
       }
     },

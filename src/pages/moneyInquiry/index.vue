@@ -79,7 +79,6 @@
 		methods: {
 			getFinance() {
 				this.$http.get(`/finance?page=${this.page}&size=5`).then(res => {
-					console.log(res)
 					if (res.data.content.length > 0) {
 						this.ishave = true
 						this.finance = res.data.content;
@@ -95,7 +94,6 @@
 					}
 				})
 					.catch(res => {
-						console.log(res)
 						wx.showToast({
 							title: res.response.data.message,
 							icon: 'none',
@@ -107,18 +105,15 @@
 				var page = this.page + 1;
 				this.page = page
 				this.$http.get(`/finance?page=${this.page}&size=5`).then(res => {
-					console.log(res)
 					if (res.data.content.length > 0) {
 						for (var i = 0; i < res.data.content.length; i++) {
 							this.finance.push(res.data.content[i]);
 						}
-						console.log(this.finance)
 					} else {
 						this.foot = false
 					}
 				})
 					.catch(res => {
-						console.log(res)
 						wx.showToast({
 							title: res.response.data.message,
 							icon: 'none',

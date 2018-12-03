@@ -72,19 +72,16 @@
 				}
 				this.$http.get("/bill", params)
 					.then(res => {
-						console.log(res)
 						if (res.data.content.length > 0) {
 							for (var i = 0; i < res.data.content.length; i++) {
-							  res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
+								res.data.content[i].orderedTime=res.data.content[i].orderedTime.replace(/T/," ")
 								this.orderList.push(res.data.content[i]);
 							}
-							console.log(this.orderList)
 						} else {
 							this.foot = false
 						}
 					})
 					.catch(res => {
-						console.log(res)
 						// .response.data.message
 						wx.showToast({
 							title: res.response.data.message,
@@ -97,7 +94,6 @@
 				wx.navigateTo({
 					url: "../../pages/order/orderInfo/main?orderInfo=" + orderCode,
 					fail: function (res) {
-						console.log(res)
 					}
 				})
 			}
@@ -112,7 +108,6 @@
 			}
 			this.$http.get("/bill", params)
 				.then(res => {
-					console.log(res)
 					if (res.status == "200") {
 						if (res.data.content.length > 0) {
 							this.ishave = true
@@ -131,7 +126,6 @@
 					}
 				})
 				.catch(res => {
-					console.log(res)
 					// .response.data.message
 					wx.showToast({
 						title: res.response.data.message,
