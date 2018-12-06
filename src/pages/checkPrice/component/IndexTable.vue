@@ -37,7 +37,7 @@
 <style scoped>
 	.table {
 		width: 100%;
-		margin-top: 40px;
+		margin-top: 70px;
 		padding-bottom: 30px;
 	}
 
