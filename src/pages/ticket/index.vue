@@ -30,7 +30,6 @@
       <div class="weui-cell__ft">
         <input
           class="input"
-          type="number"
           v-model.lazy="companyInfo.contactNumber"
           placeholder="请输入"
 		  style="text-align:left"
