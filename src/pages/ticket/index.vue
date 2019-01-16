@@ -63,14 +63,13 @@
       <div class="weui-cell__bd">
         <p>公司地址</p>
       </div>
-      <div class="weui-cell__ft">
+      <div class="weui-cell__ft" style='overflow: hidden'>
         <textarea
           class="input-textarea"
-          auto-height
-          maxlength="40"
+          maxlength="100"
           v-model.lazy="companyInfo.companyAddress"
-		  placeholder="请输入"
-		  style="padding:5px;text-align:left"
+          placeholder="请输入"
+          style="padding:5px;text-align:left;max-height: 100rpx"
         />
       </div>
     </div>
